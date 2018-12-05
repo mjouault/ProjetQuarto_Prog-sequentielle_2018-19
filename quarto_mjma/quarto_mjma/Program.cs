@@ -15,6 +15,9 @@ namespace quarto_mjma
             Console.WriteLine("              QUARTO");
             Console.WriteLine("========================================\n");
 
+            Console.WriteLine("========================================");
+            Console.WriteLine("              QUARTO");
+            Console.WriteLine("========================================\n");
 
             int[,] grille = new int[4, 4];
             initialiserGrille(grille);
