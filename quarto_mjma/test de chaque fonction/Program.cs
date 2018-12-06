@@ -11,7 +11,7 @@ namespace test_de_chaque_fonction
         static void Main(string[] args)
         {
             InitialiserGrille(new int[4, 4]);
-            AfficherGrille(new int [4,4]);
+            AfficherGrille(new int[4, 4]);
         }
         static void InitialiserGrille(int[,] grille)
         {
@@ -26,6 +26,25 @@ namespace test_de_chaque_fonction
             }
         }
 
+        static void Choix1erJoueur()
+        {
+            int choix = 0;
+            do
+            { 
+                Console.WriteLine("Si vous voulez jouer en 1er tapez [1] sinon tapez [2]");
+                choix = int.Parse(Console.ReadLine());
+                if (choix == 2) // l'ordi joue en premier
+                    OrdiJoue();
+                if (choix == 1)
+                    JoueurJoue();
+                else //on a pas saisi 1 ou 2 
+                {
+                    Console.WriteLine("vous n'avez pas choisi [1] ou [2], recommencez");
+                    Console.Write("Si vous voulez jouer en 1er tapez [1] sinon tapez [2]");
+                    choix = int.Parse(Console.ReadLine());
+                }
+        } while (choix != 2 | choix != 1);
+        }
 
         static void AfficherGrille(int[,] grille)
         {
