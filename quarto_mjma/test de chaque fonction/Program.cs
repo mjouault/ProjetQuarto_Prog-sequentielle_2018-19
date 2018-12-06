@@ -86,8 +86,6 @@ namespace test_de_chaque_fonction
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
             }
 
-            Console.WriteLine("      +-----+-----+-----+-----+");
-            Console.WriteLine("         0     1     2     3");
             Console.WriteLine("      +----+----+----+----+");
             Console.WriteLine("         0    1    2    3");
             Console.ReadLine();
