@@ -19,8 +19,7 @@ namespace quarto_mjma
             
             InitialiserGrille(grille);
             AfficherGrille(grille);
-            
-            Jouer();
+            Console.ReadKey();
         }
 
         static void InitialiserGrille(int[,] grille)
@@ -48,17 +47,8 @@ namespace quarto_mjma
 
                 for (int j = 0; j < 4; j++) // i = indice colonne
                 {
-                    int pièce = 0;
-                    switch (pièce)
-                    {
-                        case 1: //si un joueur choisi de mettre une pièce dans cette case
-                            grille[i, j] = pièce;
-                            break;
-
-                        default://si personne ne met de pièce dedans
+                    
                             grille[i, j] = 22222;// aucun caractère et pièce non présente
-                            break;
-                    }
                     Console.Write(grille[i, j] + "|");
 
                 }
@@ -67,51 +57,78 @@ namespace quarto_mjma
 
             Console.WriteLine("      +-----+-----+-----+-----+");
             Console.WriteLine("         0     1     2     3");
-            Console.ReadLine();
         }
 
 
-        static void Jouer()
+        static void OrdiJoue()
         {
             int col;
             int ligne;
             int[,] grille = new int[4, 4];//grille de 4 par 4
 
+                    //cas où l'ordinateur joue
+                    Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n 0000= petite, creuse, carrée, noire et 1111=grande, pleine, ronde, blanche\n vous pouvez mixer plusieurs caractères évidemment.");
+                    int pièce = int.Parse(Console.ReadLine());//on récupère la pièce que le joueur choisi pour l'ordi
+                    Random R = new Random();// choisit aléatoirement la ligne et la colonne pour placer le pion
 
-            //cas où l'ordinateur joue
-            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n 0000= petite, creuse, carrée, noire et 1111=grande, pleine, ronde, blanche\n vous pouvez mixer plusieurs caractères évidemment.");
-            int pièce = int.Parse(Console.ReadLine());//on récupère la pièce que le joueur choisi pour l'ordi
-            Random R = new Random();// choisit aléatoirement la ligne et la colonne pour placer le pion
 
+                    ligne = R.Next(0, 3);
+                    col = R.Next(0, 3);
+                    while (grille[ligne, col] == 2222)//tant que l'ordi choisi une case où il y a déjà une pièce
+                    {
+                        ligne = R.Next(0, 3);
+                        col = R.Next(0, 3);
+                    }
+                    grille[ligne, col] = pièce; //l'ordi a mis la pièce dans une case vide
 
-            ligne = R.Next(0, 3);
-            col = R.Next(0, 3);
-            while (grille[ligne, col] != 2222)//tant que l'ordi choisi une case où il y a déjà une pièce
-            {
-             ligne = R.Next(0, 3);
-             col = R.Next(0, 3);
-            }
-            grille[ligne, col] = pièce; //l'ordi a mis la pièce dans une case vide
+        }
             
+            
+            static void JoueurJoue()
+            {
+                 int ligne, col;
+                 int[,] grille = new int[4, 4];
+                    Random R = new Random();
+                    //cas où le joueur joue
+                    //insérer un code pour faire choisi une pièce à l'ordi, un random sur chaque caractère?
+                    int car1 = R.Next(0, 1);
+                    int car2 = R.Next(0, 1);
+                    int car3 = R.Next(0, 1);
+                    int car4 = R.Next(0, 1);
+                    // faire un code pour être sur de ne pas retomber sur la même pièce qu'avant
+                    int pièce = car1 + car2 + car3 + car4; //code faux ne pas mettre plus car on veut faire une chaine de caractère avec tous ces chiffres
 
-            //cas où le joueur joue
-            //insérer un code pour faire choisi une pièce à l'ordi, un random sur chaque caractère?
-            int car1 = R.Next(0, 1);
-            int car2 = R.Next(0, 1);
-            int car3 = R.Next(0, 1);
-            int car4 = R.Next(0, 1);
-            // faire un code pour être sur de ne pas retomber sur la même pièce qu'avant
-            pièce = car1 + car2 + car3 + car4; //code faux ne pas mettre plus car on veut faire une chaine de caractère avec tous ces chiffres
+                    Console.WriteLine("Choisir une ligne (entre 0 et 3)");
+                    ligne = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Choisir une ligne (entre 0 et 3)");
+                    col = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Choisir une ligne (entre 0 et 3)");
-            ligne = int.Parse(Console.ReadLine());
-            Console.WriteLine("Choisir une ligne (entre 0 et 3)");
-            col = int.Parse(Console.ReadLine());
+                    grille[ligne, col] = pièce;
 
-            grille[ligne, col] = pièce;
-             
-            // for (int i=0; i<4; i++) Console.Write( " | " + )
+                    // for (int i=0; i<4; i++) Console.Write( " | " + )
+            }
+
+        static void Choix1erJoueur()
+        {
+            int choix = 0;
+            do
+            {
+                Console.WriteLine("Si vous voulez jouer en 1er tapez [1] sinon tapez [2]");
+                choix = int.Parse(Console.ReadLine());
+                if (choix == 2) // l'ordi joue en premier
+                    OrdiJoue();
+                if (choix == 1)
+                    JoueurJoue();
+                else //on a pas saisi 1 ou 2 
+                {
+                    Console.WriteLine("vous n'avez pas choisi [1] ou [2], recommencez");
+                    Console.Write("Si vous voulez jouer en 1er tapez [1] sinon tapez [2]");
+                    choix = int.Parse(Console.ReadLine());
+                }
+            } while (choix != 2 | choix != 1);
         }
     }
 
-}
+    }
+
+
