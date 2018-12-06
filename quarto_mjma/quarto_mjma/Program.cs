@@ -12,7 +12,7 @@ namespace quarto_mjma
         static int NB_PIECES_TOTALE = 16;
 
         static string[,] grille;    // Grille de jeu
-        static string[,] pieces;    // Liste des pièces
+        static string[,] pieces;    // Liste des pièces la deuxième colonne sert à indiquer ou non la présence (?)
 
         // Main
         static void Main(string[] args)
@@ -27,7 +27,7 @@ namespace quarto_mjma
 
             InitialiserGrille();
             InitialiserPieces();
-            JouerOrdi();
+            Choix1erJoueur(grille);
             Console.ReadKey();
         }
 
@@ -104,18 +104,18 @@ namespace quarto_mjma
 
         }
 
-        static void JouerPiece(string choixPiece)
+        static void JouerPiece(string choixPiece) //à quoi ça sert cette fonction? 
         {
             int i = 0;
 
             // Recherche de l'indice
-            while (choixPiece != pieces[i, 0])
+            while (choixPiece == pieces[i, 0])  //on a un probleme indice hors du tableau j'ai mis un == au lieu d'un diff et ça marche
             {
                 // Incrémentation
                 i++;
             }
 
-            // Pièce utilisée
+            // Pièce utilisée 
             pieces[i, 1] = "1";
         }
 
@@ -123,15 +123,15 @@ namespace quarto_mjma
         /// IsGoodPiece() : True si la pièce n'a pas été joué, False sinon
         /// </summary>
         /// <returns></returns>
-        static bool IsGoodPiece(string choixPiece)
+        static bool IsGoodPiece(string choixPiece) //demander à maurine de m'expliquer cette fonction
         {
             bool good = true;
             int i = 0;  // Compteur
 
             // Vérification
-            while ((i < NB_PIECES_TOTALE) && good)
+            while ((i < NB_PIECES_TOTALE) && good) //tant que le nombre total de pièce n'est pas atteint 
             {
-                if (choixPiece == pieces[i, 0] && pieces[i, 1] == "1")
+                if (choixPiece == pieces[i, 0] && pieces[i, 1] == "1") 
                 {
                     // 1 si déjà jouée, 0 sinon
                     good = false;
@@ -152,18 +152,25 @@ namespace quarto_mjma
             //cas où le joueur joue
             //insérer un code pour faire choisi une pièce à l'ordi, un random sur chaque caractère?
             int car1 = R.Next(0, 1);
+            string carun=car1.ToString();
             int car2 = R.Next(0, 1);
+            string cardeux=car2.ToString();
+            
             int car3 = R.Next(0, 1);
+            string cartrois=car3.ToString();
             int car4 = R.Next(0, 1);
-            // faire un code pour être sur de ne pas retomber sur la même pièce qu'avant
-            string piece = (car1 + car2 + car3 + car4).ToString(); 
+            string carquatre=car4.ToString();
+
+            string piece = carun+cardeux+cartrois+carquatre; 
 
             Console.WriteLine("Choisir une ligne (entre 0 et 3)");
             ligne = int.Parse(Console.ReadLine());
-            Console.WriteLine("Choisir une ligne (entre 0 et 3)");
+            Console.WriteLine("Choisir une colonne (entre 0 et 3)");
             col = int.Parse(Console.ReadLine());
 
             grille[ligne, col] = piece;
+            JouerPiece(piece);
+            AfficherGrille();
 
             // for (int i=0; i<4; i++) Console.Write( " | " + )
         }
