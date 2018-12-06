@@ -29,6 +29,13 @@ namespace test_de_chaque_fonction
 
         static void AfficherGrille(int[,] grille)
         {
+            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n 0000= petite, creuse, carrée, noire et 1111=grande, pleine, ronde, blanche\n vous pouvez mixer plusieurs caractères évidemment.");
+            int pièce = int.Parse(Console.ReadLine());//on récupère la pièce que le joueur choisi pour l'ordi
+            Random R = new Random();// choisit aléatoirement la ligne et la colonne pour placer le pion
+
+        
+            int ligne = R.Next(0, 3);
+            int col = R.Next(0, 3);
             for (int i = 0; i < 4; i++) //indice ligne
             {
 
@@ -38,9 +45,11 @@ namespace test_de_chaque_fonction
 
                 for (int j = 0; j < 4; j++) // i = indice colonne
                 {
-
-                    grille[i, j] = 22222; // aucun caractère et pièce non présente
-                    Console.Write(grille[i, j] + "|");
+                if (i==ligne && j==col)
+                    grille[i, j] = pièce;// la pièce est placée là où l'ordinateur veut
+                 else grille[i, j] = 22222;// aucun caractère et pièce non présente
+                           
+                Console.Write(grille[i, j] + "|");
 
                 }
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case

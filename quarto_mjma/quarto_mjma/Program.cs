@@ -48,8 +48,17 @@ namespace quarto_mjma
 
                 for (int j = 0; j < 4; j++) // i = indice colonne
                 {
+                    int pièce = 0;
+                    switch (pièce)
+                    {
+                        case 1: //si un joueur choisi de mettre une pièce dans cette case
+                            grille[i, j] = pièce;
+                            break;
 
-                    grille[i, j] = 22222; // aucun caractère et pièce non présente
+                        default://si personne ne met de pièce dedans
+                            grille[i, j] = 22222;// aucun caractère et pièce non présente
+                            break;
+                    }
                     Console.Write(grille[i, j] + "|");
 
                 }
