@@ -12,6 +12,7 @@ namespace quarto_mjma
         static int NB_PIECES_TOTALE = 16;
         static string[,] pieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" }, { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
         static string[,] grille;    // Grille de jeu
+        static int choix1er;
    // Liste des pièces la deuxième colonne sert à indiquer ou non la présence (?)
 
         // Main
@@ -26,9 +27,31 @@ namespace quarto_mjma
             //pieces = new string[2, NB_PIECES_TOTALE];
             
             InitialiserGrille();
-          //  InitialiserPieces();
-            Choix1erJoueur(grille);
+            changerJoueur();
             Console.ReadKey();
+        }
+
+        static void changerJoueur()
+        {
+            Choix1erJoueur();
+            if (choix1er == 1)
+            {
+                while (!Gagner() &&!AvoirGrilleRemplie())
+                {
+                    JouerJoueur();
+                    JouerOrdi();
+                }
+            }
+            else
+            {
+                while (!Gagner() && !AvoirGrilleRemplie())
+                {
+                    JouerOrdi();
+                    JouerJoueur();
+                }
+            }
+           
+
         }
 
         // Methods
@@ -57,33 +80,25 @@ namespace quarto_mjma
             Console.WriteLine("    0    1    2    3");
         }
 
-        static void Choix1erJoueur(string[,] grille)
+        static void Choix1erJoueur()
         {
             int choix1er = 0;
-            do
+
+            Console.WriteLine("Si vous voulez jouer en 1er tapez [1] sinon tapez [0]");
+            choix1er = int.Parse(Console.ReadLine());
+
+            while (choix1er != 0 && choix1er != 1)
             {
-                Console.WriteLine("Si vous voulez jouer en 1er tapez [1] sinon tapez [2]");
+                Console.WriteLine("vous n'avez pas choisi [1] ou [0], recommencez");
                 choix1er = int.Parse(Console.ReadLine());
-                if (choix1er == 2) // l'ordi joue en premier
-                    JouerOrdi();
-                if (choix1er == 1)
-                    JouerJoueur();
-                else //on a pas saisi 1 ou 2 
-                {
-                    Console.WriteLine("vous n'avez pas choisi [1] ou [2], recommencez");
-                    Console.Write("Si vous voulez jouer en 1er tapez [1] sinon tapez [2]");
-                    choix1er = int.Parse(Console.ReadLine());
-                }
             }
-            while (choix1er != 2 | choix1er != 1);
+            
         }
 
         static void JouerOrdi()
         {
             string choixPiece = "";
 
-            do
-            {
                 Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n 0000= petite, creuse, carrée, clair et 1111=grande, pleine, ronde, foncee\n vous pouvez mixer plusieurs caractères évidemment.");
               do
                {
@@ -99,8 +114,6 @@ namespace quarto_mjma
                 JouerPiece(choixPiece);
 
                 AfficherGrille();
-            }
-            while (!Gagner() && !AvoirGrilleRemplie());
 
         }
 
