@@ -53,17 +53,17 @@ namespace quarto_mjma
             }
         }
 
-        static int Choix1erJoueur()
+        static string Choix1erJoueur()
         {
-            int choix1er = 0;
+            string choix1er = "";
 
             Console.WriteLine("Si vous voulez jouer en 1er tapez [1] sinon tapez [0]");
-            choix1er = int.Parse(Console.ReadLine());
+            choix1er = Console.ReadLine();
 
-            while (choix1er != 0 && choix1er != 1)
+            while (choix1er != "0" && choix1er != "1")
             {
                 Console.WriteLine("vous n'avez pas choisi [1] ou [0], recommencez");
-                choix1er = int.Parse(Console.ReadLine());
+                choix1er = Console.ReadLine();
             }
 
             return choix1er;
@@ -71,12 +71,25 @@ namespace quarto_mjma
 
         static void changerJoueur()
         {
-            if (Choix1erJoueur() == 1)
+            if (Choix1erJoueur() == "1")
             {
                 while (!Gagner() && !AvoirGrilleRemplie())
                 {
                     JouerJoueur();
-                    JouerOrdi();
+
+                    if (Gagner())
+                    {
+                        Console.WriteLine("Vous avez gagné, Bravoo !");
+                    }
+                    else
+                    {
+                        JouerOrdi();
+
+                        if (Gagner())
+                        {
+                            Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour ubne prochaine fois!");
+                        }
+                    }
                 }
             }
             else
@@ -84,7 +97,20 @@ namespace quarto_mjma
                 while (!Gagner() && !AvoirGrilleRemplie())
                 {
                     JouerOrdi();
-                    JouerJoueur();
+
+                    if (Gagner())
+                    {
+                        Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour ubne prochaine fois!");
+                    }
+                    else
+                    {
+                        JouerJoueur();
+
+                        if (Gagner())
+                        {
+                            Console.WriteLine("Vous avez gagné, Bravoo !");
+                        }
+                    }
                 }
             }
         }
@@ -119,12 +145,8 @@ namespace quarto_mjma
 
             grille[ligne, col] = choixPiece;
             AfficherGrille();
-
-            if(Gagner())
-            {
-                Console.WriteLine("Vous avez gagné, Bravoo !");
-            }
         }
+
         static void JouerJoueur()
         {
 
@@ -159,13 +181,6 @@ namespace quarto_mjma
 
             grille[ligne, col] = choixPiece;
             AfficherGrille();
-
-            // for (int i=0; i<4; i++) Console.Write( " | " + )
-
-            if (Gagner())
-            {
-                Console.WriteLine("Votre adversaire a gagné.. Ce sera pour ubne prochaine fois!");
-            }
         }
 
         static void JouerPiece(string choixPiece) //permet de marquer lorsqu'une pièce est jouée
