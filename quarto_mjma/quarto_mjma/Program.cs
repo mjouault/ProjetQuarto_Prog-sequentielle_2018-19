@@ -10,9 +10,9 @@ namespace quarto_mjma
     {
         // Variables globales
         static int NB_PIECES_TOTALE = 16;
-
+        static string[,] pieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" }, { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
         static string[,] grille;    // Grille de jeu
-        static string[,] pieces;    // Liste des pièces la deuxième colonne sert à indiquer ou non la présence (?)
+   // Liste des pièces la deuxième colonne sert à indiquer ou non la présence (?)
 
         // Main
         static void Main(string[] args)
@@ -23,10 +23,10 @@ namespace quarto_mjma
             Console.WriteLine("==============================================\n");
 
             grille = new string[4, 4];
-            pieces = new string[NB_PIECES_TOTALE, 2];
-
+            //pieces = new string[2, NB_PIECES_TOTALE];
+            
             InitialiserGrille();
-            InitialiserPieces();
+          //  InitialiserPieces();
             Choix1erJoueur(grille);
             Console.ReadKey();
         }
@@ -34,8 +34,7 @@ namespace quarto_mjma
         // Methods
         static void InitialiserPieces()
         {
-            // Initialiser les pieces
-            // 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011 1100 1101 1110 1111
+            string [,]pieces= new string[,]{ { "0000","0001","0010","0011","0100","0101","0110","0111","1000","1001","1010","1011","1100","1101","1110","1111"},{"0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"} };
         }
 
         static void InitialiserGrille()
@@ -86,15 +85,16 @@ namespace quarto_mjma
             do
             {
                 Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n 0000= petite, creuse, carrée, clair et 1111=grande, pleine, ronde, foncee\n vous pouvez mixer plusieurs caractères évidemment.");
-                do
-                {
+              do
+               {
+                    //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
                     choixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
-                } while (!IsGoodPiece(choixPiece));
+                } while (!IsGoodPiece(choixPiece)); //tant que la pièce n'est pas bon on en rechoisi une autre
                 Random R = new Random();// choisit aléatoirement la ligne et la colonne pour placer le pion
 
                 int ligne = R.Next(0, 3);
                 int col = R.Next(0, 3);
-
+                     
                 grille[ligne, col] = choixPiece;
                 JouerPiece(choixPiece);
 
@@ -104,50 +104,43 @@ namespace quarto_mjma
 
         }
 
-        static void JouerPiece(string choixPiece) //à quoi ça sert cette fonction? 
+        static void JouerPiece(string choixPiece) //permet de marquer lorsqu'une pièce est jouée
         {
             int i = 0;
 
             // Recherche de l'indice
-            while (choixPiece == pieces[i, 0])  //on a un probleme indice hors du tableau j'ai mis un == au lieu d'un diff et ça marche
+            while (i<NB_PIECES_TOTALE && choixPiece != pieces[0, i])  
             {
                 // Incrémentation
                 i++;
             }
 
             // Pièce utilisée 
-            pieces[i, 1] = "1";
+            pieces[1, i] = "1";
         }
 
         /// <summary>
         /// IsGoodPiece() : True si la pièce n'a pas été joué, False sinon
         /// </summary>
         /// <returns></returns>
-        static bool IsGoodPiece(string choixPiece) //demander à maurine de m'expliquer cette fonction
+        static bool IsGoodPiece(string choixPiece) //vérifier si la pièce a été utilisé ou non
         {
             bool good = true;
             int i = 0;  // Compteur
 
             // Vérification
-            while ((i < NB_PIECES_TOTALE) && good) //tant que le nombre total de pièce n'est pas atteint 
-            {
-                if (choixPiece == pieces[i, 0] && pieces[i, 1] == "1") 
-                {
-                    // 1 si déjà jouée, 0 sinon
-                    good = false;
-                }
 
-                // Incrémentation
-                i++;
-            }
-
-            return good;
+                while (choixPiece != pieces[0, i]&&i<NB_PIECES_TOTALE)
+                    i++;
+                if (pieces[1, i] == "1")
+                        good = false;
+            
+                return good;
         }
 
         static void JouerJoueur()
         {
             int ligne, col;
-            string[,] grille = new string[4, 4];
             Random R = new Random();
             //cas où le joueur joue
             //insérer un code pour faire choisi une pièce à l'ordi, un random sur chaque caractère?
@@ -168,8 +161,8 @@ namespace quarto_mjma
             Console.WriteLine("Choisir une colonne (entre 0 et 3)");
             col = int.Parse(Console.ReadLine());
 
-            grille[ligne, col] = piece;
             JouerPiece(piece);
+            grille[ligne, col] = piece;
             AfficherGrille();
 
             // for (int i=0; i<4; i++) Console.Write( " | " + )
