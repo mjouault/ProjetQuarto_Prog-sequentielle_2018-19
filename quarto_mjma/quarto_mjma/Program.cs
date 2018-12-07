@@ -195,9 +195,45 @@ namespace quarto_mjma
 
         static bool AvoirGrilleRemplie()
         {
-            return false;
+            bool grilleRemplie = true;
+            int i = 0; //indice ligne
+            while (i < 4 && AvoirLigneRemplie(i))
+                i++;
+            
+            int j = 0; //indice colonne
+            while (j < 4 && AvoirColRemplie(j))
+                j++;
+                
+             grilleRemplie = false;
+
+            return grilleRemplie;
         }
 
+        static bool AvoirLigneRemplie(int ligne)
+        {
+            bool ligneRemplie = false; // ligne non remplie, on peut donc jouer dessus
+            int j = 0; //compteur colonnes
+           
+            while (j<4 && grille [ligne, j] != "   ")
+                j++;
+            if (j==4)
+            return false; // ligne remplie, impossible de jouer sur cette ligne
+
+            return ligneRemplie;
+        }
+
+        static bool AvoirColRemplie (int col)
+        {
+            bool colRemplie = false; // colonne non remplie, on peut donc jouer dessus
+            int i = 0; //compteur lignes
+
+            while (i < 4 && grille[i, col] != "   ")
+                i++;
+            if (i == 4)
+                return false; // colonne remplie, impossible de jouer sur cette colonne
+
+            return colRemplie;
+        }
       
     }
 
