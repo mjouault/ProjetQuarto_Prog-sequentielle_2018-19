@@ -28,7 +28,7 @@ namespace quarto_mjma
             grille = new string[4, 4];
             
             InitialiserGrille();
-            ChangerJoueur();
+            Jouer();
             Console.ReadKey();
         }
 
@@ -57,7 +57,8 @@ namespace quarto_mjma
         {
             string choix1er = "";
 
-            Console.WriteLine("Si vous voulez jouer en 1er tapez [1] sinon tapez [0]");
+            Console.WriteLine("Tapez [1] pour jouer en premier\n" +
+                "Tapez [0] si l'IA joue en premier");
             choix1er = Console.ReadLine();
 
             while (choix1er != "0" && choix1er != "1")
@@ -72,7 +73,7 @@ namespace quarto_mjma
             return choix1er;
         }
 
-        static void ChangerJoueur()
+        static void Jouer()
         {
             if (Choisir_1er_joueur() == "1")
             {
@@ -82,6 +83,7 @@ namespace quarto_mjma
 
                     if (Gagner())
                     {
+                        Console.Beep(440, 500);
                         Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
                         Console.WriteLine("Vous avez gagné, BRAVO !");
                         Console.ResetColor();
@@ -92,6 +94,7 @@ namespace quarto_mjma
 
                         if (Gagner())
                         {
+                            Console.Beep(440,500);
                             Console.ForegroundColor = ConsoleColor.DarkRed; //affiche en rouge si perds
                             Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                             Console.ResetColor();
@@ -107,6 +110,7 @@ namespace quarto_mjma
 
                     if (Gagner())
                     {
+                        Console.Beep(440,500);
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                         Console.ResetColor();
@@ -117,6 +121,7 @@ namespace quarto_mjma
 
                         if (Gagner())
                         {
+                            Console.Beep(440, 500);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("Vous avez gagné, BRAVO !");
                             Console.ResetColor();
@@ -128,7 +133,10 @@ namespace quarto_mjma
         static void JouerOrdi()
         {
             //choix pièce par le joueur
-            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n 0000= petite, creuse, carrée, clair et 1111=grande, pleine, ronde, foncee\n vous pouvez mixer plusieurs caractères évidemment.");
+            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
+                "- 0000 correspond à petite, creuse, carrée, clair\n" +
+                "- 1111 correspond à grande, pleine, ronde, foncee \n" +
+                "vous pouvez mixer plusieurs caractères évidemment.");
             do
             {
                 //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
@@ -169,13 +177,16 @@ namespace quarto_mjma
             Random R = new Random();
             do
             {
-                randomPiece = R.Next(0, 17);
+                randomPiece = R.Next(0, 16);
                 choixPiece = tabPieces[0, randomPiece];
             }
             while (tabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée
 
             JouerPiece(choixPiece);
-            Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous", choixPiece);
+            Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
+                "- 0000 correspond à petite, creuse, carrée, clair\n" +
+                "- 1111 correspond à grande, pleine, ronde, foncee \n" +
+                "Les caractères peuvent être mélangés entre eux", choixPiece);
           // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
             //choix de la case par le joueur
             int ligne, col;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace test_de_chaque_fonction
@@ -10,9 +11,10 @@ namespace test_de_chaque_fonction
     {
         static void Main(string[] args)
         {
-            string[,] grille = new string[4, 4];
-            InitialiserGrille(grille);
-            JouerOrdi(grille);
+            for (int i = 440; i <= 800; i += 200)
+            {
+                Console.Beep(i, 500);
+            }
         }
         static void InitialiserGrille(string[,] grille)
         {
@@ -126,6 +128,7 @@ namespace test_de_chaque_fonction
 
             // for (int i=0; i<4; i++) Console.Write( " | " + )
         }
+
 
     }
 }
