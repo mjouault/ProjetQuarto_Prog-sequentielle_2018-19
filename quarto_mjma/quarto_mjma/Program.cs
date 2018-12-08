@@ -20,25 +20,26 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
-            Console.Title = "Jeu de Quarto"; //la fenêtre d'exécution s'appellera jeu de quarto 
-            Console.WriteLine("==============================================");
-            Console.WriteLine("            VOUS JOUEZ AU QUARTO");
-            Console.WriteLine("==============================================\n");
+            do
+            {
+                Console.Title = "Jeu de Quarto"; //la fenêtre d'exécution s'appellera jeu de quarto 
+                Console.WriteLine("==============================================");
+                Console.WriteLine("            VOUS JOUEZ AU QUARTO");
+                Console.WriteLine("==============================================\n");
 
-            grille = new string[4, 4];
-            
-            InitialiserGrille();
-            Jouer();
+                grille = new string[4, 4];
+
+                InitialiserGrille();
+                Jouer();
+                Continuer();
+            } while (Continuer());
             Console.ReadKey();
         }
 
        
 
         // Methods
-        static void InitialiserPieces()
-        {
-            string [,]tabPieces= new string[,]{ { "0000","0001","0010","0011","0100","0101","0110","0111","1000","1001","1010","1011","1100","1101","1110","1111"},{"0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"} };
-        }
+       
 
         static void InitialiserGrille()
         {
@@ -52,7 +53,23 @@ namespace quarto_mjma
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
             }
         }
-
+        
+        static bool Continuer()
+        {
+            Console.WriteLine("Tapez [r] pour rejour ou [a] pour arrêter");
+            string rejouer = Console.ReadLine();
+            bool continuer = true;
+            while (rejouer != "r" && rejouer != "a")
+            {
+                Console.WriteLine("saisissez [r] ou [a]");
+                rejouer = Console.ReadLine();
+            }
+            if (rejouer == "r")
+                continuer = true;
+            if (rejouer == "a")
+                continuer = false;
+            return continuer;
+        }
         static string Choisir_1er_joueur()
         {
             string choix1er = "";
@@ -83,14 +100,15 @@ namespace quarto_mjma
 
                     if (Gagner())
                     {
+                        Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
+                        Console.WriteLine("Vous avez gagné, BRAVO !");
                         Console.Beep(400, 100);//musique de victoire
                         Console.Beep(550, 100);
                         Console.Beep(450, 100);
                         Console.Beep(600, 2000);
-                        Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
-                        Console.WriteLine("Vous avez gagné, BRAVO !");
                         Console.ResetColor();
                     }
+
                     else
                     {
                         JouerOrdi();
@@ -126,18 +144,19 @@ namespace quarto_mjma
                         Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                         Console.ResetColor();
                     }
+
                     else
                     {
                         JouerJoueur();
 
                         if (Gagner())
                         {
-                            Console.Beep(400, 100);
+                            Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
+                            Console.WriteLine("Vous avez gagné, BRAVO !");
+                            Console.Beep(400, 100);//musique de victoire
                             Console.Beep(550, 100);
                             Console.Beep(450, 100);
                             Console.Beep(600, 2000);
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Vous avez gagné, BRAVO !");
                             Console.ResetColor();
                         }
                     }

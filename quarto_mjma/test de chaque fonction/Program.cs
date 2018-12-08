@@ -9,12 +9,21 @@ namespace test_de_chaque_fonction
 {
     class Program
     {
-        static void Main(string[] args)
+        static bool Continuer()
         {
-            Console.Beep(400, 100);
-            Console.Beep(550, 100);
-            Console.Beep(450, 100);
-            Console.Beep(600, 2000);
+            Console.WriteLine("Tapez [r] pour rejour ou [a] pour arrêter");
+            string rejouer = Console.ReadLine();
+            bool continuer=true;
+            while (rejouer != "r" && rejouer != "a")
+            {
+                Console.WriteLine("saisissez [r] ou [a]");
+                rejouer = Console.ReadLine();
+            }
+            if (rejouer == "r")
+                continuer = true;
+            if (rejouer == "a")
+                continuer = false;
+            return continuer;
         }
         static void InitialiserGrille(string[,] grille)
         {
