@@ -20,6 +20,7 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
+            string surnom; string afficherRegles;
             do
             {
                 Console.Title = "Jeu de Quarto"; //la fenêtre d'exécution s'appellera jeu de quarto 
@@ -27,16 +28,43 @@ namespace quarto_mjma
                 Console.WriteLine("            VOUS JOUEZ AU QUARTO");
                 Console.WriteLine("==============================================\n");
 
+                Console.Write(" C'est donc vous le nouveau joueur qui souhaite affronter la machine toute puissante au QUARTO ! Quel est votre ptit nom ? ");
+                surnom = Console.ReadLine();
+                Console.WriteLine("Sympa comme blaze! Mais avant de commencer {0}, je vous rappelle les règles du jeu? Entre [o] ou [n]", surnom);
+
+                //Afficher règles du jeu
+                do
+                {
+                    afficherRegles = Console.ReadLine();
+                    if (afficherRegles != "o" && afficherRegles != "n")
+                    {
+                        Console.WriteLine("Il faut répondre par [o] ou [n] on a dit !");
+                    }
+                } while (afficherRegles != "o" && afficherRegles != "n") ;
+
+                if (afficherRegles == "o")
+                {
+                    Console.WriteLine("\nSage décision, un petit rappel ne fait jamais de mal !\n==============================================");
+                    Console.WriteLine("            REGLES DU JEU");
+                    Console.WriteLine("==============================================\n");
+
+                    Console.Write("\nBUT DU JEU : Créer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun(fig. 2).Cet alignement peut-être horizontal, vertical ou diagonal. \nDÉROULEMENT D’UNE PARTIE : Le premier joueur est tiré au sort. Il choisit une des 16 pièces et la donne à son adversaire. Celui - ci doit la placer sur une des cases du plateau et choisir ensuite une des 15 pièces restantes pour la donner à son adversaire. \nA son tour, celui-ci la place sur une case libre et ainsi de suite…." +
+                        "\n\nGAIN DE LA PARTIE : La partie est gagnée par le premier joueur qui annonce “QUARTO !”  Un joueur fait “QUARTO !” et gagne la partie lorsque, en plaçant la pièce donnée, il crée une ligne de 4 claires ou 4 foncées ou 4 rondes ou 4 carrées ou 4 hautes ou 4 basses ou 4 pleines ou 4 creuses.Plusieurs caractères peuvent se cumuler.\n\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
+                        " Il y a égalité: toutes les pièces ont été posées sans vainqueur.");
+                }
+
+                Console.WriteLine("Que la partie commence et que le meilleur gagne !");
+
                 Grille = new string[4, 4];
 
                 InitialiserGrille();
                 Jouer();
-            } while (Continuer());
+            } while (RejouerPartie());
         }
 
        
 
-        // Methods
+        //Sous-programmes
        
 
         static void InitialiserGrille()
@@ -52,22 +80,7 @@ namespace quarto_mjma
             }
         }
         
-        static bool Continuer()
-        {
-            Console.WriteLine("Tapez [r] pour rejouer ou [a] pour arrêter");
-            string rejouer = Console.ReadLine();
-            bool continuer = true;
-            while (rejouer != "r" && rejouer != "a")
-            {
-                Console.WriteLine("saisissez [r] ou [a]");
-                rejouer = Console.ReadLine();
-            }
-            if (rejouer == "r")
-                continuer = true;
-            if (rejouer == "a")
-                continuer = false;
-            return continuer;
-        }
+       
         static string Choisir_1er_joueur()
         {
             string choix1er = "";
@@ -96,7 +109,8 @@ namespace quarto_mjma
                 {
                     JouerJoueur();
 
-                    if (Gagner())
+                    //vérification si le joueur a gagné à chaque fin de tour
+                    if (Gagner()) //cas s'il gagne
                     {
                         Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
                         Console.WriteLine("Vous avez gagné, BRAVO !");
@@ -107,10 +121,11 @@ namespace quarto_mjma
                         Console.ResetColor();
                     }
 
-                    else
+                    else 
                     {
-                        JouerOrdi();
+                        JouerOrdi(); //si le joueur n'a pas gagné, l'ordinateur joue
 
+                        //même vérification après chaque tour de jeu de l'ordinateur
                         if (Gagner())
                         {
                            
@@ -124,10 +139,12 @@ namespace quarto_mjma
                         }
                     }
                 }
-                if (AvoirGrilleRemplie()&&!Gagner())
-                    Console.WriteLine("Match nul"); //la grille est remplie mais personne ne gagne afficher match nul
+
+                if (AvoirGrilleRemplie()&&!Gagner()) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
+                    Console.WriteLine("Match nul"); 
             }
-            else
+
+            else // si l'ordinateur commence, l'alternance est inversée
             {
                 while (!Gagner() && !AvoirGrilleRemplie())
                 {
@@ -164,6 +181,10 @@ namespace quarto_mjma
                     Console.WriteLine("Match nul");
             }
         }
+
+        /// <summary>
+        /// JouerOrdi : Fonction permettant à l'ordinateur de jouer son tour soit de placer une pièce choisie par le joueur
+        /// </summary>
         static void JouerOrdi()
         {
             //choix pièce par le joueur
@@ -175,14 +196,14 @@ namespace quarto_mjma
             {
                 //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
                 ChoixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
-                if (!Verifier_si_pièce_non_utilisée(ChoixPiece))
+                if (verifierSiPieceUtilisee(ChoixPiece))
                 {
                     Console.Beep(500, 300);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
                     Console.ResetColor();
                 }
-            } while (!Verifier_si_pièce_non_utilisée(ChoixPiece)); //tant que la pièce n'est pas bonne on en rechoisit une autre
+            } while (verifierSiPieceUtilisee(ChoixPiece)); //tant que la pièce n'est pas bonne on en rechoisit une autre
 
             JouerPiece(ChoixPiece);
 
@@ -203,6 +224,9 @@ namespace quarto_mjma
             AfficherGrille();
         }
 
+        /// <summary>
+        /// JouerJoueur : Fonciton permettant au joueur de jouer son tour soit de placer une pièce choisie par l'ordinateur
+        /// </summary>
         static void JouerJoueur()
         {
 
@@ -242,7 +266,11 @@ namespace quarto_mjma
             AfficherGrille();
         }
 
-        static void JouerPiece(string choixPiece) //permet de marquer lorsqu'une pièce est jouée
+        /// <summary>
+        /// JouerPiece : Fonction permettant de ne jouer qu'une seule fois chaque pièce
+        /// </summary>
+        /// <param name="choixPiece"></param>
+        static void JouerPiece(string choixPiece) 
         {
             int i = 0;
 
@@ -258,12 +286,12 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// verifPieceJouee() : True si la pièce n'a pas été joué, False sinon
+        /// verifierSiPieceUtilisee : True si la pièce n'a pas été joué, False sinon
         /// </summary>
         /// <returns></returns>
-        static bool Verifier_si_pièce_non_utilisée(string choixPiece) //vérifier si la pièce a été utilisée (true) ou non (false)
+        static bool verifierSiPieceUtilisee(string choixPiece) //vérifier si la pièce a été utilisée (true) ou non (false)
         {
-            bool Piecelibre = true;
+            bool pieceUtilisee = false;
             int i = 0;  // Compteur
 
             // Vérification
@@ -271,13 +299,15 @@ namespace quarto_mjma
             while (choixPiece != TabPieces[0, i] && i < NB_PIECES_TOTALE)
                 i++;
             if (TabPieces[1, i] == "1")
-                Piecelibre = false;
+                pieceUtilisee = true;
 
-            return Piecelibre;
+            return pieceUtilisee;
         }
 
 
-
+        /// <summary>
+        /// AfficherGrille : réactualise la grille à chaque tour de jeu
+        /// </summary>
         static void AfficherGrille()
         {
             for (int i = 0; i < 4; i++) //indice ligne
@@ -298,6 +328,10 @@ namespace quarto_mjma
             Console.WriteLine("         0    1    2    3");
         }
 
+        /// <summary>
+        /// Gagner () : Fonction donnant toutes les combinaisons gagnantes et terminant la partie
+        /// </summary>
+        /// <returns></returns>
         static bool Gagner()
         {
             bool gagner = false;
@@ -379,24 +413,18 @@ namespace quarto_mjma
                 }
             }
 
+            if (gagner)
+            {
+                Console.WriteLine("QUARTO!");
+            }
+
             return gagner;
         }
 
-
-
-        //static bool AvoirGrilleRemplie()
-        //{
-        //    bool grilleRemplie = false;
-
-        //    int i = 0; //indice ligne
-        //    while (i < 4 && AvoirLigneRemplie(i))
-        //        i++;
-
-        //    if (i == 4)
-        //        grilleRemplie = true;
-
-        //    return grilleRemplie;
-        //}
+            /// <summary>
+            /// AvoirGrilleRemplie : Condition de fin de jeu et permet de définir quand il y a match nul
+            /// </summary>
+            /// <returns></returns>
         static bool AvoirGrilleRemplie()
         {
             bool grilleRemplie = false;
@@ -423,27 +451,45 @@ namespace quarto_mjma
             return grilleRemplie;
         }
 
+        /// <summary>
+        /// AvoirCaseRemplie : Permet de savoir si le joueur ou l'ordinateur peut jouer dans la case ou si elle est déjà remplie
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns></returns>
         static bool AvoirCaseRemplie(int i, int j)
         {
             return Grille[i, j] != CaseVide; // retourne true si la case considérée n'est pas vide, false sinon
         }
 
-        //static bool AvoirLigneRemplie(int ligne)
-        //{
-        //    bool ligneRemplie = false; // ligne non remplie, on peut donc jouer dessus
-        //    int j = 0; //compteur colonnes
-           
-        //    // Parcours
-        //    while (j < 4 && grille[ligne, j] != caseVide)
-        //        j++;
+        /// <summary>
+        /// RejouerPartie : Le joueur décide, à chaque fin de partie, s'il souhaite en refaire une ou non
+        /// </summary>
+        /// <returns></returns>
+        static bool RejouerPartie()
+        {
+            Console.WriteLine("Tapez [r] pour rejouer ou [a] pour arrêter");
+            string rejouer = Console.ReadLine(); //le joueur choisit s'il veut refaire une partie
+            bool continuer = true;
+            while (rejouer != "r" && rejouer != "a")
+            {
+                Console.WriteLine("saisissez [r] ou [a]");
+                rejouer = Console.ReadLine();
+            }
+            if (rejouer == "a")
+            {
+                continuer = false;
+            }
+            return continuer;
+        }
 
-        //    // Vérif
-        //    if (j == 4)
-        //        ligneRemplie = true; // ligne remplie, impossible de jouer sur cette ligne
-
-        //    return ligneRemplie;
-        //}
-      
+        /// <summary>
+        /// ArreterPartie : à tout moment, le joueur peut décider d'arrêter la partie
+        /// </summary>
+        static void ArreterPartie () 
+        {
+        
+        }
     }
 
 }
