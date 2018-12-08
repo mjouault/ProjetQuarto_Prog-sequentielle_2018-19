@@ -11,10 +11,10 @@ namespace test_de_chaque_fonction
     {
         static void Main(string[] args)
         {
-            for (int i = 440; i <= 800; i += 200)
-            {
-                Console.Beep(i, 500);
-            }
+            Console.Beep(400, 100);
+            Console.Beep(550, 100);
+            Console.Beep(450, 100);
+            Console.Beep(600, 2000);
         }
         static void InitialiserGrille(string[,] grille)
         {

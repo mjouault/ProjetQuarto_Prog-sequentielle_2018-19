@@ -63,7 +63,7 @@ namespace quarto_mjma
 
             while (choix1er != "0" && choix1er != "1")
             {
-                Console.Beep(500, 300);
+                Console.Beep(400, 300);
                 Console.ForegroundColor = ConsoleColor.DarkRed;//afficher le message d'erreur en rouge
                 Console.WriteLine("vous n'avez pas choisi [1] ou [0], recommencez");
                 choix1er = Console.ReadLine();
@@ -83,7 +83,10 @@ namespace quarto_mjma
 
                     if (Gagner())
                     {
-                        Console.Beep(440, 500);
+                        Console.Beep(400, 100);//musique de victoire
+                        Console.Beep(550, 100);
+                        Console.Beep(450, 100);
+                        Console.Beep(600, 2000);
                         Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
                         Console.WriteLine("Vous avez gagné, BRAVO !");
                         Console.ResetColor();
@@ -94,13 +97,18 @@ namespace quarto_mjma
 
                         if (Gagner())
                         {
-                            Console.Beep(440,500);
+                            Console.Beep(500, 100);
+                            Console.Beep(400, 100);
+                            Console.Beep(350, 100);
+                            Console.Beep(300, 2000);//musique de défaite
                             Console.ForegroundColor = ConsoleColor.DarkRed; //affiche en rouge si perds
                             Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                             Console.ResetColor();
                         }
                     }
                 }
+                if (AvoirGrilleRemplie()&&!Gagner())
+                    Console.WriteLine("Match nul"); //la grille est remplie mais personne ne gagne afficher match nul
             }
             else
             {
@@ -110,7 +118,10 @@ namespace quarto_mjma
 
                     if (Gagner())
                     {
-                        Console.Beep(440,500);
+                        Console.Beep(500, 100);//musique de défaite
+                        Console.Beep(400, 100);
+                        Console.Beep(350, 100);
+                        Console.Beep(300, 2000);
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                         Console.ResetColor();
@@ -121,13 +132,18 @@ namespace quarto_mjma
 
                         if (Gagner())
                         {
-                            Console.Beep(440, 500);
+                            Console.Beep(400, 100);
+                            Console.Beep(550, 100);
+                            Console.Beep(450, 100);
+                            Console.Beep(600, 2000);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("Vous avez gagné, BRAVO !");
                             Console.ResetColor();
                         }
                     }
                 }
+                if (AvoirGrilleRemplie() && !Gagner())
+                    Console.WriteLine("Match nul");
             }
         }
         static void JouerOrdi()
