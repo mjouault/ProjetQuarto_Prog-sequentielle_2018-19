@@ -79,7 +79,6 @@ namespace quarto_mjma
                 {
                     Grille[i, j] = caseVide; // aucun caractère et pièce non présente
                 }
-                Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
             }
         }
 
