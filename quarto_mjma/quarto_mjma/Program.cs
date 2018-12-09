@@ -28,9 +28,9 @@ namespace quarto_mjma
                 Console.WriteLine("            VOUS JOUEZ AU QUARTO");
                 Console.WriteLine("==============================================\n");
 
-                Console.Write(" C'est donc vous le nouveau joueur qui souhaite affronter la machine toute puissante au QUARTO ! Quel est votre ptit nom ? ");
+                Console.Write("C'est donc toi le nouveau joueur qui souhaite affronter la machine toute puissante au QUARTO !\nQuel est ton petit nom ? ");
                 surnom = Console.ReadLine();
-                Console.WriteLine("Sympa comme blaze! Mais avant de commencer {0}, je vous rappelle les règles du jeu? Entre [o] ou [n]", surnom);
+                Console.WriteLine("Sympa comme blaze!\nAvant de commencer {0}, veux-tu que je te rappelle les règles du jeu? [o]/[n]", surnom);
 
                 //Afficher règles du jeu
                 do
@@ -38,7 +38,10 @@ namespace quarto_mjma
                     afficherRegles = Console.ReadLine();
                     if (afficherRegles != "o" && afficherRegles != "n")
                     {
+                        Console.Beep(400, 300);
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("Il faut répondre par [o] ou [n] on a dit !");
+                        Console.ResetColor();
                     }
                 } while (afficherRegles != "o" && afficherRegles != "n") ;
 
@@ -48,9 +51,9 @@ namespace quarto_mjma
                     Console.WriteLine("            REGLES DU JEU");
                     Console.WriteLine("==============================================\n");
 
-                    Console.Write("\nBUT DU JEU : Créer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun(fig. 2).Cet alignement peut-être horizontal, vertical ou diagonal. \nDÉROULEMENT D’UNE PARTIE : Le premier joueur est tiré au sort. Il choisit une des 16 pièces et la donne à son adversaire. Celui - ci doit la placer sur une des cases du plateau et choisir ensuite une des 15 pièces restantes pour la donner à son adversaire. \nA son tour, celui-ci la place sur une case libre et ainsi de suite…." +
-                        "\n\nGAIN DE LA PARTIE : La partie est gagnée par le premier joueur qui annonce “QUARTO !”  Un joueur fait “QUARTO !” et gagne la partie lorsque, en plaçant la pièce donnée, il crée une ligne de 4 claires ou 4 foncées ou 4 rondes ou 4 carrées ou 4 hautes ou 4 basses ou 4 pleines ou 4 creuses.Plusieurs caractères peuvent se cumuler.\n\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
-                        " Il y a égalité: toutes les pièces ont été posées sans vainqueur.");
+                    Console.Write("\nBUT DU JEU : Créer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun(fig. 2).\nCet alignement peut-être horizontal, vertical ou diagonal. \nDÉROULEMENT D’UNE PARTIE : Le premier joueur est tiré au sort.\nIl choisit une des 16 pièces et la donne à son adversaire.\nCelui - ci doit la placer sur une des cases du plateau et choisir ensuite une des 15 pièces restantes pour la donner à son adversaire.\nA son tour, celui-ci la place sur une case libre et ainsi de suite…." +
+                        "\n\nGAIN DE LA PARTIE : La partie est gagnée par le premier joueur qui annonce “QUARTO !”\nUn joueur fait “QUARTO !” et gagne la partie lorsque, en plaçant la pièce donnée, il aligne 4 pièces ayant au moins un caractère en commun.\nPlusieurs caractères peuvent se cumuler.\n\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
+                        "\nIl y a égalité: toutes les pièces ont été posées sans vainqueur.");
                 }
 
                 Console.WriteLine("Que la partie commence et que le meilleur gagne !");
@@ -112,6 +115,7 @@ namespace quarto_mjma
                     //vérification si le joueur a gagné à chaque fin de tour
                     if (Gagner()) //cas s'il gagne
                     {
+                        Console.WriteLine("QUARTO !");
                         Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
                         Console.WriteLine("Vous avez gagné, BRAVO !");
                         Console.Beep(400, 100);//musique de victoire
@@ -128,7 +132,7 @@ namespace quarto_mjma
                         //même vérification après chaque tour de jeu de l'ordinateur
                         if (Gagner())
                         {
-                           
+                            Console.WriteLine("QUARTO !");
                             Console.ForegroundColor = ConsoleColor.DarkRed; //affiche en rouge si perds
                             Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                             Console.Beep(500, 100);
@@ -152,7 +156,8 @@ namespace quarto_mjma
 
                     if (Gagner())
                     {
-                         Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("QUARTO !");
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                         Console.Beep(500, 100);
                         Console.Beep(400, 100);
@@ -167,6 +172,7 @@ namespace quarto_mjma
 
                         if (Gagner())
                         {
+                            Console.WriteLine("QUARTO !");
                             Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
                             Console.WriteLine("Vous avez gagné, BRAVO !");
                             Console.Beep(400, 100);//musique de victoire
@@ -196,14 +202,14 @@ namespace quarto_mjma
             {
                 //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
                 ChoixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
-                if (verifierSiPieceUtilisee(ChoixPiece))
+                if (VerifierSiPieceUtilisee(ChoixPiece))
                 {
                     Console.Beep(500, 300);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
                     Console.ResetColor();
                 }
-            } while (verifierSiPieceUtilisee(ChoixPiece)); //tant que la pièce n'est pas bonne on en rechoisit une autre
+            } while (VerifierSiPieceUtilisee(ChoixPiece)); //tant que la pièce n'est pas bonne on en rechoisit une autre
 
             JouerPiece(ChoixPiece);
 
@@ -289,7 +295,7 @@ namespace quarto_mjma
         /// verifierSiPieceUtilisee : True si la pièce n'a pas été joué, False sinon
         /// </summary>
         /// <returns></returns>
-        static bool verifierSiPieceUtilisee(string choixPiece) //vérifier si la pièce a été utilisée (true) ou non (false)
+        static bool VerifierSiPieceUtilisee(string choixPiece) //vérifier si la pièce a été utilisée (true) ou non (false)
         {
             bool pieceUtilisee = false;
             int i = 0;  // Compteur
@@ -412,11 +418,7 @@ namespace quarto_mjma
                     }
                 }
             }
-
-            if (gagner)
-            {
-                Console.WriteLine("QUARTO!");
-            }
+            
 
             return gagner;
         }
