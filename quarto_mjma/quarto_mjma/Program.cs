@@ -62,7 +62,7 @@ namespace quarto_mjma
 
                 InitialiserGrille();
                 Jouer();
-            } while (RejouerPartie() && !ArreterPartie(Console.ReadKey()));
+            } while (RejouerPartie());
         }
 
 
@@ -491,7 +491,7 @@ namespace quarto_mjma
         /// <summary>
         /// ArreterPartie : à tout moment, le joueur peut décider d'arrêter la partie
         /// </summary>
-        static bool ArreterPartie( ConsoleKeyInfo stop)
+        static bool ArreterPartie( string stop)
         {
             bool arret = false;
             if (stop.ToString() == "s")
