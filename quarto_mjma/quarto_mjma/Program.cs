@@ -13,7 +13,7 @@ namespace quarto_mjma
         // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
         static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" }, { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
         static string[,] Grille;    // Grille de jeu
-        static string CaseVide = "    "; //pourquoi ça nous souligne les 2 premières lettres?
+        static string caseVide = "    "; //pourquoi ça nous souligne les 2 premières lettres?
         static string ChoixPiece;
 
 
@@ -43,7 +43,7 @@ namespace quarto_mjma
                         Console.WriteLine("Il faut répondre par [o] ou [n] on a dit !");
                         Console.ResetColor();
                     }
-                } while (afficherRegles != "o" && afficherRegles != "n") ;
+                } while (afficherRegles != "o" && afficherRegles != "n");
 
                 if (afficherRegles == "o")
                 {
@@ -62,13 +62,13 @@ namespace quarto_mjma
 
                 InitialiserGrille();
                 Jouer();
-            } while (RejouerPartie());
+            } while (RejouerPartie()); //&& !ArreterPartie());
         }
 
-       
+
 
         //Sous-programmes
-       
+
 
         static void InitialiserGrille()
         {
@@ -77,13 +77,13 @@ namespace quarto_mjma
             {
                 for (int j = 0; j < 4; j++) // i = indice colonne
                 {
-                    Grille[i, j] = CaseVide; // aucun caractère et pièce non présente
+                    Grille[i, j] = caseVide; // aucun caractère et pièce non présente
                 }
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
             }
         }
-        
-       
+
+
         static string Choisir_1er_joueur()
         {
             string choix1er = "";
@@ -115,7 +115,6 @@ namespace quarto_mjma
                     //vérification si le joueur a gagné à chaque fin de tour
                     if (Gagner()) //cas s'il gagne
                     {
-                        Console.WriteLine("QUARTO !");
                         Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
                         Console.WriteLine("Vous avez gagné, BRAVO !");
                         Console.Beep(400, 100);//musique de victoire
@@ -125,14 +124,13 @@ namespace quarto_mjma
                         Console.ResetColor();
                     }
 
-                    else 
+                    else
                     {
                         JouerOrdi(); //si le joueur n'a pas gagné, l'ordinateur joue
 
                         //même vérification après chaque tour de jeu de l'ordinateur
                         if (Gagner())
                         {
-                            Console.WriteLine("QUARTO !");
                             Console.ForegroundColor = ConsoleColor.DarkRed; //affiche en rouge si perds
                             Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                             Console.Beep(500, 100);
@@ -144,8 +142,8 @@ namespace quarto_mjma
                     }
                 }
 
-                if (AvoirGrilleRemplie()&&!Gagner()) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
-                    Console.WriteLine("Match nul"); 
+                if (AvoirGrilleRemplie() && !Gagner()) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
+                    Console.WriteLine("Match nul");
             }
 
             else // si l'ordinateur commence, l'alternance est inversée
@@ -156,7 +154,6 @@ namespace quarto_mjma
 
                     if (Gagner())
                     {
-                        Console.WriteLine("QUARTO !");
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
                         Console.Beep(500, 100);
@@ -172,7 +169,6 @@ namespace quarto_mjma
 
                         if (Gagner())
                         {
-                            Console.WriteLine("QUARTO !");
                             Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
                             Console.WriteLine("Vous avez gagné, BRAVO !");
                             Console.Beep(400, 100);//musique de victoire
@@ -251,7 +247,8 @@ namespace quarto_mjma
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
                 "- 1111 correspond à grande, pleine, ronde, foncee \n" +
                 "Les caractères peuvent être mélangés entre eux", ChoixPiece);
-          // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
+            // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
+
             //choix de la case par le joueur
             int ligne, col;
 
@@ -276,7 +273,7 @@ namespace quarto_mjma
         /// JouerPiece : Fonction permettant de ne jouer qu'une seule fois chaque pièce
         /// </summary>
         /// <param name="choixPiece"></param>
-        static void JouerPiece(string choixPiece) 
+        static void JouerPiece(string choixPiece)
         {
             int i = 0;
 
@@ -325,7 +322,7 @@ namespace quarto_mjma
 
                 for (int j = 0; j < 4; j++) // i = indice colonne
                 {
-                        Console.Write(Grille[i, j] + "|");
+                    Console.Write(Grille[i, j] + "|");
                 }
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
             }
@@ -351,7 +348,7 @@ namespace quarto_mjma
                 for (n = 0; n < 4; n++) //test pour chaque carcatéristique(x4)
                 {
                     j = 0;
-                    while (j < 4 && Grille[i, 0] != CaseVide && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ
+                    while (j < 4 && Grille[i, 0] != caseVide && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ
                     {
                         j++;
                     }
@@ -370,7 +367,7 @@ namespace quarto_mjma
                     for (n = 0; n < 4; n++)
                     {
                         i = 0;
-                        while (i < 4 && Grille[0, j] != CaseVide && Grille[0, j][n] == Grille[i, j][n])
+                        while (i < 4 && Grille[0, j] != caseVide && Grille[0, j][n] == Grille[i, j][n])
                         {
                             i++;
                         }
@@ -388,7 +385,7 @@ namespace quarto_mjma
                 for (n = 0; n < 4; n++)
                 {
                     i = 1;
-                    while (i < 4 && Grille[0, 0] != CaseVide && Grille[0, 0][n] == Grille[i, i][n])
+                    while (i < 4 && Grille[0, 0] != caseVide && Grille[0, 0][n] == Grille[i, i][n])
                     {
                         i++;
                     }
@@ -407,7 +404,7 @@ namespace quarto_mjma
                     // Coordonnées (i, j) de la 1ere case que je compare
                     i = 1;
                     j = 2;
-                    while (i < 4 && j >= 0 && Grille[1, 3] != CaseVide && Grille[1, 3][n] == Grille[i, j][n])
+                    while (i < 4 && j >= 0 && Grille[1, 3] != caseVide && Grille[1, 3][n] == Grille[i, j][n])
                     {
                         i++;
                         j--;
@@ -418,15 +415,20 @@ namespace quarto_mjma
                     }
                 }
             }
-            
+
+            if (gagner)
+            {
+                Console.WriteLine("QUARTO!"); //pb : dit 2x quarto !
+            }
 
             return gagner;
+
         }
 
-            /// <summary>
-            /// AvoirGrilleRemplie : Condition de fin de jeu et permet de définir quand il y a match nul
-            /// </summary>
-            /// <returns></returns>
+        /// <summary>
+        /// AvoirGrilleRemplie : Condition de fin de jeu et permet de définir quand il y a match nul
+        /// </summary>
+        /// <returns></returns>
         static bool AvoirGrilleRemplie()
         {
             bool grilleRemplie = false;
@@ -461,7 +463,7 @@ namespace quarto_mjma
         /// <returns></returns>
         static bool AvoirCaseRemplie(int i, int j)
         {
-            return Grille[i, j] != CaseVide; // retourne true si la case considérée n'est pas vide, false sinon
+            return Grille[i, j] != caseVide; // retourne true si la case considérée n'est pas vide, false sinon
         }
 
         /// <summary>
@@ -488,12 +490,27 @@ namespace quarto_mjma
         /// <summary>
         /// ArreterPartie : à tout moment, le joueur peut décider d'arrêter la partie
         /// </summary>
-        static void ArreterPartie () 
+        static bool ArreterPartie( string stop)
         {
-        
+            bool arret = false;
+            if (stop == "s")
+            {
+                Console.WriteLine("Voulez-vous arrêter la partie ? (o/n)");
+                string arreter = Console.ReadLine();
+                if (stop == "n")
+                {
+                    Console.WriteLine("On continue ...");
+                }
+                else
+                {
+                    arret = true;
+                    Console.WriteLine("On s'arrête ...");
+                }
+            }
+            return arret;
         }
+  
     }
-
 }
 
 
