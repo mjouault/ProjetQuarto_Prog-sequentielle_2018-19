@@ -15,7 +15,7 @@ namespace quarto_mjma
         static string[,] Grille;    // Grille de jeu
         static string caseVide = "    "; //pourquoi ça nous souligne les 2 premières lettres?
         static string ChoixPiece;
-
+        static int ligne; static int col;
 
         // Main
         static void Main(string[] args)
@@ -62,7 +62,7 @@ namespace quarto_mjma
 
                 InitialiserGrille();
                 Jouer();
-            } while (RejouerPartie()); //&& !ArreterPartie());
+            } while (RejouerPartie() && !ArreterPartie(Console.ReadKey()));
         }
 
 
@@ -214,7 +214,7 @@ namespace quarto_mjma
 
             // choisit aléatoirement la ligne et la colonne pour placer le pion
 
-            int ligne; int col;
+            //int ligne; int col;
 
             do
             {
@@ -250,7 +250,8 @@ namespace quarto_mjma
             // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
 
             //choix de la case par le joueur
-            int ligne, col;
+
+           // int ligne, col;
 
             do
             {
@@ -490,14 +491,14 @@ namespace quarto_mjma
         /// <summary>
         /// ArreterPartie : à tout moment, le joueur peut décider d'arrêter la partie
         /// </summary>
-        static bool ArreterPartie( string stop)
+        static bool ArreterPartie( ConsoleKeyInfo stop)
         {
             bool arret = false;
-            if (stop == "s")
+            if (stop.ToString() == "s")
             {
                 Console.WriteLine("Voulez-vous arrêter la partie ? (o/n)");
                 string arreter = Console.ReadLine();
-                if (stop == "n")
+                if (stop.ToString() == "n")
                 {
                     Console.WriteLine("On continue ...");
                 }
