@@ -9,6 +9,192 @@ namespace test_de_chaque_fonction
 {
     class Program
     {
+        static void ChoixIntelligentpiece()
+        {
+            //faire cas où il y en a 3 pareil dans une colonne ou ligne ou diagonale et quil reste une case vide donc pas alignés mais ne pas choisir pièce avec ce caractère quand même
+            //choix pièce:
+            bool aligne =false; //bool qui nous dit si il a trouvé 3 pièces alignés de caractère identique
+            int i; //indice lignes
+            int j; //indice colonnes
+            int n; //indice des 4 caractéristiques de la pièce
+
+            //verif lignes
+            for (i = 0; i < 4; i++) //indice ligne
+            {
+                for (n = 0; n < 4; n++) //test pour chaque caractéristique(x4)
+                {
+                    j = 0;
+                    while (j < 4 && Grille[i, 0] != caseVide && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ
+                    {
+                        j++;
+                    }
+                    if (j == 3)
+                    {
+
+                        //choisir pièce avec[n] != [n] de j = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
+                    }
+                }
+            }
+
+            //verif colonnes
+            if (!aligne)
+            {
+                for (j = 0; j < 4; j++)
+                {
+                    for (n = 0; n < 4; n++)
+                    {
+                        i = 0;
+                        while (i < 4 && Grille[0, j] != caseVide && Grille[0, j][n] == Grille[i, j][n])
+                        {
+                            i++;
+                        }
+                        if (i == 3)
+                        {
+
+                            //choisir pièce avec[n] != [n] de i = 3
+                            //  VerifierSiPieceUtilisee()
+                            //if (verifiersipieceutilisee) alignee=true;
+                            //else alignee=false
+                        }
+                    }
+                }
+            }
+
+            //vérif diago de la gauche vers la droite, haut vers bas
+            if (!aligne)
+            {
+                for (n = 0; n < 4; n++)
+                {
+                    i = 1;
+                    while (i < 4 && Grille[0, 0] != caseVide && Grille[0, 0][n] == Grille[i, i][n])
+                    {
+                        i++;
+                    }
+                    if (i == 3)
+                    {
+                        //choisir pièce avec[n] != [n] de i = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
+                    }
+                }
+            }
+
+            //vérif diago de la droite vers la gauche, du haut vers le bas
+            if (!aligne)
+            {
+                for (n = 0; n < 4; n++)
+                {
+                    // Coordonnées (i, j) de la 1ere case que je compare
+                    i = 1;
+                    j = 2;
+                    while (i < 4 && j >= 0 && Grille[1, 3] != caseVide && Grille[1, 3][n] == Grille[i, j][n])
+                    {
+                        i++;
+                        j--;
+                    }
+                    if (i == 3)
+                    {
+                        //choisir pièce avec[n] != [n] de i = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
+                    }
+                }
+            }
+
+        }
+
+        static void ChoixIntelligentCase()
+        {
+            //faire cas où il y en a 3 pareil dans une colonne ou ligne ou diagonale et quil reste une case vide donc les 3 ne sont pas alignés à la suite (mettre dedans)
+
+            bool aligne = false; //bool qui nous dit si il a trouvé 3 pièces alignés de caractère identique
+            int i; //indice lignes
+            int j; //indice colonnes
+            int n; //indice des 4 caractéristiques de la pièce
+
+            //verif lignes
+            for (i = 0; i < 4; i++) //indice ligne
+            {
+                for (n = 0; n < 4; n++) //test pour chaque carcatéristique(x4)
+                {
+                    j = 0;
+                    while (j < 3 && Grille[i, 0] != caseVide && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ
+                    {
+                        j++;
+                    }
+                    if (j == 3)
+                    {
+                        //Grille[i,mettre dans la case vide de la colonne j)]=ChoixPiece;
+                    }
+                }
+            }
+
+            //verif colonnes
+            if (!aligne)
+            {
+                for (j = 0; j < 4; j++)
+                {
+                    for (n = 0; n < 4; n++)
+                    {
+                        i = 0;
+                        while (i < 3 && Grille[0, j] != caseVide && Grille[0, j][n] == Grille[i, j][n])
+                        {
+                            i++;
+                        }
+                        if (i == 3)
+                        {
+                            //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+                        }
+                    }
+                }
+            }
+
+            //vérif diago de la gauche vers la droite, haut vers bas
+            if (!aligne)
+            {
+                for (n = 0; n < 4; n++)
+                {
+                    i = 1;
+                    while (i < 3 && Grille[0, 0] != caseVide && Grille[0, 0][n] == Grille[i, i][n])
+                    {
+                        i++;
+                    }
+                    if (i == 3)
+                    {
+                        //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+                    }
+                }
+            }
+
+            //vérif diago de la droite vers la gauche, du haut vers le bas
+            if (!aligne)
+            {
+                for (n = 0; n < 4; n++)
+                {
+                    // Coordonnées (i, j) de la 1ere case que je compare
+                    i = 1;
+                    j = 2;
+                    while (i < 3 && j >= 0 && Grille[1, 3] != caseVide && Grille[1, 3][n] == Grille[i, j][n])
+                    {
+                        i++;
+                        j--;
+                    }
+                    if (i == 3)
+                    {
+                        //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+                    }
+                }
+            }
+
+
+        }
+
+    
         static bool Continuer()
         {
             Console.WriteLine("Tapez [r] pour rejour ou [a] pour arrêter");
