@@ -100,103 +100,45 @@ namespace quarto_mjma
         }
 
 
-        static string Choisir_1er_joueur()
+        static bool choisir1erJoueur()
         {
-            string choix1er = "";
+            Random R = new Random ();
+            int choix1er = R.Next (0,2);
+            bool estHumain = true;
 
-            Console.WriteLine("Tapez [1] pour jouer en premier\n" +
-                "Tapez [0] si l'IA joue en premier");
-            choix1er = Console.ReadLine();
+            if (choix1er == 0)
+                estHumain = false;
 
-            while (choix1er != "0" && choix1er != "1")
-            {
-                Console.Beep(400, 300);
-                Console.ForegroundColor = ConsoleColor.DarkRed;//afficher le message d'erreur en rouge
-                Console.WriteLine("vous n'avez pas choisi [1] ou [0], recommencez");
-                choix1er = Console.ReadLine();
-                Console.ResetColor();
-            }
-
-            return choix1er;
+            return estHumain;
         }
 
+       
         static void Jouer()
         {
-            if (Choisir_1er_joueur() == "1")
+            bool joueurCourant = choisir1erJoueur();
+
+            while (!Gagner() && !AvoirGrilleRemplie())
             {
-                while (!Gagner() && !AvoirGrilleRemplie())
+                if (joueurCourant)  // joueur etre humain
                 {
                     JouerJoueur();
-
                     //vérification si le joueur a gagné à chaque fin de tour
                     if (Gagner()) //cas s'il gagne
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
-                        Console.WriteLine("Vous avez gagné, BRAVO !");
-                        Console.Beep(400, 100);//musique de victoire
-                        Console.Beep(550, 100);
-                        Console.Beep(450, 100);
-                        Console.Beep(600, 2000);
-                        Console.ResetColor();
-                    }
+                        AfficherVictoire();
+                }
 
-                    else
-                    {
-                        JouerOrdi(); //si le joueur n'a pas gagné, l'ordinateur joue
-
-                        //même vérification après chaque tour de jeu de l'ordinateur
-                        if (Gagner())
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkRed; //affiche en rouge si perds
-                            Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
-                            Console.Beep(500, 100);
-                            Console.Beep(400, 100);
-                            Console.Beep(350, 100);
-                            Console.Beep(300, 2000);//musique de défaite
-                            Console.ResetColor();
-                        }
-                    }
+                else   // joueur ordinateur
+                {
+                    JouerOrdi(); //si le joueur n'a pas gagné, l'ordinateur joue
+                    //même vérification après chaque tour de jeu de l'ordinateur
+                    if (Gagner())
+                        AfficherPerte();
                 }
 
                 if (AvoirGrilleRemplie() && !Gagner()) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
                     Console.WriteLine("Match nul");
-            }
 
-            else // si l'ordinateur commence, l'alternance est inversée
-            {
-                while (!Gagner() && !AvoirGrilleRemplie())
-                {
-                    JouerOrdi();
-
-                    if (Gagner())
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
-                        Console.WriteLine("Quel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
-                        Console.Beep(500, 100);
-                        Console.Beep(400, 100);
-                        Console.Beep(350, 100);
-                        Console.Beep(300, 2000);//musique de défaite
-                        Console.ResetColor();
-                    }
-
-                    else
-                    {
-                        JouerJoueur();
-
-                        if (Gagner())
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si gagne
-                            Console.WriteLine("Vous avez gagné, BRAVO !");
-                            Console.Beep(400, 100);//musique de victoire
-                            Console.Beep(550, 100);
-                            Console.Beep(450, 100);
-                            Console.Beep(600, 2000);
-                            Console.ResetColor();
-                        }
-                    }
-                }
-                if (AvoirGrilleRemplie() && !Gagner())
-                    Console.WriteLine("Match nul");
+                joueurCourant = !joueurCourant;
             }
         }
 
@@ -266,38 +208,39 @@ namespace quarto_mjma
             //choix de la case par le joueur
             do
             {
-                do
+                do //vérification si 0<ligne choisie <3
                 {
-                    Console.WriteLine("Choisir une ligne (entre 0 et 3) ");
+                    Console.WriteLine("\nChoisir une ligne (entre 0 et 3) ");
                     ligne = int.Parse(Console.ReadLine());
                     if (ligne < 0 || ligne > 3)
                     {
-                        Console.WriteLine(" Erreur  : Entre 0 et 3 on a dit !");
+                        Console.WriteLine("\nErreur  : Entre 0 et 3 on a dit !");
                     }
 
                 } while (ligne < 0 || ligne > 3);
 
 
-                do
+                do //vérification si 0<colonne choisie <3
                 {
-                    Console.WriteLine("Choisir une colonne (entre 0 et 3)");
+                    Console.WriteLine("\nChoisir une colonne (entre 0 et 3)");
                     col = int.Parse(Console.ReadLine());
                     if (col < 0 || col > 3)
                     {
-                        Console.WriteLine(" Erreur  : Entre 0 et 3 on a dit !");
+                        Console.WriteLine("\nErreur  : Entre 0 et 3 on a dit !");
                     }
                 } while (col < 0 || col > 3);
 
 
                     if (AvoirCaseRemplie(ligne, col))
                     {
-                        Console.WriteLine("Erreur : case déjà remplie, veuillez en choisir une autre :");
+                        Console.WriteLine("\nErreur : case déjà remplie, veuillez en choisir une autre :");
                     }
              
-            } while (  (ligne <0 || ligne >3) && (col<0 || col>3) && AvoirCaseRemplie(ligne, col) ); //tant que la case choisie est remplie, le joueur doit choisir une autre case
+            } while (  (ligne <0 || ligne >3) && (col<0 || col>3) && AvoirCaseRemplie(ligne, col) ); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablment, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             Grille[ligne, col] = ChoixPiece;
             AfficherGrille();
+            //ArreterPartie();
         }
 
         /// <summary>
@@ -446,14 +389,35 @@ namespace quarto_mjma
                     }
                 }
             }
-
-            if (gagner)
-            {
-                Console.WriteLine("QUARTO!"); //pb : dit 2x quarto !
-            }
-
             return gagner;
+        }
 
+        /// <summary>
+        /// AfficherVictoire : Affiche message de victoire si joueur humain gagne
+        /// </summary>
+        static void AfficherVictoire()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si le joueur humain gagne
+            Console.WriteLine("QUARTO! \nVous avez gagné, BRAVO !");
+            Console.Beep(400, 100);//musique de victoire
+            Console.Beep(550, 100);
+            Console.Beep(450, 100);
+            Console.Beep(600, 2000);
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// AffichePerte : Affiche message si joueur humain perd
+        /// </summary>
+        static void AfficherPerte()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed; //affiche en rouge si le joueur humain perd
+            Console.WriteLine(" QUARTO de l'ordinateur ! \nQuel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
+            Console.Beep(500, 100);
+            Console.Beep(400, 100);
+            Console.Beep(350, 100);
+            Console.Beep(300, 2000);//musique de défaite
+            Console.ResetColor();
         }
 
         /// <summary>
@@ -521,13 +485,11 @@ namespace quarto_mjma
         /// <summary>
         /// ArreterPartie : à tout moment, le joueur peut décider d'arrêter la partie
         /// </summary>
-        static bool ArreterPartie( string stop)
+        static bool ArreterPartie()
         {
             bool arret = false;
-            if (stop == "s")
-            {
-                Console.WriteLine("Voulez-vous arrêter la partie ? (o/n)");
-                string arreter = Console.ReadLine();
+            Console.WriteLine("Voulez-vous arrêter la partie ? (o/n)");
+            string stop = Console.ReadLine();
                 if (stop == "n")
                 {
                     Console.WriteLine("On continue ...");
@@ -537,7 +499,6 @@ namespace quarto_mjma
                     arret = true;
                     Console.WriteLine("On s'arrête ...");
                 }
-            }
             return arret;
         }
 
