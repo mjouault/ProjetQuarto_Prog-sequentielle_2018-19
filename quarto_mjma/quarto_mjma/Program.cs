@@ -9,30 +9,56 @@ namespace quarto_mjma
     class Program
     {
         // Variables globales
-        static int NB_PIECES_TOTALE = 16;
+        static int nbPiecesTotales = 16;
         // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
         static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" }, { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
         static string[,] Grille;    // Grille de jeu
         static string caseVide = "    "; //pourquoi ça nous souligne les 2 premières lettres?
         static string ChoixPiece;
         static int ligne; static int col;
-
+        static int nbreLignes = 4;
+        static int nbreCaractéristiques=4;
         // Main
         static void Main(string[] args)
         {
-            string surnom; string afficherRegles;
-            do
-            {
-                Console.Title = "Jeu de Quarto"; //la fenêtre d'exécution s'appellera jeu de quarto 
-                Console.WriteLine("==============================================");
-                Console.WriteLine("            VOUS JOUEZ AU QUARTO");
-                Console.WriteLine("==============================================\n");
+            AfficherEnTete();
+            AfficherRegles();
+                do
+                {
+                    
 
-                Console.Write("C'est donc toi le nouveau joueur qui souhaite affronter la machine toute puissante au QUARTO !\nQuel est ton petit nom ? ");
-                surnom = Console.ReadLine();
-                Console.WriteLine("Sympa comme blaze!\nAvant de commencer {0}, veux-tu que je te rappelle les règles du jeu? [o]/[n]", surnom);
+                Grille = new string[nbreLignes, nbreLignes];
 
-                //Afficher règles du jeu
+                InitialiserGrille();
+                Jouer();
+            } while (RejouerPartie());
+        }
+
+        //Affichage introduction du jeu
+
+        /// <summary>
+        /// AfficherEnTete : Affiche l'en-tête
+        /// </summary>
+        static void AfficherEnTete()
+        {
+                string surnom;
+
+            Console.Title = "Jeu de Quarto"; //la fenêtre d'exécution s'appellera jeu de quarto 
+            Console.WriteLine("==============================================");
+            Console.WriteLine("            VOUS JOUEZ AU QUARTO");
+            Console.WriteLine("==============================================\n");
+
+            Console.Write("C'est donc toi le nouveau joueur qui souhaite affronter la machine toute puissante au QUARTO !\nQuel est ton petit nom ? ");
+            surnom = Console.ReadLine();
+            Console.WriteLine("Sympa comme blaze!\nAvant de commencer {0}, veux-tu que je te rappelle les règles du jeu? [o]/[n]", surnom);
+        }
+
+        /// <summary>
+        /// AfficherRegles : propose au joueur de rappeler les règles du jeu
+        /// </summary>
+        static void AfficherRegles()
+        {
+               string afficherRegles;
                 do
                 {
                     afficherRegles = Console.ReadLine();
@@ -45,37 +71,28 @@ namespace quarto_mjma
                     }
                 } while (afficherRegles != "o" && afficherRegles != "n");
 
-                if (afficherRegles == "o")
-                {
-                    Console.WriteLine("\nSage décision, un petit rappel ne fait jamais de mal !\n==============================================");
-                    Console.WriteLine("            REGLES DU JEU");
-                    Console.WriteLine("==============================================\n");
+            if (afficherRegles == "o")
+            {
+                Console.WriteLine("\nSage décision, un petit rappel ne fait jamais de mal !\n==============================================");
+                Console.WriteLine("            REGLES DU JEU");
+                Console.WriteLine("==============================================\n");
 
-                    Console.Write("\nBUT DU JEU : Créer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun(fig. 2).\nCet alignement peut-être horizontal, vertical ou diagonal. \nDÉROULEMENT D’UNE PARTIE : Le premier joueur est tiré au sort.\nIl choisit une des 16 pièces et la donne à son adversaire.\nCelui - ci doit la placer sur une des cases du plateau et choisir ensuite une des 15 pièces restantes pour la donner à son adversaire.\nA son tour, celui-ci la place sur une case libre et ainsi de suite…." +
-                        "\n\nGAIN DE LA PARTIE : La partie est gagnée par le premier joueur qui annonce “QUARTO !”\nUn joueur fait “QUARTO !” et gagne la partie lorsque, en plaçant la pièce donnée, il aligne 4 pièces ayant au moins un caractère en commun.\nPlusieurs caractères peuvent se cumuler.\n\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
-                        "\nIl y a égalité: toutes les pièces ont été posées sans vainqueur.");
-                }
+                Console.Write("\nBUT DU JEU : Créer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun(fig. 2).\nCet alignement peut-être horizontal, vertical ou diagonal. \nDÉROULEMENT D’UNE PARTIE : Le premier joueur est tiré au sort.\nIl choisit une des 16 pièces et la donne à son adversaire.\nCelui - ci doit la placer sur une des cases du plateau et choisir ensuite une des 15 pièces restantes pour la donner à son adversaire.\nA son tour, celui-ci la place sur une case libre et ainsi de suite…." +
+                    "\n\nGAIN DE LA PARTIE : La partie est gagnée par le premier joueur qui annonce “QUARTO !”\nUn joueur fait “QUARTO !” et gagne la partie lorsque, en plaçant la pièce donnée, il aligne 4 pièces ayant au moins un caractère en commun.\nPlusieurs caractères peuvent se cumuler.\n\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
+                    "\nIl y a égalité: toutes les pièces ont été posées sans vainqueur.");
+            }
 
-                Console.WriteLine("Que la partie commence et que le meilleur gagne !");
-
-                Grille = new string[4, 4];
-
-                InitialiserGrille();
-                Jouer();
-            } while (RejouerPartie());
+            Console.WriteLine("Que la partie commence et que le meilleur gagne !");
         }
 
-
-
         //Sous-programmes
-
 
         static void InitialiserGrille()
         {
 
-            for (int i = 0; i < 4; i++) //indice ligne
+            for (int i = 0; i < nbreLignes; i++) //indice ligne
             {
-                for (int j = 0; j < 4; j++) // i = indice colonne
+                for (int j = 0; j < nbreLignes; j++) // i = indice colonne
                 {
                     Grille[i, j] = caseVide; // aucun caractère et pièce non présente
                 }
@@ -210,15 +227,11 @@ namespace quarto_mjma
 
             //choix case par l'ordi
             Random R = new Random();
-
             // choisit aléatoirement la ligne et la colonne pour placer le pion
-
-            //int ligne; int col;
-
             do
             {
-                ligne = R.Next(0, 4);
-                col = R.Next(0, 4);
+                ligne = R.Next(0, nbreLignes);
+                col = R.Next(0, nbreLignes);
             } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
             Grille[ligne, col] = ChoixPiece;
@@ -232,6 +245,7 @@ namespace quarto_mjma
         {
 
             //choix de la pièce dans le tableau par l'ordi
+
             int randomPiece;
             Random R = new Random();
             do
@@ -248,22 +262,39 @@ namespace quarto_mjma
                 "Les caractères peuvent être mélangés entre eux", ChoixPiece);
             // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
 
+
             //choix de la case par le joueur
-
-           // int ligne, col;
-
             do
             {
-                Console.WriteLine("Choisir une ligne (entre 0 et 3)");
-                ligne = int.Parse(Console.ReadLine());
-                Console.WriteLine("Choisir une colonne (entre 0 et 3)");
-                col = int.Parse(Console.ReadLine());
-
-                if (AvoirCaseRemplie(ligne, col))
+                do
                 {
-                    Console.WriteLine("Erreur : case déjà remplie, veuillez en choisir une autre :");
-                }
-            } while (AvoirCaseRemplie(ligne, col)); //tant que la case choisie est remplie, le joueur doit choisir une autre case
+                    Console.WriteLine("Choisir une ligne (entre 0 et 3) ");
+                    ligne = int.Parse(Console.ReadLine());
+                    if (ligne < 0 || ligne > 3)
+                    {
+                        Console.WriteLine(" Erreur  : Entre 0 et 3 on a dit !");
+                    }
+
+                } while (ligne < 0 || ligne > 3);
+
+
+                do
+                {
+                    Console.WriteLine("Choisir une colonne (entre 0 et 3)");
+                    col = int.Parse(Console.ReadLine());
+                    if (col < 0 || col > 3)
+                    {
+                        Console.WriteLine(" Erreur  : Entre 0 et 3 on a dit !");
+                    }
+                } while (col < 0 || col > 3);
+
+
+                    if (AvoirCaseRemplie(ligne, col))
+                    {
+                        Console.WriteLine("Erreur : case déjà remplie, veuillez en choisir une autre :");
+                    }
+             
+            } while (  (ligne <0 || ligne >3) && (col<0 || col>3) && AvoirCaseRemplie(ligne, col) ); //tant que la case choisie est remplie, le joueur doit choisir une autre case
 
             Grille[ligne, col] = ChoixPiece;
             AfficherGrille();
@@ -278,7 +309,7 @@ namespace quarto_mjma
             int i = 0;
 
             // Recherche de l'indice
-            while (i < NB_PIECES_TOTALE && choixPiece != TabPieces[0, i])
+            while (i < nbPiecesTotales && choixPiece != TabPieces[0, i])
             {
                 // Incrémentation
                 i++;
@@ -299,7 +330,7 @@ namespace quarto_mjma
 
             // Vérification
 
-            while (choixPiece != TabPieces[0, i] && i < NB_PIECES_TOTALE)
+            while (choixPiece != TabPieces[0, i] && i < nbPiecesTotales)
                 i++;
             if (TabPieces[1, i] == "1")
                 pieceUtilisee = true;
@@ -313,14 +344,14 @@ namespace quarto_mjma
         /// </summary>
         static void AfficherGrille()
         {
-            for (int i = 0; i < 4; i++) //indice ligne
+            for (int i = 0; i < nbreLignes; i++) //indice ligne
             {
 
                 Console.WriteLine("      +----+----+----+----+");
                 Console.Write("   " + i);
                 Console.Write("  |");
 
-                for (int j = 0; j < 4; j++) // i = indice colonne
+                for (int j = 0; j < nbreLignes; j++) // i = indice colonne
                 {
                     Console.Write(Grille[i, j] + "|");
                 }
@@ -343,16 +374,16 @@ namespace quarto_mjma
             int n; //indice des 4 caractéristiques de la pièce
 
             //verif lignes
-            for (i = 0; i < 4; i++) //indice ligne
+            for (i = 0; i < nbreLignes; i++) //indice ligne
             {
-                for (n = 0; n < 4; n++) //test pour chaque carcatéristique(x4)
+                for (n = 0; n < nbreLignes; n++) //test pour chaque carcatéristique(x4)
                 {
                     j = 0;
-                    while (j < 4 && Grille[i, 0] != caseVide && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ
+                    while (j < nbreLignes && Grille[i, 0] != caseVide && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ
                     {
                         j++;
                     }
-                    if (j == 4)
+                    if (j == nbreLignes)
                     {
                         gagner = true;
                     }
@@ -362,16 +393,16 @@ namespace quarto_mjma
             //verif colonnes
             if (!gagner)
             {
-                for (j = 0; j < 4; j++)
+                for (j = 0; j < nbreLignes; j++)
                 {
-                    for (n = 0; n < 4; n++)
+                    for (n = 0; n < nbreLignes; n++)
                     {
                         i = 0;
-                        while (i < 4 && Grille[0, j] != caseVide && Grille[0, j][n] == Grille[i, j][n])
+                        while (i < nbreLignes && Grille[0, j] != caseVide && Grille[0, j][n] == Grille[i, j][n])
                         {
                             i++;
                         }
-                        if (i == 4)
+                        if (i == nbreLignes)
                         {
                             gagner = true; // une ligne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                         }
@@ -382,14 +413,14 @@ namespace quarto_mjma
             //vérif diago de la gauche vers la droite, haut vers bas
             if (!gagner)
             {
-                for (n = 0; n < 4; n++)
+                for (n = 0; n < nbreCaractéristiques; n++)
                 {
                     i = 1;
-                    while (i < 4 && Grille[0, 0] != caseVide && Grille[0, 0][n] == Grille[i, i][n])
+                    while (i < nbreLignes && Grille[0, 0] != caseVide && Grille[0, 0][n] == Grille[i, i][n])
                     {
                         i++;
                     }
-                    if (i == 4)
+                    if (i == nbreLignes)
                     {
                         gagner = true; // la diagonale décrite a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
                     }
@@ -399,17 +430,17 @@ namespace quarto_mjma
             //vérif diago de la droite vers la gauche, du haut vers le bas
             if (!gagner)
             {
-                for (n = 0; n < 4; n++)
+                for (n = 0; n < nbreCaractéristiques; n++)
                 {
                     // Coordonnées (i, j) de la 1ere case que je compare
                     i = 1;
                     j = 2;
-                    while (i < 4 && j >= 0 && Grille[1, 3] != caseVide && Grille[1, 3][n] == Grille[i, j][n])
+                    while (i < nbreLignes && j >= 0 && Grille[1, 3] != caseVide && Grille[1, 3][n] == Grille[i, j][n])
                     {
                         i++;
                         j--;
                     }
-                    if (i == 4)
+                    if (i == nbreLignes)
                     {
                         gagner = true; // la diagonale décrite a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
                     }
@@ -435,21 +466,21 @@ namespace quarto_mjma
 
             int i = 0; //indice ligne
             int j = 0;  // Indice colonne
-            while (i < 4 && AvoirCaseRemplie(i, j))
+            while (i < nbreLignes && AvoirCaseRemplie(i, j))
             {
-                while (j < 4 && AvoirCaseRemplie(i, j))
+                while (j < nbreLignes && AvoirCaseRemplie(i, j))
                 {
                     j++;
                 }
 
-                if (j == 4)
+                if (j == nbreLignes)
                 {
                     j = 0;
                     i++;
                 }
             }
 
-            if (i == 4 && j == 4)
+            if (i == nbreLignes && j == nbreLignes)
                 grilleRemplie = true;
 
             return grilleRemplie;
@@ -493,11 +524,11 @@ namespace quarto_mjma
         static bool ArreterPartie( string stop)
         {
             bool arret = false;
-            if (stop.ToString() == "s")
+            if (stop == "s")
             {
                 Console.WriteLine("Voulez-vous arrêter la partie ? (o/n)");
                 string arreter = Console.ReadLine();
-                if (stop.ToString() == "n")
+                if (stop == "n")
                 {
                     Console.WriteLine("On continue ...");
                 }
@@ -509,7 +540,7 @@ namespace quarto_mjma
             }
             return arret;
         }
-  
+
     }
 }
 
