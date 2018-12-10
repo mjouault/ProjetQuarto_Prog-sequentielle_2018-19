@@ -290,19 +290,21 @@ namespace quarto_mjma
             for (int i = 0; i < nbreLignes; i++) //indice ligne
             {
 
-                Console.WriteLine("      +----+----+----+----+");
-                Console.Write("   " + i);
+                Console.WriteLine("      +------+------+------+------+");
+                Console.WriteLine("      |      |      |      |      |");
+                Console.Write("{0}   ", i);
                 Console.Write("  |");
 
                 for (int j = 0; j < nbreLignes; j++) // i = indice colonne
                 {
-                    Console.Write(Grille[i, j] + "|");
+                    Console.Write(" "+ Grille[i, j] + " |");
                 }
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
+                Console.WriteLine("      |      |      |      |      |");
             }
 
-            Console.WriteLine("      +----+----+----+----+");
-            Console.WriteLine("         0    1    2    3");
+            Console.WriteLine("      +------+------+------+------+");
+            Console.WriteLine("         0      1      2      3");
         }
 
         /// <summary>
