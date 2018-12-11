@@ -325,5 +325,43 @@ namespace test_de_chaque_fonction
         }
 
 
+        static void AfficherGrille()
+        {
+            for (int i = 0; i < nbreLignes; i++) //indice ligne
+            {
+
+                Console.WriteLine("      +------+------+------+------+");
+                Console.WriteLine("      |      |      |      |      |");
+                Console.Write("{0}   ", i);
+                Console.Write("  |");
+
+                for (int j = 0; j < nbreLignes; j++) // i = indice colonne
+                {
+                    Console.Write(" "+ Grille[i, j] + " |");
+                }
+                Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
+                Console.WriteLine("      |      |      |      |      |");
+            }
+
+            Console.WriteLine("      +------+------+------+------+");
+            Console.WriteLine("         0      1      2      3");
+        }
+        static void piece1()
+        {
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            for (int i = 0; i < 7; i++)
+            {
+                Console.WriteLine("**************");
+            }
+            Console.ResetColor();
+        }
+
+        static void Main(string[] args)
+        {
+            string[,] grille = new string[4, 4];
+        }
+
+
     }
 }
