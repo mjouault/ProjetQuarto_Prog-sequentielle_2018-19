@@ -387,92 +387,111 @@ namespace test_de_chaque_fonction
             int j = 0;
             int n = 0;
             //trouver une case non vide
-            while (i < Grille.GetLength(1) && !AvoirCaracCommune(i,j) && !AvoirCaseVideIA(i,j))
+            while (i < Grille.GetLength(1) && !AvoirCaracCommuneIA(i,j) && !AvoirCaseJouableIA(i,j))
             {
-                while (j < Grille.GetLength(1) && !AvoirCaracCommune(i,j) && !AvoirCaseVideIA (i,j))
+                while (j < Grille.GetLength(1) && !AvoirCaracCommuneIA(i,j) && !AvoirCaseJouableIA (i,j) && Grille [i,j]==caseVide)
                 {
 
-
-                   
-                    if (Grille[i, j][n] == ChoixPiece[n])
-                    {
-                        
-
-                        Grille[ligne, col] = ChoixPiece;
-
-                    }
+                    j++;
                 }
-                j++;
+
+                if (!AvoirCaseJouableIA(i, j))
+                    i++;
             }
-            i++;
-            
+
+            if (AvoirCaseJouableIA(i, j))
+            {
+                Grille[ligne, col] = ChoixPiece;
+
+            }
+
         }
 
-        static void AvoirCaracCommuneIA(int i, int j)
+        static bool AvoirCaracCommuneIA(int i, int j)
         {
+
+            bool caracCommune = false;
             int n = 0;
             while (n < nbreCaractéristiques && Grille[i, j][n] != ChoixPiece[n])
             {
                 n++;
             }
+
+            if (n != 0 && n!=4)
+                caracCommune = true;
+
+            return caracCommune;
         }
 
-        static void AvoirCaseVideIA(int i, int j)
+        static bool AvoirCaseJouableIA (int i, int j)
         {
+            bool caseJouable = false;
+
             // A Gauche
             if (!AvoirCaseRemplie(i, j - 1))
             {
                 ligne = i;
                 col = j - 1;
+                caseJouable = true;
             }
             // A Droite
             else if (!AvoirCaseRemplie(i, j + 1))
             {
                 ligne = i;
-                col = j - 1;
+                col = j + 1;
+                caseJouable = true;
             }
             // En Haut
             else if (!AvoirCaseRemplie(i, j + 1))
             {
                 ligne = i;
                 col = j + 1;
+                caseJouable = true;
             }
             // En Bas
             else if (!AvoirCaseRemplie(i - 1, j))
             {
                 ligne = i - 1;
                 col = j;
+                caseJouable = true;
             }
             //En haut
             else if (!AvoirCaseRemplie(i + 1, j))
             {
                 ligne = i + 1;
                 col = j;
+                caseJouable = true;
             }
             //Diago Haut Droite
             else if (!AvoirCaseRemplie(i - 1, j + 1))
             {
                 ligne = i - 1;
                 col = j + 1;
+                caseJouable = true;
             }
             //Diago Haut Gauche
             else if (!AvoirCaseRemplie(i - 1, j - 1))
             {
                 ligne = i - 1;
                 col = j - 1;
+                caseJouable = true;
             }
             //Diago Bas Droite
             else if (!AvoirCaseRemplie(i + 1, j + 1))
             {
                 ligne = i + 1;
                 col = j + 1;
+                caseJouable = true;
             }
             //Diago Bas Gauche
             else if (!AvoirCaseRemplie(i + 1, j - 1))
             {
                 ligne = i + 1;
                 col = j - 1;
+                caseJouable = true;
             }
+
+            return caseJouable;
         }
 
         static void Main(string[] args)
@@ -483,3 +502,4 @@ namespace test_de_chaque_fonction
 
     }
 }
+ 

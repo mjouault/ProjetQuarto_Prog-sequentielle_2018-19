@@ -17,15 +17,15 @@ namespace quarto_mjma
         static string ChoixPiece;
         static int ligne; static int col;
         static int nbreLignes = 4;
-        static int nbreCaractéristiques=4;
+        static int nbreCaractéristiques = 4;
         // Main
         static void Main(string[] args)
         {
             AfficherEnTete();
             AfficherRegles();
-                do
-                {
-                    
+            do
+            {
+
 
                 Grille = new string[nbreLignes, nbreLignes];
 
@@ -64,19 +64,19 @@ namespace quarto_mjma
         /// </summary>
         static void AfficherRegles()
         {
-               string afficherRegles;
-                do
-                {
-                    afficherRegles = Console.ReadLine();
-                    Console.Clear();
+            string afficherRegles;
+            do
+            {
+                afficherRegles = Console.ReadLine();
+                Console.Clear();
                 if (afficherRegles != "o" && afficherRegles != "n")
-                    {
-                        Console.Beep(400, 300);
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
-                        Console.WriteLine("Il faut répondre par [o] ou [n] on a dit !");
-                        Console.ResetColor();
-                    }
-                } while (afficherRegles != "o" && afficherRegles != "n");
+                {
+                    Console.Beep(400, 300);
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("Il faut répondre par [o] ou [n] on a dit !");
+                    Console.ResetColor();
+                }
+            } while (afficherRegles != "o" && afficherRegles != "n");
 
             if (afficherRegles == "o")
             {
@@ -109,8 +109,8 @@ namespace quarto_mjma
 
         static bool choisir1erJoueur()
         {
-            Random R = new Random ();
-            int choix1er = R.Next (0,2);
+            Random R = new Random();
+            int choix1er = R.Next(0, 2);
             bool estHumain = true;
 
             if (choix1er == 0)
@@ -119,7 +119,7 @@ namespace quarto_mjma
             return estHumain;
         }
 
-       
+
         static void Jouer()
         {
             bool joueurCourant = choisir1erJoueur();
@@ -180,15 +180,18 @@ namespace quarto_mjma
             JouerPiece(ChoixPiece);
 
             //choix case par l'ordi
-            Random R = new Random();
-            // choisit aléatoirement la ligne et la colonne pour placer le pion
-            do
-            {
-                ligne = R.Next(0, nbreLignes);
-                col = R.Next(0, nbreLignes);
-            } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+            /* Random R = new Random();
+             // choisit aléatoirement la ligne et la colonne pour placer le pion
+             do
+             {
+                 ligne = R.Next(0, nbreLignes);
+                 col = R.Next(0, nbreLignes);
+             } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-            Grille[ligne, col] = ChoixPiece;
+             Grille[ligne, col] = ChoixPiece;*/
+
+            ChoixIntell2();
+
         }
 
         /// <summary>
@@ -242,12 +245,12 @@ namespace quarto_mjma
                 } while (col < 0 || col > 3);
 
 
-                    if (AvoirCaseRemplie(ligne, col))
-                    {
-                        Console.WriteLine("\nErreur : case déjà remplie, veuillez en choisir une autre :");
-                    }
-             
-            } while (  (ligne <0 || ligne >3) && (col<0 || col>3) && AvoirCaseRemplie(ligne, col) ); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablment, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
+                if (AvoirCaseRemplie(ligne, col))
+                {
+                    Console.WriteLine("\nErreur : case déjà remplie, veuillez en choisir une autre :");
+                }
+
+            } while ((ligne < 0 || ligne > 3) && (col < 0 || col > 3) && AvoirCaseRemplie(ligne, col)); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablment, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             Grille[ligne, col] = ChoixPiece;
             //AfficherGrille();
@@ -308,7 +311,7 @@ namespace quarto_mjma
 
                 for (int j = 0; j < nbreLignes; j++) // i = indice colonne
                 {
-                    Console.Write(" "+ Grille[i, j] + " |");
+                    Console.Write(" " + Grille[i, j] + " |");
                 }
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
                 Console.WriteLine("      |      |      |      |      |");
@@ -503,18 +506,144 @@ namespace quarto_mjma
             bool arret = false;
             Console.WriteLine("Voulez-vous arrêter la partie ? (o/n)");
             string stop = Console.ReadLine();
-                if (stop == "n")
-                {
-                    Console.WriteLine("On continue ...");
-                }
-                else
-                {
-                    arret = true;
-                    Console.WriteLine("On s'arrête ...");
-                }
+            if (stop == "n")
+            {
+                Console.WriteLine("On continue ...");
+            }
+            else
+            {
+                arret = true;
+                Console.WriteLine("On s'arrête ...");
+            }
             return arret;
         }
 
+
+
+
+        static void ChoixIntell2()
+        {
+            int i = 0;
+            int j = 0;
+
+            while (i < Grille.GetLength(1) && !AvoirCaracCommuneIA(i, j) && !AvoirCaseJouableIA(i, j))
+            {
+                while (j < Grille.GetLength(1) && !AvoirCaracCommuneIA(i, j) && !AvoirCaseJouableIA(i, j) && Grille[i, j] == caseVide)
+                {
+
+                    j++;
+                }
+
+                if (!AvoirCaseJouableIA(i, j))
+                    i++;
+            }
+
+            if (AvoirCaseJouableIA(i, j))
+            {
+                Grille[ligne, col] = ChoixPiece;
+
+            }
+
+        }
+
+        /// <summary>
+        /// AvoirCaseJouableIA :  true s'il y a une case autour de la case de référence qui est vide, false sinon
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        static bool AvoirCaseJouableIA(int i, int j)
+        {
+            bool caseJouable = false;
+
+            // A Gauche
+            if (j > 0 && !AvoirCaseRemplie(i, j - 1))
+            {
+                ligne = i;
+                col = j - 1;
+                caseJouable = true;
+            }
+            // A Droite
+            else if (j<3 && !AvoirCaseRemplie(i, j + 1))
+            {
+                ligne = i;
+                col = j + 1;
+                caseJouable = true;
+            }
+            // En Haut
+            else if (j<3 && !AvoirCaseRemplie(i, j + 1))
+            {
+                ligne = i;
+                col = j + 1;
+                caseJouable = true;
+            }
+            // En Bas
+            else if (i>0 && !AvoirCaseRemplie(i - 1, j))
+            {
+                ligne = i - 1;
+                col = j;
+                caseJouable = true;
+            }
+            //En haut
+            else if (i>0 && !AvoirCaseRemplie(i + 1, j))
+            {
+                ligne = i + 1;
+                col = j;
+                caseJouable = true;
+            }
+            //Diago Haut Droite
+            else if (i>0 && j<3 && !AvoirCaseRemplie(i - 1, j + 1))
+            {
+                ligne = i - 1;
+                col = j + 1;
+                caseJouable = true;
+            }
+            //Diago Haut Gauche
+            else if (i>0 && j>0 && !AvoirCaseRemplie(i - 1, j - 1))
+            {
+                ligne = i - 1;
+                col = j - 1;
+                caseJouable = true;
+            }
+            //Diago Bas Droite
+            else if (i<3 && j<3 && !AvoirCaseRemplie(i + 1, j + 1))
+            {
+                ligne = i + 1;
+                col = j + 1;
+                caseJouable = true;
+            }
+            //Diago Bas Gauche
+            else if ( i<3 && j>0 && !AvoirCaseRemplie(i + 1, j - 1))
+            {
+                ligne = i + 1;
+                col = j - 1;
+                caseJouable = true;
+            }
+
+            return caseJouable;
+        }
+
+        /// <summary>
+        /// AvoirCaracCommunIA : true si la pièce que l'IA doit jouer a au moins une caractéristique commune avec la 1ere pièce qu'il trouve sur le plateau de jeu
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        static bool AvoirCaracCommuneIA(int i, int j)
+        {
+
+            bool caracCommune = false;
+            int n = 0;
+            while (n < nbreCaractéristiques && Grille[i, j][n] != ChoixPiece[n])
+            {
+                n++;
+            }
+
+            if (n != 0 && n != 4)
+                caracCommune = true;
+
+            return caracCommune;
+        }
     }
 }
 
