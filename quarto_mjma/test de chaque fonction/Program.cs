@@ -9,6 +9,15 @@ namespace test_de_chaque_fonction
 {
     class Program
     {
+        static int nbPiecesTotales = 16;
+        // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
+        static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" }, { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
+        static string[,] Grille;    // Grille de jeu
+        static string caseVide = "    "; //pourquoi ça nous souligne les 2 premières lettres?
+        static string ChoixPiece;
+        static int ligne; static int col;
+        static int nbreLignes = 4;
+        static int nbreCaractéristiques = 4;
         static void ChoixIntelligentpiece()
         {
             //faire cas où il y en a 3 pareil dans une colonne ou ligne ou diagonale et quil reste une case vide donc pas alignés mais ne pas choisir pièce avec ce caractère quand même
@@ -355,6 +364,115 @@ namespace test_de_chaque_fonction
                 Console.WriteLine("**************");
             }
             Console.ResetColor();
+        }
+
+
+
+
+
+        /// <summary>
+        /// AvoirCaseRemplie : Permet de savoir si le joueur ou l'ordinateur peut jouer dans la case ou si elle est déjà remplie
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        static bool AvoirCaseRemplie(int i, int j)
+        {
+            return Grille[i, j] != caseVide; // retourne true si la case considérée n'est pas vide, false sinon
+        }
+
+        static void ChoixIntell2 ()
+        {
+            int i = 0;
+            int j = 0;
+            int n = 0;
+            //trouver une case non vide
+            while (i < Grille.GetLength(1) && !AvoirCaracCommune(i,j) && !AvoirCaseVideIA(i,j))
+            {
+                while (j < Grille.GetLength(1) && !AvoirCaracCommune(i,j) && !AvoirCaseVideIA (i,j))
+                {
+
+
+                   
+                    if (Grille[i, j][n] == ChoixPiece[n])
+                    {
+                        
+
+                        Grille[ligne, col] = ChoixPiece;
+
+                    }
+                }
+                j++;
+            }
+            i++;
+            
+        }
+
+        static void AvoirCaracCommuneIA(int i, int j)
+        {
+            int n = 0;
+            while (n < nbreCaractéristiques && Grille[i, j][n] != ChoixPiece[n])
+            {
+                n++;
+            }
+        }
+
+        static void AvoirCaseVideIA(int i, int j)
+        {
+            // A Gauche
+            if (!AvoirCaseRemplie(i, j - 1))
+            {
+                ligne = i;
+                col = j - 1;
+            }
+            // A Droite
+            else if (!AvoirCaseRemplie(i, j + 1))
+            {
+                ligne = i;
+                col = j - 1;
+            }
+            // En Haut
+            else if (!AvoirCaseRemplie(i, j + 1))
+            {
+                ligne = i;
+                col = j + 1;
+            }
+            // En Bas
+            else if (!AvoirCaseRemplie(i - 1, j))
+            {
+                ligne = i - 1;
+                col = j;
+            }
+            //En haut
+            else if (!AvoirCaseRemplie(i + 1, j))
+            {
+                ligne = i + 1;
+                col = j;
+            }
+            //Diago Haut Droite
+            else if (!AvoirCaseRemplie(i - 1, j + 1))
+            {
+                ligne = i - 1;
+                col = j + 1;
+            }
+            //Diago Haut Gauche
+            else if (!AvoirCaseRemplie(i - 1, j - 1))
+            {
+                ligne = i - 1;
+                col = j - 1;
+            }
+            //Diago Bas Droite
+            else if (!AvoirCaseRemplie(i + 1, j + 1))
+            {
+                ligne = i + 1;
+                col = j + 1;
+            }
+            //Diago Bas Gauche
+            else if (!AvoirCaseRemplie(i + 1, j - 1))
+            {
+                ligne = i + 1;
+                col = j - 1;
+            }
         }
 
         static void Main(string[] args)

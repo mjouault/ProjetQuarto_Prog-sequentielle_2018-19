@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2050
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quarto_mjma", "quarto_mjma\quarto_mjma.csproj", "{CBBD7AED-3FF3-4F53-B4C4-F008FFB5563B}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "essai_deplacement_fleches", "essai_deplacement_fleches\essai_deplacement_fleches.csproj", "{4DE70802-7BD9-495A-9C0A-7772FE8072AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiecesStylees", "PiecesStylees\PiecesStylees.csproj", "{F79DE58D-06C9-4B88-A0F3-B246FBA97CFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RushHour", "C:\Users\mjouault\Downloads\projet-2018-baillet-toniutti\RushHour\RushHour\RushHour.csproj", "{9CE7DB1E-22D3-45C4-A4C2-E6CC347BC3C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F79DE58D-06C9-4B88-A0F3-B246FBA97CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F79DE58D-06C9-4B88-A0F3-B246FBA97CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F79DE58D-06C9-4B88-A0F3-B246FBA97CFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CE7DB1E-22D3-45C4-A4C2-E6CC347BC3C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CE7DB1E-22D3-45C4-A4C2-E6CC347BC3C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CE7DB1E-22D3-45C4-A4C2-E6CC347BC3C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CE7DB1E-22D3-45C4-A4C2-E6CC347BC3C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

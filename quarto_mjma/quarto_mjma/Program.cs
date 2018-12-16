@@ -41,16 +41,22 @@ namespace quarto_mjma
         /// </summary>
         static void AfficherEnTete()
         {
-                string surnom;
+            string surnom;
 
             Console.Title = "Jeu de Quarto"; //la fenêtre d'exécution s'appellera jeu de quarto 
-            Console.WriteLine("==============================================");
-            Console.WriteLine("            VOUS JOUEZ AU QUARTO");
-            Console.WriteLine("==============================================\n");
+            AfficherTitre();
 
             Console.Write("C'est donc toi le nouveau joueur qui souhaite affronter la machine toute puissante au QUARTO !\nQuel est ton petit nom ? ");
             surnom = Console.ReadLine();
             Console.WriteLine("Sympa comme blaze!\nAvant de commencer {0}, veux-tu que je te rappelle les règles du jeu? [o]/[n]", surnom);
+
+        }
+
+        private static void AfficherTitre()
+        {
+            Console.WriteLine("==============================================");
+            Console.WriteLine("                  QUARTO");
+            Console.WriteLine("==============================================\n");
         }
 
         /// <summary>
@@ -62,7 +68,8 @@ namespace quarto_mjma
                 do
                 {
                     afficherRegles = Console.ReadLine();
-                    if (afficherRegles != "o" && afficherRegles != "n")
+                    Console.Clear();
+                if (afficherRegles != "o" && afficherRegles != "n")
                     {
                         Console.Beep(400, 300);
                         Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -82,7 +89,7 @@ namespace quarto_mjma
                     "\nIl y a égalité: toutes les pièces ont été posées sans vainqueur.");
             }
 
-            Console.WriteLine("Que la partie commence et que le meilleur gagne !");
+            //Console.WriteLine("Que la partie commence et que le meilleur gagne !");
         }
 
         //Sous-programmes
@@ -119,6 +126,10 @@ namespace quarto_mjma
 
             while (!Gagner() && !AvoirGrilleRemplie())
             {
+                Console.Clear();
+                AfficherTitre();
+                AfficherGrille();
+
                 if (joueurCourant)  // joueur etre humain
                 {
                     JouerJoueur();
@@ -147,6 +158,7 @@ namespace quarto_mjma
         /// </summary>
         static void JouerOrdi()
         {
+
             //choix pièce par le joueur
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
@@ -177,7 +189,6 @@ namespace quarto_mjma
             } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
             Grille[ligne, col] = ChoixPiece;
-            AfficherGrille();
         }
 
         /// <summary>
@@ -239,7 +250,7 @@ namespace quarto_mjma
             } while (  (ligne <0 || ligne >3) && (col<0 || col>3) && AvoirCaseRemplie(ligne, col) ); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablment, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             Grille[ligne, col] = ChoixPiece;
-            AfficherGrille();
+            //AfficherGrille();
             //ArreterPartie();
         }
 
