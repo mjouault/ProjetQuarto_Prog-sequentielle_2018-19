@@ -126,9 +126,9 @@ namespace quarto_mjma
 
             while (!Gagner() && !AvoirGrilleRemplie())
             {
-               /* Console.Clear();
+                Console.Clear();
                 AfficherTitre();
-                AfficherGrille();*/
+                AfficherGrille();
 
                 if (joueurCourant)  // joueur etre humain
                 {
@@ -180,7 +180,8 @@ namespace quarto_mjma
             JouerPiece(ChoixPiece);
 
             //choix case par l'ordi
-            Random R = new Random();
+
+           /* Random R = new Random();
              // choisit aléatoirement la ligne et la colonne pour placer le pion
              do
              {
@@ -189,9 +190,9 @@ namespace quarto_mjma
              } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
              Grille[ligne, col] = ChoixPiece;
-            AfficherGrille();
+            AfficherGrille();*/
 
-         //   ChoixIntell2();
+            ChoixIntell2();
 
         }
 
@@ -219,7 +220,7 @@ namespace quarto_mjma
                 "Les caractères peuvent être mélangés entre eux", ChoixPiece);
             // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
 
-
+            bool caseRemplie = false;
             //choix de la case par le joueur
             do
             {
@@ -245,13 +246,12 @@ namespace quarto_mjma
                     }
                 } while (col < 0 || col > 3);
 
-
-                if (AvoirCaseRemplie(ligne, col))
+                caseRemplie = AvoirCaseRemplie(ligne, col);
+                if ( caseRemplie )
                 {
                     Console.WriteLine("\nErreur : case déjà remplie, veuillez en choisir une autre :");
                 }
-
-            } while ((ligne < 0 || ligne > 3) && (col < 0 || col > 3) && AvoirCaseRemplie(ligne, col)); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablment, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
+            } while (caseRemplie ); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             Grille[ligne, col] = ChoixPiece;
             AfficherGrille();
@@ -520,9 +520,7 @@ namespace quarto_mjma
         }
 
 
-
-
-       /* static void ChoixIntell2()
+       static void ChoixIntell2()
         {
             int i = 0;
             int j = 0;
@@ -540,13 +538,25 @@ namespace quarto_mjma
             }
 
             if (AvoirCaseJouableIA(i, j))
-            {
                 Grille[ligne, col] = ChoixPiece;
+            else
+            {
+                Random R = new Random();
+                // choisit aléatoirement la ligne et la colonne pour placer le pion
+                do
+                {
+                    ligne = R.Next(0, nbreLignes);
+                    col = R.Next(0, nbreLignes);
+                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+
+                Grille[ligne, col] = ChoixPiece;
+            }
+                
                 AfficherGrille();
 
             }
 
-        }*/
+        }
 
         /// <summary>
         /// AvoirCaseJouableIA :  true s'il y a une case vide autour de la case de référence, false sinon. Permet de jouer autour de la case de référence.
