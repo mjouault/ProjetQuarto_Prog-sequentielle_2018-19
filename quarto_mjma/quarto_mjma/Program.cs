@@ -254,7 +254,7 @@ namespace quarto_mjma
             } while (caseRemplie ); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             Grille[ligne, col] = ChoixPiece;
-            AfficherGrille();
+           // AfficherGrille();
             //ArreterPartie();
         }
 
@@ -539,7 +539,7 @@ namespace quarto_mjma
 
             if (AvoirCaseJouableIA(i, j))
                 Grille[ligne, col] = ChoixPiece;
-            else
+          /*  else
             {
                 Random R = new Random();
                 // choisit aléatoirement la ligne et la colonne pour placer le pion
@@ -550,9 +550,9 @@ namespace quarto_mjma
                 } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
                 Grille[ligne, col] = ChoixPiece;
-            }
+            }*/
 
-            AfficherGrille();
+            //AfficherGrille();
 
         }
 
