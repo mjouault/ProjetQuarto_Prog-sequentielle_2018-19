@@ -499,7 +499,84 @@ namespace test_de_chaque_fonction
             string[,] grille = new string[4, 4];
         }
 
+        static void choixI13()
+        {
+            int n = 0;
+            int countG = 0;
+            for (int i=0; i < Grille.GetLength(0); i++)
+            {
+                for (int j=0; j < Grille.GetLength(1); j++)
+                {
+                    for (n = 0; n < nbreCaractéristiques; n++)
+                    {
+                        // A Gauche
+                        if (j > 0 && AvoirCaseRemplie(i, j - 1) && Grille[i, j - 1][n] == Grille[i, j][n])
+                        {
+                            countG++;
+                        }
+                        // A Droite
+                        else if (!AvoirCaseRemplie(i, j + 1))
+                        {
+                            ligne = i;
+                            col = j + 1;
+                            //caseJouable = true;
+                        }
+                        // En Haut
+                        else if (!AvoirCaseRemplie(i, j + 1))
+                        {
+                            ligne = i;
+                            col = j + 1;
+                            //caseJouable = true;
+                        }
+                        // En Bas
+                        else if (!AvoirCaseRemplie(i - 1, j))
+                        {
+                            ligne = i - 1;
+                            col = j;
+                            //caseJouable = true;
+                        }
+                        //En haut
+                        else if (!AvoirCaseRemplie(i + 1, j))
+                        {
+                            ligne = i + 1;
+                            col = j;
+                            //caseJouable = true;
+                        }
+                        //Diago Haut Droite
+                        else if (!AvoirCaseRemplie(i - 1, j + 1))
+                        {
+                            ligne = i - 1;
+                            col = j + 1;
+                           // caseJouable = true;
+                        }
+                        //Diago Haut Gauche
+                        else if (!AvoirCaseRemplie(i - 1, j - 1))
+                        {
+                            ligne = i - 1;
+                            col = j - 1;
+                            //caseJouable = true;
+                        }
+                        //Diago Bas Droite
+                        else if (!AvoirCaseRemplie(i + 1, j + 1))
+                        {
+                            ligne = i + 1;
+                            col = j + 1;
+                            //caseJouable = true;
+                        }
+                        //Diago Bas Gauche
+                        else if (!AvoirCaseRemplie(i + 1, j - 1))
+                        {
+                            ligne = i + 1;
+                            col = j - 1;
+                            //caseJouable = true;
+                        }
+                    }
 
-    }
+                }
+
+            }
+
+
+        }
 }
  
