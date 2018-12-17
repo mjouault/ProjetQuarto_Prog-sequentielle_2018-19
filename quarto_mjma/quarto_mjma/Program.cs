@@ -126,9 +126,9 @@ namespace quarto_mjma
 
             while (!Gagner() && !AvoirGrilleRemplie())
             {
-                Console.Clear();
+               /* Console.Clear();
                 AfficherTitre();
-                AfficherGrille();
+                AfficherGrille();*/
 
                 if (joueurCourant)  // joueur etre humain
                 {
@@ -180,7 +180,7 @@ namespace quarto_mjma
             JouerPiece(ChoixPiece);
 
             //choix case par l'ordi
-            /* Random R = new Random();
+            Random R = new Random();
              // choisit aléatoirement la ligne et la colonne pour placer le pion
              do
              {
@@ -188,9 +188,10 @@ namespace quarto_mjma
                  col = R.Next(0, nbreLignes);
              } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-             Grille[ligne, col] = ChoixPiece;*/
+             Grille[ligne, col] = ChoixPiece;
+            AfficherGrille();
 
-            ChoixIntell2();
+         //   ChoixIntell2();
 
         }
 
@@ -222,7 +223,7 @@ namespace quarto_mjma
             //choix de la case par le joueur
             do
             {
-                do //vérification si 0<ligne choisie <3
+                do //vérification si 0<ligne choisie < 3
                 {
                     Console.WriteLine("\nChoisir une ligne (entre 0 et 3) ");
                     ligne = int.Parse(Console.ReadLine());
@@ -253,7 +254,7 @@ namespace quarto_mjma
             } while ((ligne < 0 || ligne > 3) && (col < 0 || col > 3) && AvoirCaseRemplie(ligne, col)); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablment, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             Grille[ligne, col] = ChoixPiece;
-            //AfficherGrille();
+            AfficherGrille();
             //ArreterPartie();
         }
 
@@ -521,7 +522,7 @@ namespace quarto_mjma
 
 
 
-        static void ChoixIntell2()
+       /* static void ChoixIntell2()
         {
             int i = 0;
             int j = 0;
@@ -541,13 +542,14 @@ namespace quarto_mjma
             if (AvoirCaseJouableIA(i, j))
             {
                 Grille[ligne, col] = ChoixPiece;
+                AfficherGrille();
 
             }
 
-        }
+        }*/
 
         /// <summary>
-        /// AvoirCaseJouableIA :  true s'il y a une case autour de la case de référence qui est vide, false sinon
+        /// AvoirCaseJouableIA :  true s'il y a une case vide autour de la case de référence, false sinon. Permet de jouer autour de la case de référence.
         /// </summary>
         /// <param name="i"></param>
         /// <param name="j"></param>
