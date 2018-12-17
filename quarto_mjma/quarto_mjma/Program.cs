@@ -520,7 +520,7 @@ namespace quarto_mjma
         }
 
 
-       static void ChoixIntell2()
+        static void ChoixIntell2()
         {
             int i = 0;
             int j = 0;
@@ -551,10 +551,8 @@ namespace quarto_mjma
 
                 Grille[ligne, col] = ChoixPiece;
             }
-                
-                AfficherGrille();
 
-            }
+            AfficherGrille();
 
         }
 
