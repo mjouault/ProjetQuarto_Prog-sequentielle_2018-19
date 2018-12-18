@@ -13,7 +13,7 @@ namespace quarto_mjma
         // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
         static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" }, { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
         static string[,] Grille;    // Grille de jeu
-        static string caseVide = "    "; //pourquoi ça nous souligne les 2 premières lettres?
+        static string caseVide = "    "; 
         static string ChoixPiece;
         static int ligne; static int col;
         static int nbreLignes = 4;
@@ -520,7 +520,9 @@ namespace quarto_mjma
             return arret;
         }
 
-
+        /// <summary>
+        /// ChoixIntell2 : l"ordi place la pièce qui lui est donnée autour d'une pièce qui a une caractéristique commune
+        /// </summary>
         static void ChoixIntell2()
         {
             int i = 0;
