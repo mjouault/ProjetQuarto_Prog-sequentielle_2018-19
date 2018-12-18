@@ -21,6 +21,7 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
+            Console.SetWindowSize(100, 60);
             AfficherEnTete();
             AfficherRegles();
             do
