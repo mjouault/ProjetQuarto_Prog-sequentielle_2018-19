@@ -660,6 +660,16 @@ namespace quarto_mjma
 
                 return caracCommune;
             }
+
+        static void AfficherPiece (string piece)
+        {
+           if (piece[1] ==0 && piece [2]==0 && piece[3]==0)
+            {
+
+            }
+        }
+
+
         }
     }
 
