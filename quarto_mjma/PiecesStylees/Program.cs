@@ -34,7 +34,7 @@ namespace PiecesStylees
             Console.WriteLine("");
             piece9();
             Console.WriteLine("");
-            piece10();
+           // piece10();
             Console.WriteLine("");
             piece11();
             Console.WriteLine("");
@@ -54,7 +54,7 @@ namespace PiecesStylees
 
         static void piece1()
         {
-            
+
             Console.ForegroundColor = ConsoleColor.Blue;
             for (int i = 0; i < hauteurGrandCarre; i++)
             {
@@ -82,11 +82,11 @@ namespace PiecesStylees
                    Console.WriteLine("**************");
            }*/
 
-        static void piece3 ()
+        static void piece3()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
-            for (int i = 0; i < hauteurGrandCarre-2; i++)
+            for (int i = 0; i < hauteurGrandCarre - 2; i++)
                 Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre - 2)) + "*");
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             Console.ResetColor();
@@ -96,8 +96,8 @@ namespace PiecesStylees
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
-            for (int i = 0; i < hauteurGrandCarre-2; i++)
-                Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre-2)) + "*");
+            for (int i = 0; i < hauteurGrandCarre - 2; i++)
+                Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre - 2)) + "*");
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             Console.ResetColor();
         }
@@ -112,7 +112,7 @@ namespace PiecesStylees
                Console.WriteLine("**************");
            }*/
 
-        static void piece5 ()
+        static void piece5()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             for (int i = 0; i < hauteurPetitCarre; i++)
@@ -147,9 +147,9 @@ namespace PiecesStylees
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
-            for (int i = 0; i < hauteurPetitCarre-2; i++)
+            for (int i = 0; i < hauteurPetitCarre - 2; i++)
             {
-                Console.WriteLine(" *" + string.Concat(Enumerable.Repeat(" ", largeurPetitCarre-2)) + "*");
+                Console.WriteLine(" *" + string.Concat(Enumerable.Repeat(" ", largeurPetitCarre - 2)) + "*");
             }
             Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
             Console.ResetColor();
@@ -179,7 +179,7 @@ namespace PiecesStylees
             Console.WriteLine("***********");
         }
         */
-        static void piece9 ()
+        static void piece9()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("      * *     ");
@@ -190,17 +190,15 @@ namespace PiecesStylees
             Console.WriteLine("      * *     ");
             Console.ResetColor();
         }
-        static void piece10()
+        string[,] piece10 = new string[6, 1]
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("      * *     ");
-            Console.WriteLine("   *       * ");
-            Console.WriteLine("  *         * ");
-            Console.WriteLine("  *         * ");
-            Console.WriteLine("   *       * ");
-            Console.WriteLine("      * *     ");
-            Console.ResetColor();
-        }
+            {"      * *     "},
+            {"   *       * "},
+            {"  *         * "},
+            {"  *         * "},
+            {"   *       * "},
+            {"      * *     "},
+        };
 
         static void piece11()
         {
