@@ -28,7 +28,7 @@ namespace test_de_chaque_fonction
             int n; //indice des 4 caractéristiques de la pièce
 
             //verif lignes
-            for (i = 0; i < 4; i++) //indice ligne
+            for (i = 0; i < nbreLignes; i++) //indice ligne
             {
                 for (n = 0; n < 4; n++) //test pour chaque caractéristique(x4)
                 {
@@ -125,20 +125,29 @@ namespace test_de_chaque_fonction
             int i; //indice lignes
             int j; //indice colonnes
             int n; //indice des 4 caractéristiques de la pièce
+                   //verif lignes
+            int compteur = 0;
 
-            //verif lignes
-            for (i = 0; i < 4; i++) //indice ligne
+            for (i = 0; i < nbreLignes; i++) //indice ligne
             {
-                for (n = 0; n < 4; n++) //test pour chaque carcatéristique(x4)
+                for (n = 0; n < 4; n++) //test pour chaque caractéristique(x4)
                 {
                     j = 0;
-                    while (j < 3 && Grille[i, 0] != caseVide && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ
+                    while (j < 4 && Grille[i, 0] != caseVide) //qd caractéristique commune, on compare la valeur de départ
                     {
+                        if (Grille[i, 0][n] == Grille[i, j][n])
+                            compteur++;
+
                         j++;
                     }
-                    if (j == 3)
+                    if (compteur == 3)
                     {
-                        //Grille[i,mettre dans la case vide de la colonne j)]=ChoixPiece;
+                        aligne = true;
+
+                        //choisir pièce avec[n] != [n] de j = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
                     }
                 }
             }
@@ -151,14 +160,23 @@ namespace test_de_chaque_fonction
                     for (n = 0; n < 4; n++)
                     {
                         i = 0;
-                        while (i < 3 && Grille[0, j] != caseVide && Grille[0, j][n] == Grille[i, j][n])
+                        while (i < 4 && Grille[0, j] != caseVide)
                         {
+                            if (Grille[0, j][n] == Grille[i, j][n])
+                                compteur++;
+
                             i++;
                         }
-                        if (i == 3)
+                        if (compteur == 3)
                         {
-                            //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+                            aligne = true;
+
+                            //choisir pièce avec[n] != [n] de i = 3
+                            //  VerifierSiPieceUtilisee()
+                            //if (verifiersipieceutilisee) alignee=true;
+                            //else alignee=false
                         }
+                        compteur = 0;
                     }
                 }
             }
@@ -169,14 +187,22 @@ namespace test_de_chaque_fonction
                 for (n = 0; n < 4; n++)
                 {
                     i = 1;
-                    while (i < 3 && Grille[0, 0] != caseVide && Grille[0, 0][n] == Grille[i, i][n])
+                    while (i < 4 && Grille[0, 0] != caseVide)
                     {
+                        if (Grille[0, 0][n] == Grille[i, i][n])
+                            compteur++;
+
                         i++;
                     }
-                    if (i == 3)
+                    if (compteur == 3)
                     {
-                        //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+
+                        //choisir pièce avec[n] != [n] de i = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
                     }
+                    compteur = 0;
                 }
             }
 
@@ -188,18 +214,24 @@ namespace test_de_chaque_fonction
                     // Coordonnées (i, j) de la 1ere case que je compare
                     i = 1;
                     j = 2;
-                    while (i < 3 && j >= 0 && Grille[1, 3] != caseVide && Grille[1, 3][n] == Grille[i, j][n])
+                    while (i < 4 && j >= 0 && Grille[1, 3] != caseVide)
                     {
+                        if (Grille[1, 3][n] == Grille[i, j][n])
+                            compteur++;
+
                         i++;
                         j--;
                     }
-                    if (i == 3)
+                    if (compteur == 3)
                     {
-                        //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+                        //choisir pièce avec[n] != [n] de i = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
                     }
+                    compteur = 0;
                 }
             }
-
 
         }
 
