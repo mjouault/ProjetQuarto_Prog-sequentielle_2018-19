@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace quarto_mjma
 {
@@ -13,12 +9,23 @@ namespace quarto_mjma
         // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
         static string[,] TabPieces;
         static string[,] Grille;    // Grille de jeu
-        static string caseVide = "    "; 
+        static string caseVide = "    ";
+
         static string ChoixPiece;
+
         static int ligne; static int col;
         static int nbreLignes = 4;
         static int nbreCaractéristiques = 4;
+
+        static int[,] tablignes1 = new int[4, 4];
+        static int[,] tablignes0 = new int[4, 4];
+        static int[,] tabcol1 = new int[4, 4];
+        static int[,] tabcol0 = new int[4, 4];
+        static int[,] diagos1 = new int[4, 4];
+        static int[,] diago0 = new int[4, 4];
+
         static bool trace = false;
+
         // Main
         static void Main(string[] args)
         {
@@ -109,10 +116,10 @@ namespace quarto_mjma
             }
         }
 
-        static void InitialiserPieces ()
+        static void InitialiserPieces()
         {
-        TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" },
-                           { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
+            TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" },
+                                    { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
         }
 
 
@@ -130,28 +137,28 @@ namespace quarto_mjma
 
         static void Jouer()
         {
-            
+
             bool joueurCourant = choisir1erJoueur();
 
             while (!Gagner() && !AvoirGrilleRemplie())
             {
-                Console.Clear();
+                //Console.Clear();
                 AfficherTitre();
                 AfficherGrille();
-                
+
                 if (trace)
-                Console.WriteLine("la partie commence");
+                    Console.WriteLine("la partie commence");
 
                 if (joueurCourant)  // joueur etre humain
                 {
                     if (trace)
-                    Console.WriteLine("A toi de jouer");
+                        Console.WriteLine("A toi de jouer");
 
                     JouerJoueur();
                     if (trace)
-                     Console.WriteLine("Le joueur joue");
+                        Console.WriteLine("Le joueur joue");
 
-                   // AfficherGrille();
+                    // AfficherGrille();
 
                     if (trace)
                         Console.WriteLine("Le joueur a joué");
@@ -190,7 +197,6 @@ namespace quarto_mjma
         /// </summary>
         static void JouerOrdi()
         {
-
             //choix pièce par le joueur
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
@@ -213,21 +219,25 @@ namespace quarto_mjma
 
             //choix case par l'ordi
 
-           /* Random R = new Random();
-             // choisit aléatoirement la ligne et la colonne pour placer le pion
-             do
-             {
-                 ligne = R.Next(0, nbreLignes);
-                 col = R.Next(0, nbreLignes);
-             } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+            /* Random R = new Random();
+              // choisit aléatoirement la ligne et la colonne pour placer le pion
+              do
+              {
+                  ligne = R.Next(0, nbreLignes);
+                  col = R.Next(0, nbreLignes);
+              } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-             Grille[ligne, col] = ChoixPiece;
-            AfficherGrille();*/
+              Grille[ligne, col] = ChoixPiece;
+             AfficherGrille();*/
 
             ChoixIntell2();
+            MettreAJourStrategies(ligne, col);
+
             //AfficherGrille();
 
         }
+
+
 
         /// <summary>
         /// JouerJoueur : Fonciton permettant au joueur de jouer son tour soit de placer une pièce choisie par l'ordinateur
@@ -291,19 +301,21 @@ namespace quarto_mjma
                 if (trace)
                     Console.WriteLine("après case remplie");
 
-                if ( caseRemplie )
+                if (caseRemplie)
                 {
                     Console.WriteLine("\nErreur : case déjà remplie, veuillez en choisir une autre :");
                 }
                 if (trace)
                     Console.WriteLine("fin while");
 
-            } while (caseRemplie ); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
+            } while (caseRemplie); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             if (trace)
                 Console.WriteLine("yolo1");
 
             Grille[ligne, col] = ChoixPiece;
+            MettreAJourStrategies(ligne, col);
+
 
             if (trace)
                 Console.WriteLine("yolo2");
@@ -593,21 +605,23 @@ namespace quarto_mjma
 
             if (AvoirCaseJouableIA(i, j))
             {
-                Grille[ligne, col] = ChoixPiece;
+                ligne = i;
+                col = j;
+                Grille[i, j] = ChoixPiece;
             }
 
-          /*  else
-            {
-                Random R = new Random();
-                // choisit aléatoirement la ligne et la colonne pour placer le pion
-                do
-                {
-                    ligne = R.Next(0, nbreLignes);
-                    col = R.Next(0, nbreLignes);
-                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+            /*  else
+              {
+                  Random R = new Random();
+                  // choisit aléatoirement la ligne et la colonne pour placer le pion
+                  do
+                  {
+                      ligne = R.Next(0, nbreLignes);
+                      col = R.Next(0, nbreLignes);
+                  } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-                Grille[ligne, col] = ChoixPiece;
-            }*/
+                  Grille[ligne, col] = ChoixPiece;
+              }*/
 
             //AfficherGrille();
 
@@ -631,56 +645,56 @@ namespace quarto_mjma
                 caseJouable = true;
             }
             // A Droite
-            else if (j<3 && !AvoirCaseRemplie(i, j + 1))
+            else if (j < 3 && !AvoirCaseRemplie(i, j + 1))
             {
                 ligne = i;
                 col = j + 1;
                 caseJouable = true;
             }
             // En Haut
-            else if (j<3 && !AvoirCaseRemplie(i, j + 1))
+            else if (j < 3 && !AvoirCaseRemplie(i, j + 1))
             {
                 ligne = i;
                 col = j + 1;
                 caseJouable = true;
             }
             // En Bas
-            else if (i>0 && !AvoirCaseRemplie(i - 1, j))
+            else if (i > 0 && !AvoirCaseRemplie(i - 1, j))
             {
                 ligne = i - 1;
                 col = j;
                 caseJouable = true;
             }
             //En haut
-            else if (i>0 && !AvoirCaseRemplie(i + 1, j))
+            else if (i > 0 && !AvoirCaseRemplie(i + 1, j))
             {
                 ligne = i + 1;
                 col = j;
                 caseJouable = true;
             }
             //Diago Haut Droite
-            else if (i>0 && j<3 && !AvoirCaseRemplie(i - 1, j + 1))
+            else if (i > 0 && j < 3 && !AvoirCaseRemplie(i - 1, j + 1))
             {
                 ligne = i - 1;
                 col = j + 1;
                 caseJouable = true;
             }
             //Diago Haut Gauche
-            else if (i>0 && j>0 && !AvoirCaseRemplie(i - 1, j - 1))
+            else if (i > 0 && j > 0 && !AvoirCaseRemplie(i - 1, j - 1))
             {
                 ligne = i - 1;
                 col = j - 1;
                 caseJouable = true;
             }
             //Diago Bas Droite
-            else if (i<3 && j<3 && !AvoirCaseRemplie(i + 1, j + 1))
+            else if (i < 3 && j < 3 && !AvoirCaseRemplie(i + 1, j + 1))
             {
                 ligne = i + 1;
                 col = j + 1;
                 caseJouable = true;
             }
             //Diago Bas Gauche
-            else if ( i<3 && j>0 && !AvoirCaseRemplie(i + 1, j - 1))
+            else if (i < 3 && j > 0 && !AvoirCaseRemplie(i + 1, j - 1))
             {
                 ligne = i + 1;
                 col = j - 1;
@@ -711,6 +725,112 @@ namespace quarto_mjma
 
             return caracCommune;
         }
+
+        /// <summary>
+        /// MettreAJourStratégies : l'IA calcule le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
+        /// </summary>
+        /// <returns></returns>
+        static void MettreAJourStrategies(int ligne, int col)
+        {
+            Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
+            for (int n = 0; n < nbreCaractéristiques; n++)
+            {
+                Console.WriteLine("case :" +Grille[ligne, col][n]);
+                //Mise à jour lignes et colonnes
+                if ( Grille[ligne,col][n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
+                {
+                    tablignes0[ligne, n] += 1;
+                    tabcol0[col, n] += 1;
+                }
+                else
+                {
+                    tablignes1[ligne, n] += 1; //compteur du nombre de 1 de la n ième caractéristique sur la ligne considérée
+                     tabcol1[col, n] += 1;
+                }
+            }
+
+           /* Console.WriteLine("lignes0");
+            for (int i = 0; i < 4; i++) // affiche tabligne0
+            {
+                Console.WriteLine("");
+                for (int j = 0; j < 4; j++)
+                    Console.Write(tablignes0[i, j] + "\t");
+            }
+
+            Console.WriteLine("lignes1");
+            for (int i = 0; i < 4; i++)  //affiche tabligne1
+            {
+                Console.WriteLine("");
+                for (int j = 0; j < 4; j++)
+                {
+                    Console.Write(tablignes1[i, j] + "\t");
+                }
+            }
+
+            Console.WriteLine("col0");
+            for (int i = 0; i < 4; i++) // afiche tabcol0
+            {
+                Console.WriteLine("");
+                for (int j = 0; j < 4; j++)
+                    Console.Write(tabcol0[i, j] + "\t");
+            }
+
+            Console.WriteLine("col1");
+            for (int i = 0; i < 4; i++) // afiche tabcol1
+            {
+                Console.WriteLine("");
+                for (int j = 0; j < 4; j++)
+                    Console.Write(tabcol1[i, j] + "\t");
+            }*/
+
+
+        }
+
+        static void ChoisirCaseIA()
+        {
+            // l'IA recherche où il y a déjà 3 pièces "alignées" et ayant 1 même caractéristique
+            int n = 0;
+            int i = 0;
+            while (n < nbreCaractéristiques)
+            {
+                if (ChoixPiece[n] == '0')
+                {
+                    while (i < nbreLignes && tablignes0[i, n] != 3)
+                    {
+                        i++;
+                    }
+                }
+                else
+                {
+                    while (i < nbreLignes && tablignes1[i, n] != 3)
+                    {
+                        i++;
+                    }
+                }
+
+                if (tablignes0[i, n] == 3 || tablignes1[i, n] == 3)
+                {
+                    TrouverCaseIA(i);
+                    Grille[i, j] = ChoixPiece;
+                }
+                else if ()
+            }
+        }
+
+        /// <summary>
+        /// TrouverCaseIA(): permet à l'IA de recherche où est la case vide sur cette ligne/col/diago où il y a déjà 3 pièces d'alignées
+        /// </summary>
+        static void TrouverCaseIA(int i)  // elle recherche où est la case vide sur cette ligne/col/diago et joue dedans
+        {
+            int j = 0;
+            while (j < nbreLignes && AvoirCaseRemplie(i, j))
+            {
+                j++;
+            }
+            if ()
+            
+        }
+
     }
 }
 
