@@ -786,12 +786,17 @@ namespace quarto_mjma
 
         }
 
+        /// <summary>
+        /// ChoisirCaseIA : si 3 pièces alignées, met la pièce donnée dans la case qu'il reste sinon, évite de jouer là où il y a déjà 2 pièces d'alignées
+        /// </summary>
         static void ChoisirCaseIA()
         {
-            // l'IA recherche où il y a déjà 3 pièces "alignées" et ayant 1 même caractéristique
+            // l'IA recherche où il y a déjà 3 pièces "alignées" et ayant 1 même caractéristique sur une mm ligne
             int n = 0;
+            int j = 0;
             int i = 0;
-            while (n < nbreCaractéristiques)
+            bool gagner = false;
+            while (n < nbreCaractéristiques && !gagner)
             {
                 if (ChoixPiece[n] == '0')
                 {
@@ -808,29 +813,82 @@ namespace quarto_mjma
                     }
                 }
 
-                if (tablignes0[i, n] == 3 || tablignes1[i, n] == 3)
+                if ((tablignes0[i, n] == 3 || tablignes1[i, n] == 3) && TrouverCaseIALigne(i))
                 {
-                    TrouverCaseIA(i);
-                    Grille[i, j] = ChoixPiece;
+                    Grille[i, col] = ChoixPiece;
+                    gagner = true;
                 }
-                else if ()
+                else
+                {
+                    n++;
+                }
+            }
+
+            // l'IA recherche où il y a déjà 3 pièces "alignées" et ayant 1 même caractéristique sur une mm col
+            while (n < nbreCaractéristiques && !gagner)
+            {
+                if (ChoixPiece[n] == '0')
+                {
+                    while (j < nbreLignes && tabcol0[j, n] != 3)
+                    {
+                        j++;
+                    }
+                }
+                else
+                {
+                    while (j < nbreLignes && tabcol1[j, n] != 3)
+                    {
+                        j++;
+                    }
+                }
+
+                if ((tabcol0[j, n] == 3 || tabcol1 [j, n] == 3) && TrouverCaseIACol(j))
+                {
+                    Grille[ligne, j] = ChoixPiece;
+                    gagner = true;
+                }
+                else
+                {
+                    n++;
+                }
             }
         }
 
         /// <summary>
         /// TrouverCaseIA(): permet à l'IA de recherche où est la case vide sur cette ligne/col/diago où il y a déjà 3 pièces d'alignées
         /// </summary>
-        static void TrouverCaseIA(int i)  // elle recherche où est la case vide sur cette ligne/col/diago et joue dedans
-        {
+        static bool TrouverCaseIALigne (int i)
+        { 
+            bool caseVide = false;
             int j = 0;
             while (j < nbreLignes && AvoirCaseRemplie(i, j))
             {
                 j++;
             }
-            if ()
+            if (j<nbreLignes)
+            {
+             caseVide = true;
+            }
+            col = j;
+            return caseVide;
             
         }
 
+        static bool TrouverCaseIACol ( int j)
+        {
+            bool caseVide = false;
+            int i = 0;
+            while (i < nbreLignes && AvoirCaseRemplie(i, j))
+            {
+                i++;
+            }
+            if (i < nbreLignes)
+            {
+                caseVide = true;
+            }
+            ligne = i;
+            return caseVide;
+        }
     }
 }
 
