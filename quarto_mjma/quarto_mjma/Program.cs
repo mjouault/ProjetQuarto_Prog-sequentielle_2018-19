@@ -11,17 +11,18 @@ namespace quarto_mjma
         // Variables globales
         static int nbPiecesTotales = 16;
         // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
-        static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" }, { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
+        static string[,] TabPieces;
         static string[,] Grille;    // Grille de jeu
         static string caseVide = "    "; 
         static string ChoixPiece;
         static int ligne; static int col;
         static int nbreLignes = 4;
         static int nbreCaractéristiques = 4;
+        static bool trace = false;
         // Main
         static void Main(string[] args)
         {
-            Console.SetWindowSize(100, 60);
+            Console.SetWindowSize(100, 50);
             AfficherEnTete();
             AfficherRegles();
             do
@@ -31,6 +32,7 @@ namespace quarto_mjma
                 Grille = new string[nbreLignes, nbreLignes];
 
                 InitialiserGrille();
+                InitialiserPieces();
                 Jouer();
             } while (RejouerPartie());
         }
@@ -107,6 +109,12 @@ namespace quarto_mjma
             }
         }
 
+        static void InitialiserPieces ()
+        {
+        TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" },
+                           { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
+        }
+
 
         static bool choisir1erJoueur()
         {
@@ -120,20 +128,34 @@ namespace quarto_mjma
             return estHumain;
         }
 
-
         static void Jouer()
         {
+            
             bool joueurCourant = choisir1erJoueur();
 
             while (!Gagner() && !AvoirGrilleRemplie())
             {
-                Console.Clear();
+               // Console.Clear();
                 AfficherTitre();
                 AfficherGrille();
+                
+                if (trace)
+                Console.WriteLine("la partie commence");
 
                 if (joueurCourant)  // joueur etre humain
                 {
+                    if (trace)
+                    Console.WriteLine("A toi de jouer");
+
                     JouerJoueur();
+                    if (trace)
+                     Console.WriteLine("Le joueur joue");
+
+                   // AfficherGrille();
+
+                    if (trace)
+                        Console.WriteLine("Le joueur a joué");
+
                     //vérification si le joueur a gagné à chaque fin de tour
                     if (Gagner()) //cas s'il gagne
                         AfficherVictoire();
@@ -143,6 +165,15 @@ namespace quarto_mjma
                 {
                     JouerOrdi(); //si le joueur n'a pas gagné, l'ordinateur joue
                     //même vérification après chaque tour de jeu de l'ordinateur
+
+                    if (trace)
+                        Console.WriteLine("L'ordi joue");
+
+                    //AfficherGrille();
+
+                    if (trace)
+                        Console.WriteLine("l'ordi a joué");
+
                     if (Gagner())
                         AfficherPerte();
                 }
@@ -194,6 +225,7 @@ namespace quarto_mjma
             AfficherGrille();*/
 
             ChoixIntell2();
+            //AfficherGrille();
 
         }
 
@@ -223,6 +255,10 @@ namespace quarto_mjma
 
             bool caseRemplie = false;
             //choix de la case par le joueur
+
+            if (trace)
+                Console.WriteLine("début while");
+
             do
             {
                 do //vérification si 0<ligne choisie < 3
@@ -247,15 +283,31 @@ namespace quarto_mjma
                     }
                 } while (col < 0 || col > 3);
 
+                if (trace)
+                    Console.WriteLine("avant case remplie");
+
                 caseRemplie = AvoirCaseRemplie(ligne, col);
+
+                if (trace)
+                    Console.WriteLine("après case remplie");
+
                 if ( caseRemplie )
                 {
                     Console.WriteLine("\nErreur : case déjà remplie, veuillez en choisir une autre :");
                 }
+                if (trace)
+                    Console.WriteLine("fin while");
+
             } while (caseRemplie ); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
+            if (trace)
+                Console.WriteLine("yolo1");
+
             Grille[ligne, col] = ChoixPiece;
-           // AfficherGrille();
+
+            if (trace)
+                Console.WriteLine("yolo2");
+            //AfficherGrille();
             //ArreterPartie();
         }
 
@@ -541,7 +593,13 @@ namespace quarto_mjma
             }
 
             if (AvoirCaseJouableIA(i, j))
+            {
                 Grille[ligne, col] = ChoixPiece;
+            }
+            else
+                Console.WriteLine("else" + ChoixPiece);
+
+            Console.WriteLine("pièce:" + ChoixPiece + "\t" + i + "\t"+ j);
           /*  else
             {
                 Random R = new Random();
