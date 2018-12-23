@@ -580,12 +580,15 @@ namespace quarto_mjma
             int i = 0;
             int j = 0;
 
-            while (i < Grille.GetLength(1) && !AvoirCaracCommuneIA(i, j) && !AvoirCaseJouableIA(i, j))
+            Console.WriteLine("recherchecase");
+            while (i < nbreLignes && !AvoirCaracCommuneIA(i, j) && AvoirCaseJouableIA(i, j))
             {
+                Console.WriteLine("coucou");
                 while (j < Grille.GetLength(1) && !AvoirCaracCommuneIA(i, j) && !AvoirCaseJouableIA(i, j) && Grille[i, j] == caseVide)
                 {
-
+                    Console.WriteLine("début while");
                     j++;
+                    Console.WriteLine("fin while");
                 }
 
                 if (!AvoirCaseJouableIA(i, j))
