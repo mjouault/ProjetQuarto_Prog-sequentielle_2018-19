@@ -135,7 +135,7 @@ namespace quarto_mjma
 
             while (!Gagner() && !AvoirGrilleRemplie())
             {
-               // Console.Clear();
+                Console.Clear();
                 AfficherTitre();
                 AfficherGrille();
                 
@@ -573,22 +573,18 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// ChoixIntell2 : l"ordi place la pièce qui lui est donnée autour d'une pièce qui a une caractéristique commune
+        /// ChoixIntell2 : l'ordi place la pièce qui lui est donnée autour d'une pièce qui a une caractéristique commune
         /// </summary>
         static void ChoixIntell2()
         {
             int i = 0;
             int j = 0;
 
-            Console.WriteLine("recherchecase");
-            while (i < nbreLignes && !AvoirCaracCommuneIA(i, j) && AvoirCaseJouableIA(i, j))
+            while (i < nbreLignes && !AvoirCaracCommuneIA(i, j) && !AvoirCaseJouableIA(i, j))
             {
-                Console.WriteLine("coucou");
                 while (j < Grille.GetLength(1) && !AvoirCaracCommuneIA(i, j) && !AvoirCaseJouableIA(i, j) && Grille[i, j] == caseVide)
                 {
-                    Console.WriteLine("début while");
                     j++;
-                    Console.WriteLine("fin while");
                 }
 
                 if (!AvoirCaseJouableIA(i, j))
@@ -599,10 +595,7 @@ namespace quarto_mjma
             {
                 Grille[ligne, col] = ChoixPiece;
             }
-            else
-                Console.WriteLine("else" + ChoixPiece);
 
-            Console.WriteLine("pièce:" + ChoixPiece + "\t" + i + "\t"+ j);
           /*  else
             {
                 Random R = new Random();
