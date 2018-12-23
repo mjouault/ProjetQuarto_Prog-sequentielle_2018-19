@@ -22,13 +22,13 @@ namespace test_de_chaque_fonction
         {
             //faire cas où il y en a 3 pareil dans une colonne ou ligne ou diagonale et quil reste une case vide donc pas alignés mais ne pas choisir pièce avec ce caractère quand même
             //choix pièce:
-            bool aligne =false; //bool qui nous dit si il a trouvé 3 pièces alignés de caractère identique
+            bool aligne = false; //bool qui nous dit si il a trouvé 3 pièces alignés de caractère identique
             int i; //indice lignes
             int j; //indice colonnes
             int n; //indice des 4 caractéristiques de la pièce
 
             //verif lignes
-            for (i = 0; i < 4; i++) //indice ligne
+            for (i = 0; i < nbreLignes; i++) //indice ligne
             {
                 for (n = 0; n < 4; n++) //test pour chaque caractéristique(x4)
                 {
@@ -117,7 +117,7 @@ namespace test_de_chaque_fonction
 
         }
 
-        static void ChoixIntelligentCase()
+        static bool ChoixIntelligentCase()
         {
             //faire cas où il y en a 3 pareil dans une colonne ou ligne ou diagonale et quil reste une case vide donc les 3 ne sont pas alignés à la suite (mettre dedans)
 
@@ -125,20 +125,29 @@ namespace test_de_chaque_fonction
             int i; //indice lignes
             int j; //indice colonnes
             int n; //indice des 4 caractéristiques de la pièce
+                   //verif lignes
+            int compteur = 0;
 
-            //verif lignes
-            for (i = 0; i < 4; i++) //indice ligne
+            for (i = 0; i < nbreLignes; i++) //indice ligne
             {
-                for (n = 0; n < 4; n++) //test pour chaque carcatéristique(x4)
+                for (n = 0; n < 4; n++) //test pour chaque caractéristique(x4)
                 {
                     j = 0;
-                    while (j < 3 && Grille[i, 0] != caseVide && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ
+                    while (j < 4 && Grille[i, 0] != caseVide) //qd caractéristique commune, on compare la valeur de départ
                     {
+                        if (Grille[i, 0][n] == Grille[i, j][n])
+                            compteur++;
+
                         j++;
                     }
-                    if (j == 3)
+                    if (compteur == 3)
                     {
-                        //Grille[i,mettre dans la case vide de la colonne j)]=ChoixPiece;
+                        aligne = true;
+
+                        //choisir pièce avec[n] != [n] de j = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
                     }
                 }
             }
@@ -151,14 +160,23 @@ namespace test_de_chaque_fonction
                     for (n = 0; n < 4; n++)
                     {
                         i = 0;
-                        while (i < 3 && Grille[0, j] != caseVide && Grille[0, j][n] == Grille[i, j][n])
+                        while (i < 4 && Grille[0, j] != caseVide)
                         {
+                            if (Grille[0, j][n] == Grille[i, j][n])
+                                compteur++;
+
                             i++;
                         }
-                        if (i == 3)
+                        if (compteur == 3)
                         {
-                            //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+                            aligne = true;
+
+                            //choisir pièce avec[n] != [n] de i = 3
+                            //  VerifierSiPieceUtilisee()
+                            //if (verifiersipieceutilisee) alignee=true;
+                            //else alignee=false
                         }
+                        compteur = 0;
                     }
                 }
             }
@@ -169,14 +187,22 @@ namespace test_de_chaque_fonction
                 for (n = 0; n < 4; n++)
                 {
                     i = 1;
-                    while (i < 3 && Grille[0, 0] != caseVide && Grille[0, 0][n] == Grille[i, i][n])
+                    while (i < 4 && Grille[0, 0] != caseVide)
                     {
+                        if (Grille[0, 0][n] == Grille[i, i][n])
+                            compteur++;
+
                         i++;
                     }
-                    if (i == 3)
+                    if (compteur == 3)
                     {
-                        //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+
+                        //choisir pièce avec[n] != [n] de i = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
                     }
+                    compteur = 0;
                 }
             }
 
@@ -188,27 +214,56 @@ namespace test_de_chaque_fonction
                     // Coordonnées (i, j) de la 1ere case que je compare
                     i = 1;
                     j = 2;
-                    while (i < 3 && j >= 0 && Grille[1, 3] != caseVide && Grille[1, 3][n] == Grille[i, j][n])
+                    while (i < 4 && j >= 0 && Grille[1, 3] != caseVide)
                     {
+                        if (Grille[1, 3][n] == Grille[i, j][n])
+                            compteur++;
+
                         i++;
                         j--;
                     }
-                    if (i == 3)
+                    if (compteur == 3)
                     {
-                        //Grille[mettre dans la case vide de la ligne i,j)]=ChoixPiece;
+                        //choisir pièce avec[n] != [n] de i = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
                     }
+                    compteur = 0;
+                    ligne = i;
                 }
             }
-
-
+            return aligne;
         }
 
-    
+
+
+
+
+        static void choixIntell3( int i)
+        {
+            int j = 0;
+            if (ChoixIntelligentCase())
+            {
+                while (j < nbreLignes && Grille[i,j]!=caseVide)
+                    j++;
+
+                Grille[ligne, j] = ChoixPiece;
+            }
+               
+            
+
+            else
+                ChoixIntell2();
+        }
+        
+
+
         static bool Continuer()
         {
             Console.WriteLine("Tapez [r] pour rejour ou [a] pour arrêter");
             string rejouer = Console.ReadLine();
-            bool continuer=true;
+            bool continuer = true;
             while (rejouer != "r" && rejouer != "a")
             {
                 Console.WriteLine("saisissez [r] ou [a]");
@@ -232,11 +287,11 @@ namespace test_de_chaque_fonction
             }
         }
 
-       static void Choisir1erJoueur(string [,]grille)
+        static void Choisir1erJoueur(string[,] grille)
         {
             int choix = 0;
             do
-            { 
+            {
                 Console.WriteLine("Si vous voulez jouer en 1er tapez [1] sinon tapez [2]");
                 choix = int.Parse(Console.ReadLine());
                 if (choix == 2) // l'ordi joue en premier
@@ -253,7 +308,7 @@ namespace test_de_chaque_fonction
                     Console.Write("Si vous voulez jouer en 1er tapez [1] sinon tapez [2]");
                     choix = int.Parse(Console.ReadLine());
                 }
-        } while (choix != 2 | choix != 1);
+            } while (choix != 2 | choix != 1);
         }
 
         static void JouerOrdi(string[,] grille)
@@ -261,21 +316,21 @@ namespace test_de_chaque_fonction
             do
             {
                 Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n 0000= petite, creuse, carrée, clair et 1111=grande, pleine, ronde, foncee\n vous pouvez mixer plusieurs caractères évidemment.");
-               string piece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi.
+                string piece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi.
                 Random R = new Random();// choisit aléatoirement la ligne et la colonne pour placer le pion
 
 
                 int ligne = R.Next(0, 3);
                 int col = R.Next(0, 3);
 
-                grille [ligne, col]= piece;
+                grille[ligne, col] = piece;
 
                 AfficherGrille(grille, ligne, col, piece);
             }
             while (!Gagner() && !AvoirGrilleRemplie());
 
         }
-       
+
         static void AfficherGrille(string[,] grille, int ligne, int col, string piece)
         {
             for (int i = 0; i < 4; i++) //indice ligne
@@ -287,7 +342,7 @@ namespace test_de_chaque_fonction
 
                 for (int j = 0; j < 4; j++) // i = indice colonne
                 {
-                Console.Write(grille[i, j] + "|");
+                    Console.Write(grille[i, j] + "|");
                 }
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
             }
@@ -299,12 +354,12 @@ namespace test_de_chaque_fonction
         }
 
         //pb d'affichage pour 0000
-        static bool Gagner ()
+        static bool Gagner()
         {
             return false;
         }
 
-        static bool AvoirGrilleRemplie ()
+        static bool AvoirGrilleRemplie()
         {
             return false;
         }
@@ -346,7 +401,7 @@ namespace test_de_chaque_fonction
 
                 for (int j = 0; j < nbreLignes; j++) // i = indice colonne
                 {
-                    Console.Write(" "+ Grille[i, j] + " |");
+                    Console.Write(" " + Grille[i, j] + " |");
                 }
                 Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
                 Console.WriteLine("      |      |      |      |      |");
@@ -381,15 +436,15 @@ namespace test_de_chaque_fonction
             return Grille[i, j] != caseVide; // retourne true si la case considérée n'est pas vide, false sinon
         }
 
-        static void ChoixIntell2 ()
+        static void ChoixIntell2()
         {
             int i = 0;
             int j = 0;
             int n = 0;
             //trouver une case non vide
-            while (i < Grille.GetLength(1) && !AvoirCaracCommuneIA(i,j) && !AvoirCaseJouableIA(i,j))
+            while (i < Grille.GetLength(1) && !AvoirCaracCommuneIA(i, j) && !AvoirCaseJouableIA(i, j))
             {
-                while (j < Grille.GetLength(1) && !AvoirCaracCommuneIA(i,j) && !AvoirCaseJouableIA (i,j) && Grille [i,j]==caseVide)
+                while (j < Grille.GetLength(1) && !AvoirCaracCommuneIA(i, j) && !AvoirCaseJouableIA(i, j) && Grille[i, j] == caseVide)
                 {
 
                     j++;
@@ -417,13 +472,13 @@ namespace test_de_chaque_fonction
                 n++;
             }
 
-            if (n != 0 && n!=4)
+            if (n != 0 && n != 4)
                 caracCommune = true;
 
             return caracCommune;
         }
 
-        static bool AvoirCaseJouableIA (int i, int j)
+        static bool AvoirCaseJouableIA(int i, int j)
         {
             bool caseJouable = false;
 
@@ -497,9 +552,165 @@ namespace test_de_chaque_fonction
         static void Main(string[] args)
         {
             string[,] grille = new string[4, 4];
+            Affichertitre();
+            Console.ReadLine();
         }
 
+        static void choixI13()
+        {
+            int n = 0;
+            int countG = 0;
+            for (int i = 0; i < Grille.GetLength(0); i++)
+            {
+                for (int j = 0; j < Grille.GetLength(1); j++)
+                {
+                    for (n = 0; n < nbreCaractéristiques; n++)
+                    {
+                        // A Gauche
+                        if (j > 0 && AvoirCaseRemplie(i, j - 1) && Grille[i, j - 1][n] == Grille[i, j][n])
+                        {
+                            countG++;
+                        }
+                        // A Droite
+                        else if (!AvoirCaseRemplie(i, j + 1))
+                        {
+                            ligne = i;
+                            col = j + 1;
+                            //caseJouable = true;
+                        }
+                        // En Haut
+                        else if (!AvoirCaseRemplie(i, j + 1))
+                        {
+                            ligne = i;
+                            col = j + 1;
+                            //caseJouable = true;
+                        }
+                        // En Bas
+                        else if (!AvoirCaseRemplie(i - 1, j))
+                        {
+                            ligne = i - 1;
+                            col = j;
+                            //caseJouable = true;
+                        }
+                        //En haut
+                        else if (!AvoirCaseRemplie(i + 1, j))
+                        {
+                            ligne = i + 1;
+                            col = j;
+                            //caseJouable = true;
+                        }
+                        //Diago Haut Droite
+                        else if (!AvoirCaseRemplie(i - 1, j + 1))
+                        {
+                            ligne = i - 1;
+                            col = j + 1;
+                            // caseJouable = true;
+                        }
+                        //Diago Haut Gauche
+                        else if (!AvoirCaseRemplie(i - 1, j - 1))
+                        {
+                            ligne = i - 1;
+                            col = j - 1;
+                            //caseJouable = true;
+                        }
+                        //Diago Bas Droite
+                        else if (!AvoirCaseRemplie(i + 1, j + 1))
+                        {
+                            ligne = i + 1;
+                            col = j + 1;
+                            //caseJouable = true;
+                        }
+                        //Diago Bas Gauche
+                        else if (!AvoirCaseRemplie(i + 1, j - 1))
+                        {
+                            ligne = i + 1;
+                            col = j - 1;
+                            //caseJouable = true;
+                        }
+                    }
 
+                }
+
+            }
+
+
+        }
+
+        static void Affichertitre()
+        { // Lancement du jeu
+            Console.Write("\n");
+
+            Console.WriteLine("          _____                    _____                    _____                    _____             ");
+            Console.WriteLine("         /\\    \\                  /\\    \\                  /\\    \\                  /\\    \\            ");
+            Thread.Sleep(200);
+            Console.WriteLine("        /::\\    \\                /::\\____\\                /::\\    \\                /::\\____\\           ");
+            Thread.Sleep(200);
+            Console.WriteLine("       /::::\\    \\              /:::/    /               /::::\\    \\              /:::/    /           ");
+            Console.WriteLine("      /::::::\\    \\            /:::/    /               /::::::\\    \\            /:::/    /            ");
+            Thread.Sleep(200);
+            Console.WriteLine("     /:::/\\:::\\    \\          /:::/    /               /:::/\\:::\\    \\          /:::/    /             ");
+            Console.WriteLine("    /:::/__\\:::\\    \\        /:::/    /               /:::/__\\:::\\    \\        /:::/____/              ");
+            Thread.Sleep(200);
+            Console.WriteLine("   /::::\\   \\:::\\    \\      /:::/    /                \\:::\\   \\:::\\    \\      /::::\\    \\              ");
+            Console.WriteLine("  /::::::\\   \\:::\\    \\    /:::/    /      _____    ___\\:::\\   \\:::\\    \\    /::::::\\    \\   _____     ");
+            Thread.Sleep(200);
+            Console.WriteLine(" /:::/\\:::\\   \\:::\\____\\  /:::/____/      /\\    \\  /\\   \\:::\\   \\:::\\    \\  /:::/\\:::\\    \\ /\\    \\    ");
+            Console.WriteLine("/:::/  \\:::\\   \\:::|    ||:::|    /      /::\\____\\/::\\   \\:::\\   \\:::\\____\\/:::/  \\:::\\    /::\\____\\   ");
+            Thread.Sleep(200);
+            Console.WriteLine("\\::/   |::::\\  /:::|____||:::|____\\     /:::/    /\\:::\\   \\:::\\   \\::/    /\\::/    \\:::\\  /:::/    /   ");
+            Console.WriteLine(" \\/____|:::::\\/:::/    /  \\:::\\    \\   /:::/    /  \\:::\\   \\:::\\   \\/____/  \\/____/ \\:::\\/:::/    /    ");
+            Thread.Sleep(200);
+            Console.WriteLine("       |:::::::::/    /    \\:::\\    \\ /:::/    /    \\:::\\   \\:::\\    \\               \\::::::/    /     ");
+            Console.WriteLine("       |::|\\::::/    /      \\:::\\    /:::/    /      \\:::\\   \\:::\\____\\               \\::::/    /      ");
+            Thread.Sleep(200);
+            Console.WriteLine("       |::| \\::/____/        \\:::\\__/:::/    /        \\:::\\  /:::/    /               /:::/    /       ");
+            Console.WriteLine("       |::|  ~|               \\::::::::/    /          \\:::\\/:::/    /               /:::/    /        ");
+            Thread.Sleep(200);
+            Console.WriteLine("       |::|   |                \\::::::/    /            \\::::::/    /               /:::/    /         ");
+            Console.WriteLine("       \\::|   |                 \\::::/    /              \\::::/    /               /:::/    /          ");
+            Thread.Sleep(200);
+            Console.WriteLine("        \\:|   |                  \\::/____/                \\::/    /                \\::/    /           ");
+            Console.WriteLine("         \\|___|                   ~~                       \\/____/                  \\/____/            ");
+
+            Thread.Sleep(200);
+            Console.Write("\n\n\n");
+
+            Console.WriteLine("               _____                   _______                   _____                    _____          ");
+            Console.WriteLine("              /\\    \\                 /::\\    \\                 /\\    \\                  /\\    \\         ");
+            Thread.Sleep(200);
+            Console.WriteLine("             /::\\____\\               /::::\\    \\               /::\\____\\                /::\\    \\        ");
+            Console.WriteLine("            /:::/    /              /::::::\\    \\             /:::/    /               /::::\\    \\       ");
+            Thread.Sleep(200);
+            Console.WriteLine("           /:::/    /              /::::::::\\    \\           /:::/    /               /::::::\\    \\      ");
+            Console.WriteLine("          /:::/    /              /:::/~~\\:::\\    \\         /:::/    /               /:::/\\:::\\    \\     ");
+            Thread.Sleep(200);
+            Console.WriteLine("         /:::/____/              /:::/    \\:::\\    \\       /:::/    /               /:::/__\\:::\\    \\    ");
+            Console.WriteLine("        /::::\\    \\             /:::/    / \\:::\\    \\     /:::/    /               /::::\\   \\:::\\    \\   ");
+            Thread.Sleep(200);
+            Console.WriteLine("       /::::::\\    \\   _____   /:::/____/   \\:::\\____\\   /:::/    /      _____    /::::::\\   \\:::\\    \\  ");
+            Console.WriteLine("      /:::/\\:::\\    \\ /\\    \\ |:::|    |     |:::|    | /:::/____/      /\\    \\  /:::/\\:::\\   \\:::\\____\\ ");
+            Thread.Sleep(200);
+            Console.WriteLine("     /:::/  \\:::\\    /::\\____\\|:::|____|     |:::|    ||:::|    /      /::\\____\\/:::/  \\:::\\   \\:::|    |");
+            Console.WriteLine("     \\::/    \\:::\\  /:::/    / \\:::\\    \\   /:::/    / |:::|____\\     /:::/    /\\::/   |::::\\  /:::|____|");
+            Thread.Sleep(200);
+            Console.WriteLine("      \\/____/ \\:::\\/:::/    /   \\:::\\    \\ /:::/    /   \\:::\\    \\   /:::/    /  \\/____|:::::\\/:::/    / ");
+            Console.WriteLine("               \\::::::/    /     \\:::\\    /:::/    /     \\:::\\    \\ /:::/    /         |:::::::::/    /  ");
+            Thread.Sleep(200);
+            Console.WriteLine("                \\::::/    /       \\:::\\__/:::/    /       \\:::\\    /:::/    /          |::|\\::::/    /   ");
+            Console.WriteLine("                /:::/    /         \\::::::::/    /         \\:::\\__/:::/    /           |::| \\::/____/    ");
+            Thread.Sleep(200);
+            Console.WriteLine("               /:::/    /           \\::::::/    /           \\::::::::/    /            |::|  ~|          ");
+            Console.WriteLine("              /:::/    /             \\::::/    /             \\::::::/    /             |::|   |          ");
+            Thread.Sleep(200);
+            Console.WriteLine("             /:::/    /               \\::/____/               \\::::/    /              \\::|   |          ");
+            Console.WriteLine("             \\::/    /                 ~~                      \\::/____/                \\:|   |          ");
+            Thread.Sleep(200);
+            Console.WriteLine("              \\/____/                                           ~~                       \\|___|          ");
+
+            Console.Write("\n");
+
+            Thread.Sleep(1800);
+        }
     }
 }
  

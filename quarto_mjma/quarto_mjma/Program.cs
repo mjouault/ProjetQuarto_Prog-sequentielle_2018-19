@@ -13,7 +13,7 @@ namespace quarto_mjma
         // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
         static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" }, { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
         static string[,] Grille;    // Grille de jeu
-        static string caseVide = "    "; //pourquoi ça nous souligne les 2 premières lettres?
+        static string caseVide = "    "; 
         static string ChoixPiece;
         static int ligne; static int col;
         static int nbreLignes = 4;
@@ -21,6 +21,7 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
+            Console.SetWindowSize(100, 50);
             AfficherEnTete();
             AfficherRegles();
             do
@@ -149,7 +150,9 @@ namespace quarto_mjma
                 if (AvoirGrilleRemplie() && !Gagner()) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
                     Console.WriteLine("Match nul");
 
+               
                 joueurCourant = !joueurCourant;
+                
             }
         }
 
@@ -180,17 +183,19 @@ namespace quarto_mjma
             JouerPiece(ChoixPiece);
 
             //choix case par l'ordi
+
             /* Random R = new Random();
-             // choisit aléatoirement la ligne et la colonne pour placer le pion
-             do
-             {
-                 ligne = R.Next(0, nbreLignes);
-                 col = R.Next(0, nbreLignes);
-             } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+              // choisit aléatoirement la ligne et la colonne pour placer le pion
+              do
+              {
+                  ligne = R.Next(0, nbreLignes);
+                  col = R.Next(0, nbreLignes);
+              } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-             Grille[ligne, col] = ChoixPiece;*/
+              Grille[ligne, col] = ChoixPiece;
+             AfficherGrille();*/
 
-            ChoixIntell2();
+            choixIntell3(ligne);
 
         }
 
@@ -218,11 +223,11 @@ namespace quarto_mjma
                 "Les caractères peuvent être mélangés entre eux", ChoixPiece);
             // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
 
-
+            bool caseRemplie = false;
             //choix de la case par le joueur
             do
             {
-                do //vérification si 0<ligne choisie <3
+                do //vérification si 0<ligne choisie < 3
                 {
                     Console.WriteLine("\nChoisir une ligne (entre 0 et 3) ");
                     ligne = int.Parse(Console.ReadLine());
@@ -244,16 +249,15 @@ namespace quarto_mjma
                     }
                 } while (col < 0 || col > 3);
 
-
-                if (AvoirCaseRemplie(ligne, col))
+                caseRemplie = AvoirCaseRemplie(ligne, col);
+                if ( caseRemplie )
                 {
                     Console.WriteLine("\nErreur : case déjà remplie, veuillez en choisir une autre :");
                 }
-
-            } while ((ligne < 0 || ligne > 3) && (col < 0 || col > 3) && AvoirCaseRemplie(ligne, col)); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablment, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
+            } while (caseRemplie ); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             Grille[ligne, col] = ChoixPiece;
-            //AfficherGrille();
+           // AfficherGrille();
             //ArreterPartie();
         }
 
@@ -518,9 +522,146 @@ namespace quarto_mjma
             return arret;
         }
 
+        static bool ChoixIntelligentCase()
+        {
+            //faire cas où il y en a 3 pareil dans une colonne ou ligne ou diagonale et quil reste une case vide donc les 3 ne sont pas alignés à la suite (mettre dedans)
+
+            bool aligne = false; //bool qui nous dit si il a trouvé 3 pièces alignés de caractère identique
+            int i; //indice lignes
+            int j; //indice colonnes
+            int n; //indice des 4 caractéristiques de la pièce
+                   //verif lignes
+            int compteur = 0;
+
+            for (i = 0; i < nbreLignes; i++) //indice ligne
+            {
+                for (n = 0; n < 4; n++) //test pour chaque caractéristique(x4)
+                {
+                    j = 0;
+                    while (j < 4 && Grille[i, 0] != caseVide) //qd caractéristique commune, on compare la valeur de départ
+                    {
+                        if (Grille[i, 0][n] == Grille[i, j][n])
+                            compteur++;
+
+                        j++;
+                    }
+                    if (compteur == 3)
+                    {
+                        aligne = true;
+
+                        //choisir pièce avec[n] != [n] de j = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
+                    }
+                }
+            }
+
+            //verif colonnes
+            if (!aligne)
+            {
+                for (j = 0; j < 4; j++)
+                {
+                    for (n = 0; n < 4; n++)
+                    {
+                        i = 0;
+                        while (i < 4 && Grille[0, j] != caseVide)
+                        {
+                            if (Grille[0, j][n] == Grille[i, j][n])
+                                compteur++;
+
+                            i++;
+                        }
+                        if (compteur == 3)
+                        {
+                            aligne = true;
+
+                            //choisir pièce avec[n] != [n] de i = 3
+                            //  VerifierSiPieceUtilisee()
+                            //if (verifiersipieceutilisee) alignee=true;
+                            //else alignee=false
+                        }
+                        compteur = 0;
+                    }
+                }
+            }
+
+            //vérif diago de la gauche vers la droite, haut vers bas
+            if (!aligne)
+            {
+                for (n = 0; n < 4; n++)
+                {
+                    i = 1;
+                    while (i < 4 && Grille[0, 0] != caseVide)
+                    {
+                        if (Grille[0, 0][n] == Grille[i, i][n])
+                            compteur++;
+
+                        i++;
+                    }
+                    if (compteur == 3)
+                    {
+
+                        //choisir pièce avec[n] != [n] de i = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
+                    }
+                    compteur = 0;
+                }
+            }
+
+            //vérif diago de la droite vers la gauche, du haut vers le bas
+            if (!aligne)
+            {
+                for (n = 0; n < 4; n++)
+                {
+                    // Coordonnées (i, j) de la 1ere case que je compare
+                    i = 1;
+                    j = 2;
+                    while (i < 4 && j >= 0 && Grille[1, 3] != caseVide)
+                    {
+                        if (Grille[1, 3][n] == Grille[i, j][n])
+                            compteur++;
+
+                        i++;
+                        j--;
+                    }
+                    if (compteur == 3)
+                    {
+                        //choisir pièce avec[n] != [n] de i = 3
+                        //  VerifierSiPieceUtilisee()
+                        //if (verifiersipieceutilisee) alignee=true;
+                        //else alignee=false
+                    }
+                    compteur = 0;
+                    ligne = i;
+                }
+            }
+            return aligne;
+        }
+
+        static void choixIntell3(int i)
+        {
+            int j = 0;
+            if (ChoixIntelligentCase())
+            {
+                while (j < nbreLignes && Grille[i, j] != caseVide)
+                    j++;
+
+                Grille[ligne, j] = ChoixPiece;
+            }
 
 
 
+            else
+                ChoixIntell2();
+        }
+
+
+        /// <summary>
+        /// ChoixIntell2 : l"ordi place la pièce qui lui est donnée autour d'une pièce qui a une caractéristique commune
+        /// </summary>
         static void ChoixIntell2()
         {
             int i = 0;
@@ -539,15 +680,26 @@ namespace quarto_mjma
             }
 
             if (AvoirCaseJouableIA(i, j))
-            {
                 Grille[ligne, col] = ChoixPiece;
+          /*  else
+            {
+                Random R = new Random();
+                // choisit aléatoirement la ligne et la colonne pour placer le pion
+                do
+                {
+                    ligne = R.Next(0, nbreLignes);
+                    col = R.Next(0, nbreLignes);
+                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-            }
+                Grille[ligne, col] = ChoixPiece;
+            }*/
+
+            //AfficherGrille();
 
         }
 
         /// <summary>
-        /// AvoirCaseJouableIA :  true s'il y a une case autour de la case de référence qui est vide, false sinon
+        /// AvoirCaseJouableIA :  true s'il y a une case vide autour de la case de référence, false sinon. Permet de jouer autour de la case de référence.
         /// </summary>
         /// <param name="i"></param>
         /// <param name="j"></param>
