@@ -26,7 +26,7 @@ namespace quarto_mjma
 
 
         static bool trace = false;
-        static bool gagner = false;
+        static bool AGagne = false;
 
         // Main
         static void Main(string[] args)
@@ -176,7 +176,7 @@ namespace quarto_mjma
             AfficherTitre();
             AfficherGrille();
 
-            while (!Gagner() && !AvoirGrilleRemplie())
+            while (!AGagne && !AvoirGrilleRemplie())
             {
                 //Console.Clear();
                // AfficherTitre();
@@ -200,7 +200,7 @@ namespace quarto_mjma
                         Console.WriteLine("Le joueur a joué");
 
                     //vérification si le joueur a gagné à chaque fin de tour
-                    if (Gagner()) //cas s'il gagne
+                    if (AGagne) //cas s'il gagne
                         AfficherVictoire();
                 }
 
@@ -217,11 +217,11 @@ namespace quarto_mjma
                     if (trace)
                         Console.WriteLine("l'ordi a joué");
 
-                    if (Gagner())
+                    if (AGagne)
                         AfficherPerte();
                 }
 
-                if (AvoirGrilleRemplie() && !Gagner()) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
+                if (AvoirGrilleRemplie() && !AGagne) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
                     Console.WriteLine("Match nul");
 
                 AfficherTitre();
@@ -403,9 +403,8 @@ namespace quarto_mjma
         /// Gagner () : Fonction donnant toutes les combinaisons gagnantes et terminant la partie
         /// </summary>
         /// <returns></returns>
-        static bool Gagner()
+        static void Gagner()
         {
-            bool gagner = false;
             int i; //indice lignes
             int j; //indice colonnes
             int n; //indice des 4 caractéristiques de la pièce
@@ -422,13 +421,13 @@ namespace quarto_mjma
                     }
                     if (j == nbreLignes)
                     {
-                        gagner = true;
+                        AGagne = true;
                     }
                 }
             }
 
             //verif colonnes
-            if (!gagner)
+            if (!AGagne)
             {
                 for (j = 0; j < nbreLignes; j++)
                 {
@@ -441,14 +440,14 @@ namespace quarto_mjma
                         }
                         if (i == nbreLignes)
                         {
-                            gagner = true; // une ligne de 4 pièces avec au moins 1 caractéristique commune a été complétée
+                            AGagne = true; // une ligne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                         }
                     }
                 }
             }
 
             //vérif diago de la gauche vers la droite, haut vers bas
-            if (!gagner)
+            if (!AGagne)
             {
                 for (n = 0; n < nbreCaractéristiques; n++)
                 {
@@ -459,13 +458,13 @@ namespace quarto_mjma
                     }
                     if (i == nbreLignes)
                     {
-                        gagner = true; // la diagonale décrite a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
+                        AGagne = true; // la diagonale décrite a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
                     }
                 }
             }
 
             //vérif diago de la droite vers la gauche, du haut vers le bas
-            if (!gagner)
+            if (!AGagne)
             {
                 for (n = 0; n < nbreCaractéristiques; n++)
                 {
@@ -479,12 +478,10 @@ namespace quarto_mjma
                     }
                     if (i == nbreLignes)
                     {
-                        gagner = true; // la diagonale décrite a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
+                        AGagne = true; // la diagonale décrite a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
                     }
                 }
             }
-
-            return gagner;
         }
 
         /// <summary>
@@ -668,7 +665,7 @@ namespace quarto_mjma
         static void ChoisirCaseIA()
         {
             GagnerIA();
-            if (!gagner)
+            if (!AGagne)
             {
                 if (trace)
                 Console.WriteLine("aléatoire");
@@ -696,7 +693,7 @@ namespace quarto_mjma
             // l'IA recherche s'il y a déjà  sur une mm ligne, 3 pièces "alignées" et ayant 1 même caractéristique 
             int n = 0;
 
-            while (n < nbreCaractéristiques && !gagner)
+            while (n < nbreCaractéristiques && !AGagne)
             {
                 int i = 0;
                 if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
@@ -723,7 +720,7 @@ namespace quarto_mjma
                 if (i!=4 && TrouverCaseIALigne(i))
                 {
                     Grille[i, col] = ChoixPiece;
-                    gagner = true;
+                    AGagne = true;
                 }
                 else
                 { 
@@ -733,7 +730,7 @@ namespace quarto_mjma
 
             n = 0;
             // l'IA recherche où il y a déjà sur une même colonne, 3 pièces "alignées" et ayant 1 même caractéristique 
-            while (n < nbreCaractéristiques && !gagner)
+            while (n < nbreCaractéristiques && !AGagne)
             {
                 int j = 0;
                 if (trace)
@@ -760,7 +757,7 @@ namespace quarto_mjma
                 if (j!=4 && TrouverCaseIACol(j))
                 {
                     Grille[ligne, j] = ChoixPiece;
-                    gagner = true;
+                    AGagne = true;
                 }
                 else
                 {
