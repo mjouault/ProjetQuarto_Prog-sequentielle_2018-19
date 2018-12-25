@@ -19,13 +19,13 @@ namespace PiecesStylees
         {
             for (int i = 0; i < 7; i++) //indice ligne
             {
-
+               
                 Console.WriteLine("      +--------------------+--------------------+--------------------+--------------------+");
                 Console.WriteLine("      |                    |                    |                    |                    |");
                 Console.WriteLine("      |                    |                    |                    |                    |");
                 Console.WriteLine("      |                    |                    |                    |                    |");
                 Console.WriteLine("      |                    |                    |                    |                    |");
-                //Console.Write("{0}   ", i);
+               // Console.Write("{0}   ", i);
                // Console.Write("                    |");
 
                 //Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
@@ -40,7 +40,7 @@ namespace PiecesStylees
         {
             AfficherGrille();
 
-            piece1();
+            piece9();
             Console.WriteLine("");
 
             curseur = 7;
@@ -93,12 +93,12 @@ namespace PiecesStylees
         }
         static void piece2()
         {
-
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.BackgroundColor = ConsoleColor.White;
+            //Console.ForegroundColor = ConsoleColor.Red;
             for (int i = 0; i < hauteurGrandCarre; i++)
             {
                 Console.SetCursorPosition(curseur, 7 + i);
-                Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
+                Console.WriteLine(string.Concat(Enumerable.Repeat(" ", largeurGrandCarre)));
             }
             Console.ResetColor();
         }
@@ -211,14 +211,36 @@ namespace PiecesStylees
         */
         static void piece9 ()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+            /*Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("      * *     ");
             Console.WriteLine("   *       * ");
             Console.WriteLine("  *         * ");
             Console.WriteLine("  *         * ");
             Console.WriteLine("   *       * ");
             Console.WriteLine("      * *     ");
-            Console.ResetColor();
+            Console.ResetColor();*/
+
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.SetCursorPosition(7, 1);
+            Console.WriteLine("      ");
+            Console.SetCursorPosition(7+9, 1);
+            Console.WriteLine("      ");
+            Console.SetCursorPosition(7, 2);
+            Console.WriteLine("    ");
+            Console.SetCursorPosition(7 +11, 2);
+            Console.WriteLine("    ");
+            Console.SetCursorPosition(7, 3);
+            Console.WriteLine("  ");
+            Console.SetCursorPosition(7+13, 3);
+            Console.WriteLine("  ");
+            Console.SetCursorPosition(7, 4);
+            Console.WriteLine("    ");
+            Console.SetCursorPosition(7+11, 4);
+            Console.WriteLine("    ");
+            Console.SetCursorPosition(7, 5);
+            Console.WriteLine("      ");
+            Console.SetCursorPosition(7+9, 5);
+            Console.WriteLine("      ");
         }
         static void piece10()
         {
@@ -234,14 +256,26 @@ namespace PiecesStylees
 
         static void piece11()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+           /* Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("      ***     ");
             Console.WriteLine("   ********* ");
             Console.WriteLine("  *********** ");
             Console.WriteLine("  *********** ");
             Console.WriteLine("   ********* ");
             Console.WriteLine("      ***     ");
-            Console.ResetColor();
+            Console.ResetColor();*/
+
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(7 + 6, 1);
+            Console.WriteLine("  ");
+            Console.SetCursorPosition(7 + 4, 2);
+            Console.WriteLine("      ");
+            Console.SetCursorPosition(7 + 2, 3);
+            Console.WriteLine("          ");
+            Console.SetCursorPosition(7 + 4, 4);
+            Console.WriteLine("      ");
+            Console.SetCursorPosition(7 + 6, 5);
+            Console.WriteLine("  ");
         }
         static void piece12()
         {
