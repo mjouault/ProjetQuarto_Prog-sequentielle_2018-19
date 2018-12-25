@@ -17,12 +17,13 @@ namespace quarto_mjma
         static int nbreLignes = 4;
         static int nbreCaractéristiques = 4;
 
-        static int[,] tablignes1 = new int[4, 4];
-        static int[,] tablignes0 = new int[4, 4];
-        static int[,] tabcol1 = new int[4, 4];
-        static int[,] tabcol0 = new int[4, 4];
-        static int[,] diagos1 = new int[4, 4];
-        static int[,] diago0 = new int[4, 4];
+        static int[,] tablignes0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque ligne 
+        static int[,] tablignes1 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque ligne 
+        static int[,] tabcol0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque colonne
+        static int[,] tabcol1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque colonne
+        static int[,] diago0 = new int[4, 4];   //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque diagonale
+        static int[,] diagos1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque diagonale
+
 
         static bool trace = false;
         static bool gagner = false;
@@ -611,39 +612,42 @@ namespace quarto_mjma
                 }
             }
 
-            /*Console.WriteLine("lignes0");
-            for (int i = 0; i < 4; i++) // affiche tabligne0
+            if (trace)
             {
-                Console.WriteLine("");
-                for (int j = 0; j < 4; j++)
-                    Console.Write(tablignes0[i, j] + "\t");
-            }
-
-            Console.WriteLine("lignes1");
-            for (int i = 0; i < 4; i++)  //affiche tabligne1
-            {
-                Console.WriteLine("");
-                for (int j = 0; j < 4; j++)
+                Console.WriteLine("lignes0");
+                for (int i = 0; i < 4; i++) // affiche tabligne0
                 {
-                    Console.Write(tablignes1[i, j] + "\t");
+                    Console.WriteLine("");
+                    for (int j = 0; j < 4; j++)
+                        Console.Write(tablignes0[i, j] + "\t");
+                }
+
+                Console.WriteLine("lignes1");
+                for (int i = 0; i < 4; i++)  //affiche tabligne1
+                {
+                    Console.WriteLine("");
+                    for (int j = 0; j < 4; j++)
+                    {
+                        Console.Write(tablignes1[i, j] + "\t");
+                    }
+                }
+
+                Console.WriteLine("col0");
+                for (int i = 0; i < 4; i++) // afiche tabcol0
+                {
+                    Console.WriteLine("");
+                    for (int j = 0; j < 4; j++)
+                        Console.Write(tabcol0[i, j] + "\t");
+                }
+
+                Console.WriteLine("col1");
+                for (int i = 0; i < 4; i++) // afiche tabcol1
+                {
+                    Console.WriteLine("");
+                    for (int j = 0; j < 4; j++)
+                        Console.Write(tabcol1[i, j] + "\t");
                 }
             }
-
-            Console.WriteLine("col0");
-            for (int i = 0; i < 4; i++) // afiche tabcol0
-            {
-                Console.WriteLine("");
-                for (int j = 0; j < 4; j++)
-                    Console.Write(tabcol0[i, j] + "\t");
-            }
-
-            Console.WriteLine("col1");
-            for (int i = 0; i < 4; i++) // afiche tabcol1
-            {
-                Console.WriteLine("");
-                for (int j = 0; j < 4; j++)
-                    Console.Write(tabcol1[i, j] + "\t");
-            }*/
 
 
         }
@@ -676,13 +680,13 @@ namespace quarto_mjma
             if (trace)
             Console.WriteLine("entre ds gagnerIA");
 
-            // l'IA recherche où il y a déjà 3 pièces "alignées" et ayant 1 même caractéristique sur une mm ligne
+            // l'IA recherche s'il y a déjà  sur une mm ligne, 3 pièces "alignées" et ayant 1 même caractéristique 
             int n = 0;
 
             while (n < nbreCaractéristiques && !gagner)
             {
                 int i = 0;
-                if (ChoixPiece[n] == '0')
+                if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
                 {
                     
                     while (i < nbreLignes && tablignes0[i, n] != 3)
@@ -715,7 +719,7 @@ namespace quarto_mjma
             }
 
             n = 0;
-            // l'IA recherche où il y a déjà 3 pièces "alignées" et ayant 1 même caractéristique sur une mm col
+            // l'IA recherche où il y a déjà sur une même colonne, 3 pièces "alignées" et ayant 1 même caractéristique 
             while (n < nbreCaractéristiques && !gagner)
             {
                 int j = 0;
