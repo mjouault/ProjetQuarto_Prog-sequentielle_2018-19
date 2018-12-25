@@ -27,6 +27,7 @@ namespace quarto_mjma
 
         static bool trace = false;
         static bool AGagne = false;
+        static bool grilleRemplie = false;
 
         // Main
         static void Main(string[] args)
@@ -176,7 +177,7 @@ namespace quarto_mjma
             AfficherTitre();
             AfficherGrille();
 
-            while (!AGagne && !AvoirGrilleRemplie())
+            while (!AGagne && !grilleRemplie)
             {
                 //Console.Clear();
                // AfficherTitre();
@@ -193,6 +194,8 @@ namespace quarto_mjma
                     JouerJoueur();
                     if (trace)
                         Console.WriteLine("Le joueur joue");
+
+                    Gagner();
 
                     // AfficherGrille();
 
@@ -217,12 +220,17 @@ namespace quarto_mjma
                     if (trace)
                         Console.WriteLine("l'ordi a joué");
 
+                    Gagner();
                     if (AGagne)
                         AfficherPerte();
                 }
 
-                if (AvoirGrilleRemplie() && !AGagne) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
+                if (!AGagne) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
+                {
+                    AvoirGrilleRemplie();
+                    if (grilleRemplie)
                     Console.WriteLine("Match nul");
+                }
 
                 AfficherTitre();
                 AfficherGrille();
@@ -516,9 +524,8 @@ namespace quarto_mjma
         /// AvoirGrilleRemplie : Condition de fin de jeu et permet de définir quand il y a match nul
         /// </summary>
         /// <returns></returns>
-        static bool AvoirGrilleRemplie()
+        static void AvoirGrilleRemplie()
         {
-            bool grilleRemplie = false;
 
             int i = 0; //indice ligne
             int j = 0;  // Indice colonne
@@ -538,8 +545,6 @@ namespace quarto_mjma
 
             if (i == nbreLignes && j == nbreLignes)
                 grilleRemplie = true;
-
-            return grilleRemplie;
         }
 
         /// <summary>
