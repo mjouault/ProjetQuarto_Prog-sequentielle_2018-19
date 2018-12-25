@@ -8,18 +8,46 @@ namespace PiecesStylees
 {
     class Program
     {
-        static int largeurGrandCarre = 9;
-        static int hauteurGrandCarre = 7;
-        static int largeurPetitCarre = 7;
-        static int hauteurPetitCarre = 5;
+        static int largeurGrandCarre = 7;
+        static int hauteurGrandCarre = 4;
+        static int largeurPetitCarre = 5;
+        static int hauteurPetitCarre = 3;
+
+       static int curseur = 7;
+
+        static void AfficherGrille()
+        {
+            for (int i = 0; i < 7; i++) //indice ligne
+            {
+
+                Console.WriteLine("      +--------------------+--------------------+--------------------+--------------------+");
+                Console.WriteLine("      |                    |                    |                    |                    |");
+                Console.WriteLine("      |                    |                    |                    |                    |");
+                Console.WriteLine("      |                    |                    |                    |                    |");
+                Console.WriteLine("      |                    |                    |                    |                    |");
+                //Console.Write("{0}   ", i);
+               // Console.Write("                    |");
+
+                //Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
+                Console.WriteLine("      |                    |                    |                    |                    |");
+            }
+
+            Console.WriteLine("      +--------------------+--------------------+--------------------+--------------------+");
+            Console.WriteLine("         0      1      2      3");
+        }
 
         static void Main(string[] args)
         {
+            AfficherGrille();
 
             piece1();
             Console.WriteLine("");
+
+            curseur = 7;
+       
             piece2();
-            Console.WriteLine("");
+
+            /*Console.WriteLine("");
             piece3();
             Console.WriteLine("");
             piece4();
@@ -34,7 +62,7 @@ namespace PiecesStylees
             Console.WriteLine("");
             piece9();
             Console.WriteLine("");
-           // piece10();
+            piece10();
             Console.WriteLine("");
             piece11();
             Console.WriteLine("");
@@ -46,7 +74,7 @@ namespace PiecesStylees
             Console.WriteLine("");
             piece15();
             Console.WriteLine("");
-            piece16();
+            piece16();*/
 
 
             Console.ReadLine();
@@ -54,10 +82,11 @@ namespace PiecesStylees
 
         static void piece1()
         {
-
+            
             Console.ForegroundColor = ConsoleColor.Blue;
             for (int i = 0; i < hauteurGrandCarre; i++)
             {
+                Console.SetCursorPosition(curseur,1+i);
                 Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             }
             Console.ResetColor();
@@ -68,6 +97,7 @@ namespace PiecesStylees
             Console.ForegroundColor = ConsoleColor.Red;
             for (int i = 0; i < hauteurGrandCarre; i++)
             {
+                Console.SetCursorPosition(curseur, 7 + i);
                 Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             }
             Console.ResetColor();
@@ -82,11 +112,11 @@ namespace PiecesStylees
                    Console.WriteLine("**************");
            }*/
 
-        static void piece3()
+        static void piece3 ()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
-            for (int i = 0; i < hauteurGrandCarre - 2; i++)
+            for (int i = 0; i < hauteurGrandCarre-2; i++)
                 Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre - 2)) + "*");
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             Console.ResetColor();
@@ -96,8 +126,8 @@ namespace PiecesStylees
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
-            for (int i = 0; i < hauteurGrandCarre - 2; i++)
-                Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre - 2)) + "*");
+            for (int i = 0; i < hauteurGrandCarre-2; i++)
+                Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre-2)) + "*");
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             Console.ResetColor();
         }
@@ -112,7 +142,7 @@ namespace PiecesStylees
                Console.WriteLine("**************");
            }*/
 
-        static void piece5()
+        static void piece5 ()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             for (int i = 0; i < hauteurPetitCarre; i++)
@@ -147,9 +177,9 @@ namespace PiecesStylees
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
-            for (int i = 0; i < hauteurPetitCarre - 2; i++)
+            for (int i = 0; i < hauteurPetitCarre-2; i++)
             {
-                Console.WriteLine(" *" + string.Concat(Enumerable.Repeat(" ", largeurPetitCarre - 2)) + "*");
+                Console.WriteLine(" *" + string.Concat(Enumerable.Repeat(" ", largeurPetitCarre-2)) + "*");
             }
             Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
             Console.ResetColor();
@@ -179,7 +209,7 @@ namespace PiecesStylees
             Console.WriteLine("***********");
         }
         */
-        static void piece9()
+        static void piece9 ()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("      * *     ");
@@ -190,15 +220,17 @@ namespace PiecesStylees
             Console.WriteLine("      * *     ");
             Console.ResetColor();
         }
-        string[,] piece10 = new string[6, 1]
+        static void piece10()
         {
-            {"      * *     "},
-            {"   *       * "},
-            {"  *         * "},
-            {"  *         * "},
-            {"   *       * "},
-            {"      * *     "},
-        };
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("      * *     ");
+            Console.WriteLine("   *       * ");
+            Console.WriteLine("  *         * ");
+            Console.WriteLine("  *         * ");
+            Console.WriteLine("   *       * ");
+            Console.WriteLine("      * *     ");
+            Console.ResetColor();
+        }
 
         static void piece11()
         {
