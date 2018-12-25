@@ -649,8 +649,7 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// ChoisirCaseIA : si 3 pièces alignées, met la pièce donnée dans la case qu'il reste sinon, évite de jouer là où il y a déjà 2 pièces d'alignées
-        /// </summary>
+        /// ChoisirCaseIA : L'IA choisit intelligemment la case dans laquelle elle va jouer la pièce donnée. Si 3 pièces alignées, met la pièce donnée dans la case qu'il reste sinon, joue dans les coins
         static void ChoisirCaseIA()
         {
             GagnerIA();
@@ -669,9 +668,14 @@ namespace quarto_mjma
             }
         }
 
+        /// <summary>
+        /// GagnerIA () : l'IA cherche si elle peut directement gagner avec la pièce qu'elle a. S'il l y a déjà 3 pièces d' "alignées", elle regarde si sa pièce est compatible
+        /// </summary>
         static void GagnerIA()
         {
-            //Console.WriteLine("entre ds gagnerIA");
+            if (trace)
+            Console.WriteLine("entre ds gagnerIA");
+
             // l'IA recherche où il y a déjà 3 pièces "alignées" et ayant 1 même caractéristique sur une mm ligne
             int n = 0;
 
@@ -683,7 +687,8 @@ namespace quarto_mjma
                     
                     while (i < nbreLignes && tablignes0[i, n] != 3)
                     {
-                      // Console.WriteLine("lablignes0" + i);
+                        if (trace)
+                       Console.WriteLine("lablignes0" + i);
                         i++;
                     }
                 }
@@ -691,19 +696,20 @@ namespace quarto_mjma
                 {
                     while (i < nbreLignes && tablignes1[i, n] != 3)
                     {
-                       //Console.WriteLine("lablignes1" + i);
+                        if (trace)
+                        Console.WriteLine("lablignes1" + i);
                         i++;
                     }
                 }
-                 //Console.WriteLine("i ={0}, n={1}", i, n);
+                  if (trace)
+                 Console.WriteLine("i ={0}, n={1}", i, n);
                 if (i!=4 && TrouverCaseIALigne(i))
                 {
                     Grille[i, col] = ChoixPiece;
                     gagner = true;
                 }
                 else
-                {
-                   // Console.WriteLine("n++");
+                { 
                     n++;
                 }
             }
@@ -713,12 +719,14 @@ namespace quarto_mjma
             while (n < nbreCaractéristiques && !gagner)
             {
                 int j = 0;
-                // Console.WriteLine("piècesalignéescolonnes");
+                if (trace)
+                Console.WriteLine("piècesalignéescolonnes");
                 if (ChoixPiece[n] == '0')
                 {
                     while (j < nbreLignes && tabcol0[j, n] != 3)
                     {
-                       // Console.WriteLine("tabcol0" + j);
+                        if (trace)
+                        Console.WriteLine("tabcol0" + j);
                         j++;
                     }
                 }
@@ -726,7 +734,8 @@ namespace quarto_mjma
                 {
                     while (j < nbreLignes && tabcol1[j, n] != 3)
                     {
-                       // Console.WriteLine("tabcol1" + j);
+                        if (trace)
+                        Console.WriteLine("tabcol1" + j);
                         j++;
                     }
                 }
@@ -748,8 +757,9 @@ namespace quarto_mjma
         /// </summary>
         static bool TrouverCaseIALigne (int i)
         {
-
+            if (trace)
             Console.WriteLine("TrouveCaseLigne" + i);
+
             bool caseVide = false;
             int j = 0;
             while (j < nbreLignes && AvoirCaseRemplie(i, j))
@@ -761,14 +771,18 @@ namespace quarto_mjma
              caseVide = true;
             }
             col = j;
+            if (trace)
             Console.WriteLine("TrouveCaseLigneFin col={0}, caseVide ={1}", col, caseVide);
+
             return caseVide;
             
         }
 
         static bool TrouverCaseIACol ( int j)
         {
+            if (trace)
             Console.WriteLine("TrouveCasecol" + j);
+
             bool caseVide = false;
             int i = 0;
             while (i < nbreLignes && AvoirCaseRemplie(i, j))
