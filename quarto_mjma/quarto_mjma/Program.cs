@@ -150,6 +150,10 @@ namespace quarto_mjma
             Console.WriteLine("         0      1      2      3");
         }
 
+        /// <summary>
+        /// choisir1erJoueur : désigne aléatoirement qui du joueur ou de l'ordi commence à jouer
+        /// </summary>
+        /// <returns></returns>
         static bool choisir1erJoueur()
         {
             Random R = new Random();
@@ -163,7 +167,9 @@ namespace quarto_mjma
         }
 
         
-
+        /// <summary>
+        /// Jouer() : Permet que le joueur et l'ordinateur jouent chacun leur tour
+        /// </summary>
         static void Jouer()
         {
             bool joueurCourant = choisir1erJoueur();
@@ -660,7 +666,9 @@ namespace quarto_mjma
             GagnerIA();
             if (!gagner)
             {
-               // Console.WriteLine("aléatoire");
+                if (trace)
+                Console.WriteLine("aléatoire");
+
                 Random R = new Random();
                 // choisit aléatoirement la ligne et la colonne pour placer le pion
                 do
