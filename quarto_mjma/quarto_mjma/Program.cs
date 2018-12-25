@@ -598,7 +598,8 @@ namespace quarto_mjma
            // Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
             for (int n = 0; n < nbreCaractéristiques; n++)
             {
-                Console.WriteLine("case :" +Grille[ligne, col][n]);
+                //Console.WriteLine("case :" +Grille[ligne, col][n]);
+
                 //Mise à jour lignes et colonnes
                 if ( Grille[ligne,col][n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
                 {
