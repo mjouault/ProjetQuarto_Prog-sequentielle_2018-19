@@ -173,12 +173,14 @@ namespace quarto_mjma
         static void Jouer()
         {
             bool joueurCourant = choisir1erJoueur();
+            AfficherTitre();
+            AfficherGrille();
 
             while (!Gagner() && !AvoirGrilleRemplie())
             {
                 //Console.Clear();
-                AfficherTitre();
-                AfficherGrille();
+               // AfficherTitre();
+               // AfficherGrille();
 
                 if (trace)
                     Console.WriteLine("la partie commence");
@@ -222,6 +224,8 @@ namespace quarto_mjma
                 if (AvoirGrilleRemplie() && !Gagner()) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
                     Console.WriteLine("Match nul");
 
+                AfficherTitre();
+                AfficherGrille();
                 joueurCourant = !joueurCourant;
             }
         }
@@ -264,7 +268,7 @@ namespace quarto_mjma
               Grille[ligne, col] = ChoixPiece;
              AfficherGrille();*/
             ChoisirCaseIA();
-            MettreAJourStrategies(ligne, col);
+            MettreAJourStrategies(/*ligne, col*/);
 
             //AfficherGrille();
 
@@ -347,7 +351,7 @@ namespace quarto_mjma
                 Console.WriteLine("yolo1");
 
             Grille[ligne, col] = ChoixPiece;
-            MettreAJourStrategies(ligne, col);
+            MettreAJourStrategies(/*ligne, col*/);
 
 
             if (trace)
@@ -599,7 +603,7 @@ namespace quarto_mjma
         /// MettreAJourStratégies : l'IA calcule le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
         /// </summary>
         /// <returns></returns>
-        static void MettreAJourStrategies(int ligne, int col)
+        static void MettreAJourStrategies(/*int ligne, int col*/)
         {
            // Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
             for (int n = 0; n < nbreCaractéristiques; n++)
