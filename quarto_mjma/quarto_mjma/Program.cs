@@ -11,7 +11,7 @@ namespace quarto_mjma
         static string[,] Grille;    // Grille de jeu
         static string caseVide = "    ";
 
-        static int ligne; static int col;
+        static int ligne; static int col; //lignes et colonnes que le joueur/l'ordi a choisi
         static int nbreLignes = 4;
         static int nbreCaractéristiques = 4;
 
