@@ -782,8 +782,9 @@ namespace quarto_mjma
             if (j<nbreLignes)
             {
              caseVide = true;
+              col = j;
             }
-            col = j;
+            
             if (trace)
             Console.WriteLine("TrouveCaseLigneFin col={0}, caseVide ={1}", col, caseVide);
 
