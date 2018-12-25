@@ -38,12 +38,12 @@ namespace quarto_mjma
             do
             {
 
-
                 Grille = new string[nbreLignes, nbreLignes];
 
                 InitialiserGrille();
                 InitialiserPieces();
                 Jouer();
+
             } while (RejouerPartie());
         }
 
@@ -173,7 +173,7 @@ namespace quarto_mjma
         /// </summary>
         static void Jouer()
         {
-            bool joueurCourant = choisir1erJoueur();
+            bool joueurCourantHumain = choisir1erJoueur();
             AfficherTitre();
             AfficherGrille();
 
@@ -186,12 +186,12 @@ namespace quarto_mjma
                 if (trace)
                     Console.WriteLine("la partie commence");
 
-                if (joueurCourant)  // joueur etre humain
+                if (joueurCourantHumain)  // joueur etre humain
                 {
                     if (trace)
                         Console.WriteLine("A toi de jouer");
 
-                    JouerJoueur();
+                    JouerHumain();
                     if (trace)
                         Console.WriteLine("Le joueur joue");
 
@@ -234,7 +234,7 @@ namespace quarto_mjma
 
                 AfficherTitre();
                 AfficherGrille();
-                joueurCourant = !joueurCourant;
+                joueurCourantHumain = !joueurCourantHumain;
             }
         }
 
@@ -285,9 +285,9 @@ namespace quarto_mjma
 
 
         /// <summary>
-        /// JouerJoueur : Fonciton permettant au joueur de jouer son tour soit de placer une pièce choisie par l'ordinateur
+        /// JouerHumain : Fonciton permettant au joueur de jouer son tour soit de placer une pièce choisie par l'ordinateur
         /// </summary>
-        static void JouerJoueur()
+        static void JouerHumain()
         {
 
             //choix de la pièce dans le tableau par l'ordi
@@ -562,21 +562,20 @@ namespace quarto_mjma
         /// RejouerPartie : Le joueur décide, à chaque fin de partie, s'il souhaite en refaire une ou non
         /// </summary>
         /// <returns></returns>
-        static bool RejouerPartie()
+         static bool RejouerPartie()
         {
             Console.WriteLine("Tapez [r] pour rejouer ou [a] pour arrêter");
-            string rejouer = Console.ReadLine(); //le joueur choisit s'il veut refaire une partie
-            bool continuer = true;
-            while (rejouer != "r" && rejouer != "a")
+            string reponse = Console.ReadLine(); //le joueur choisit s'il veut refaire une partie
+            while (reponse != "r" && reponse != "a")
             {
                 Console.WriteLine("saisissez [r] ou [a]");
-                rejouer = Console.ReadLine();
+                reponse = Console.ReadLine();
             }
-            if (rejouer == "a")
-            {
-                continuer = false;
-            }
-            return continuer;
+            if (reponse == "r")
+                return true;
+
+            else
+                return false;
         }
 
         /// <summary>
