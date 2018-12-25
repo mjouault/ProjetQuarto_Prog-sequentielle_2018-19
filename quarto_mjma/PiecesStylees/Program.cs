@@ -8,10 +8,10 @@ namespace PiecesStylees
 {
     class Program
     {
-        static int largeurGrandCarre = 9;
-        static int hauteurGrandCarre = 7;
-        static int largeurPetitCarre = 7;
-        static int hauteurPetitCarre = 5;
+        static int largeurGrandCarre = 7;
+        static int hauteurGrandCarre = 4;
+        static int largeurPetitCarre = 5;
+        static int hauteurPetitCarre = 3;
 
         static void Main(string[] args)
         {
