@@ -11,8 +11,6 @@ namespace quarto_mjma
         static string[,] Grille;    // Grille de jeu
         static string caseVide = "    ";
 
-        static string ChoixPiece;
-
         static int ligne; static int col;
         static int nbreLignes = 4;
         static int nbreCaractéristiques = 4;
@@ -243,6 +241,8 @@ namespace quarto_mjma
         /// </summary>
         static void JouerOrdi()
         {
+            string ChoixPiece;
+            bool pieceUtilisee = false;
             //choix pièce par le joueur
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
@@ -252,14 +252,15 @@ namespace quarto_mjma
             {
                 //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
                 ChoixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
-                if (VerifierSiPieceUtilisee(ChoixPiece))
+                pieceUtilisee = VerifierSiPieceUtilisee(ChoixPiece);
+                if (pieceUtilisee)
                 {
                     Console.Beep(500, 300);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
                     Console.ResetColor();
                 }
-            } while (VerifierSiPieceUtilisee(ChoixPiece)); //tant que la pièce n'est pas bonne on en rechoisit une autre
+            } while (pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
 
             JouerPiece(ChoixPiece);
 
@@ -275,7 +276,7 @@ namespace quarto_mjma
 
               Grille[ligne, col] = ChoixPiece;
              AfficherGrille();*/
-            ChoisirCaseIA();
+            ChoisirCaseIA(ChoixPiece);
             MettreAJourStrategies(/*ligne, col*/);
 
             //AfficherGrille();
@@ -289,6 +290,7 @@ namespace quarto_mjma
         /// </summary>
         static void JouerHumain()
         {
+            string ChoixPiece;
 
             //choix de la pièce dans le tableau par l'ordi
 
@@ -666,9 +668,9 @@ namespace quarto_mjma
 
         /// <summary>
         /// ChoisirCaseIA : L'IA choisit intelligemment la case dans laquelle elle va jouer la pièce donnée. Si 3 pièces alignées, met la pièce donnée dans la case qu'il reste sinon, joue dans les coins
-        static void ChoisirCaseIA()
+        static void ChoisirCaseIA(string ChoixPiece)
         {
-            GagnerIA();
+            GagnerIA(ChoixPiece);
             if (!AGagne)
             {
                 if (trace)
@@ -689,7 +691,7 @@ namespace quarto_mjma
         /// <summary>
         /// GagnerIA () : l'IA cherche si elle peut directement gagner avec la pièce qu'elle a. S'il l y a déjà 3 pièces d' "alignées", elle regarde si sa pièce est compatible
         /// </summary>
-        static void GagnerIA()
+        static void GagnerIA( string ChoixPiece)
         {
             if (trace)
             Console.WriteLine("entre ds gagnerIA");
