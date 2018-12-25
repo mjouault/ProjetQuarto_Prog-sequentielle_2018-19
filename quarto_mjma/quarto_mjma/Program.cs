@@ -30,7 +30,7 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
-            Console.SetWindowSize(100, 50);
+            Console.SetWindowSize(100, 40);
             AfficherEnTete();
             AfficherRegles();
             do
@@ -594,7 +594,7 @@ namespace quarto_mjma
         /// <returns></returns>
         static void MettreAJourStrategies(int ligne, int col)
         {
-            Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
+           // Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
             for (int n = 0; n < nbreCaractéristiques; n++)
             {
                 Console.WriteLine("case :" +Grille[ligne, col][n]);
