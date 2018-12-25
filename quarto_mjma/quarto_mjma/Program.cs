@@ -22,9 +22,10 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
-            Console.SetWindowSize(100, 50);
+            Console.SetWindowSize(100, 24);
             AfficherEnTete();
             AfficherRegles();
+            Console.ReadKey();
             do
             {
 
@@ -71,7 +72,6 @@ namespace quarto_mjma
             do
             {
                 afficherRegles = Console.ReadLine();
-                Console.Clear();
                 if (afficherRegles != "o" && afficherRegles != "n")
                 {
                     Console.Beep(400, 300);
@@ -87,7 +87,7 @@ namespace quarto_mjma
                 Console.WriteLine("            REGLES DU JEU");
                 Console.WriteLine("==============================================\n");
 
-                Console.Write("\nBUT DU JEU : Créer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun(fig. 2).\nCet alignement peut-être horizontal, vertical ou diagonal. \nDÉROULEMENT D’UNE PARTIE : Le premier joueur est tiré au sort.\nIl choisit une des 16 pièces et la donne à son adversaire.\nCelui - ci doit la placer sur une des cases du plateau et choisir ensuite une des 15 pièces restantes pour la donner à son adversaire.\nA son tour, celui-ci la place sur une case libre et ainsi de suite…." +
+                Console.Write("\nBUT DU JEU : Créer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun(fig. 2).\nCet alignement peut-être horizontal, vertical ou diagonal. \n\nDÉROULEMENT D’UNE PARTIE : Le premier joueur est tiré au sort.\nIl choisit une des 16 pièces et la donne à son adversaire.\nCelui - ci doit la placer sur une des cases du plateau et choisir ensuite une des 15 pièces restantes pour la donner à son adversaire.\nA son tour, celui-ci la place sur une case libre et ainsi de suite…." +
                     "\n\nGAIN DE LA PARTIE : La partie est gagnée par le premier joueur qui annonce “QUARTO !”\nUn joueur fait “QUARTO !” et gagne la partie lorsque, en plaçant la pièce donnée, il aligne 4 pièces ayant au moins un caractère en commun.\nPlusieurs caractères peuvent se cumuler.\n\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
                     "\nIl y a égalité: toutes les pièces ont été posées sans vainqueur.");
             }
