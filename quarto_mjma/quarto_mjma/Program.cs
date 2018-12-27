@@ -277,7 +277,7 @@ namespace quarto_mjma
               Grille[ligne, col] = ChoixPiece;
              AfficherGrille();*/
             ChoisirCaseIA(ChoixPiece);
-            MettreAJourStrategies(/*ligne, col*/);
+            MettreAJourStrategies(false);
 
             //AfficherGrille();
 
@@ -361,7 +361,7 @@ namespace quarto_mjma
                 Console.WriteLine("yolo1");
 
             Grille[ligne, col] = ChoixPiece;
-            MettreAJourStrategies(/*ligne, col*/);
+            MettreAJourStrategies(false);
 
 
             if (trace)
@@ -603,11 +603,12 @@ namespace quarto_mjma
        
 
         /// <summary>
-        /// MettreAJourStratégies : l'IA calcule le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
+        /// MettreAJourStrategies : l'IA calcule le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
         /// </summary>
         /// <returns></returns>
-        static void MettreAJourStrategies(/*int ligne, int col*/)
+        static bool MettreAJourStrategies( bool simul)
         {
+            bool mauvaiseStrategie = false;
            // Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
             for (int n = 0; n < nbreCaractéristiques; n++)
             {
@@ -616,13 +617,45 @@ namespace quarto_mjma
                 //Mise à jour lignes et colonnes
                 if ( Grille[ligne,col][n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
                 {
-                    tablignes0[ligne, n] += 1;
-                    tabcol0[col, n] += 1;
+                    if (simul)
+                    {
+                        if (tablignes0 [ligne, n] == 2)
+                        {
+                            mauvaiseStrategie = true;
+                        }  
+                        else if (tabcol0[col, n] ==2)
+                        {
+                            mauvaiseStrategie = true;
+                        }
+                    }
+                    else
+                    {
+                        tablignes0[ligne, n] += 1;
+                        tabcol0[col, n] += 1;
+                    }
                 }
                 else
                 {
-                    tablignes1[ligne, n] += 1; //compteur du nombre de 1 de la n ième caractéristique sur la ligne considérée
-                     tabcol1[col, n] += 1;
+                    if (simul)
+                    {
+                        if (tablignes1[ligne, n] == 2)
+                        {
+                            mauvaiseStrategie = true;
+                        }
+                        else if (tabcol1[col, n] == 2)
+                        {
+                            mauvaiseStrategie = true;
+                        }
+                    }
+                    else
+                    {
+                        tablignes1[ligne, n] += 1; //compteur du nombre de 1 de la n ième caractéristique sur la ligne considérée
+                        tabcol1[col, n] += 1;
+                    }
+                }
+                if (mauvaiseStrategie)
+                {
+                    return mauvaiseStrategie;
                 }
             }
 
@@ -663,7 +696,7 @@ namespace quarto_mjma
                 }
             }
 
-
+            return mauvaiseStrategie;
         }
 
         /// <summary>
@@ -773,7 +806,7 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// TrouverCaseIA(): permet à l'IA de recherche où est la case vide sur cette ligne/col/diago où il y a déjà 3 pièces d'alignées
+        /// TrouverCaseIALigne(): permet à l'IA de recherche où est la case vide sur cette ligne où il y a déjà 3 pièces d'alignées
         /// </summary>
         static bool TrouverCaseIALigne (int i)
         {
@@ -799,6 +832,11 @@ namespace quarto_mjma
             
         }
 
+        /// <summary>
+        /// /// TrouverCaseIACol(): permet à l'IA de recherche où est la case vide sur cette colonne où il y a déjà 3 pièces d'alignées
+        /// </summary>
+        /// <param name="j"></param>
+        /// <returns></returns>
         static bool TrouverCaseIACol ( int j)
         {
             if (trace)
@@ -816,6 +854,33 @@ namespace quarto_mjma
             }
             ligne = i;
             return caseVide;
+        }
+
+        /// <summary>
+        /// PlacerPieceIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans l'un des 4 coins
+        /// </summary>
+        static void PlacerPieceIA ()
+        {
+            bool mauvaiseStrategie = false;
+
+            // l'IA commence par vérifier les 4 coins 
+            int[,] tabCoin = { { 0, 3 }, { 0, 3 } };
+            int i = 0; int j = 0;
+            while (i < 2)
+            {
+                if (Grille[i, j] == caseVide)
+                {
+
+                    mauvaiseStrategie = MettreAJourStrategies(true);
+                    if (mauvaiseStrategie && Grille[0, 3] == caseVide)
+                    {
+
+                        mauvaiseStrategie = MettreAJourStrategies(true);
+                    }
+                }
+            }
+
+
         }
     }
 }
