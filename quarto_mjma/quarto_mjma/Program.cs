@@ -706,7 +706,9 @@ namespace quarto_mjma
             GagnerIA(ChoixPiece);
             if (!AGagne)
             {
-                if (trace)
+                PlacerPieceIA(ChoixPiece);
+
+                /*if (trace)
                 Console.WriteLine("aléatoire");
 
                 Random R = new Random();
@@ -717,7 +719,7 @@ namespace quarto_mjma
                     col = R.Next(0, nbreLignes);
                 } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-                Grille[ligne, col] = ChoixPiece;
+                Grille[ligne, col] = ChoixPiece;*/
             }
         }
 
@@ -859,28 +861,65 @@ namespace quarto_mjma
         /// <summary>
         /// PlacerPieceIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans l'un des 4 coins
         /// </summary>
-        static void PlacerPieceIA ()
+        static void PlacerPieceIA ( string choixPiece)
         {
-            bool mauvaiseStrategie = false;
+           bool mauvaiseStrategie = false;
 
             // l'IA commence par vérifier les 4 coins 
-            int[,] tabCoin = { { 0, 3 }, { 0, 3 } };
+            int[] tabCoinLigne = { 0, 3 };
+            int [] tabCoinCol = { 0, 3 };
             int i = 0; int j = 0;
-            while (i < 2)
+
+            do
             {
-                if (Grille[i, j] == caseVide)
+                ligne = tabCoinLigne[i];
+                col = tabCoinCol[j];
+                Console.WriteLine("yolo");
+                while (i < tabCoinLigne.Length && Grille [ligne, col] != caseVide)
                 {
-
-                    mauvaiseStrategie = MettreAJourStrategies(true);
-                    if (mauvaiseStrategie && Grille[0, 3] == caseVide)
+                    Console.WriteLine("i={0}, j={1}", i, j);
+                    while (j < tabCoinCol.Length && Grille[ligne, col] != caseVide)
                     {
-
-                        mauvaiseStrategie = MettreAJourStrategies(true);
+                        ligne = tabCoinLigne[i];
+                        col = tabCoinCol[j];
+                        Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
+                        j++;
+                       
                     }
+                    i++;
+                    if (j== tabCoinCol.Length)
+                        j = 0;
                 }
+
+                ligne = tabCoinLigne[i];
+                col = tabCoinCol[j];
+                mauvaiseStrategie = MettreAJourStrategies(true);
+
+                if (mauvaiseStrategie)
+                            j++;
+                    
+            } while (i <= tabCoinCol.Length && j <= tabCoinLigne.Length && mauvaiseStrategie);
+
+            if (i < tabCoinLigne.Length && j < tabCoinCol.Length)
+            {
+                Console.WriteLine("a trouvé un coin vide, i= {0}, j={1}", i, j);
+                Grille[ligne, col] = choixPiece;
+                JouerPiece(choixPiece);
+            }
+            else
+                Console.WriteLine("aléatoire");
             }
 
+        static void TrouverEmplacementPiece (string choixPiece)
+        {
+            int i = 0;
 
+            // Recherche de l'indice
+            while (i < nbPiecesTotales && choixPiece != TabPieces[0, i])
+            {
+                // Incrémentation
+                i++;
+            }
         }
     }
 }
