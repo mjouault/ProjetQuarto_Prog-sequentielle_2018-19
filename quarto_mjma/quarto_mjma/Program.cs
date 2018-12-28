@@ -679,6 +679,7 @@ namespace quarto_mjma
                 {
                     ligne = i;
                     col = j;
+                    Console.SetCursorPosition(cursor, largeurCase + i);
                 }
 
                
@@ -750,7 +751,6 @@ namespace quarto_mjma
         {
             for (int i = 0; i < hauteurPetitCarre; i++)
             {
-                Console.SetCursorPosition(cursor, largeurCase + i);
                 Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
             }
 
@@ -759,7 +759,6 @@ namespace quarto_mjma
         {
             for (int i = 0; i < hauteurPetitCarre; i++)
             {
-                Console.SetCursorPosition(cursor + col*largeurCase, ligne*longueurCase + i);
                 Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
             }
 
@@ -770,7 +769,6 @@ namespace quarto_mjma
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             for (int i = 0; i < hauteurGrandCarre - 2; i++)
             {
-                Console.SetCursorPosition(cursor + col * largeurCase, ligne * longueurCase + i);
                 Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre - 2)) + "*");
                 Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             }
@@ -782,7 +780,6 @@ namespace quarto_mjma
 
             for (int i = 0; i < hauteurGrandCarre; i++)
             {
-                Console.SetCursorPosition(cursor, largeurCase + i);
                 Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             }
         }
