@@ -217,13 +217,10 @@ namespace PiecesStylees
         static void piece9 ()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("       ");
-            Console.WriteLine("       ");
             Console.WriteLine("  * * ");
             Console.WriteLine("*     *");
             Console.WriteLine("*     *");
             Console.WriteLine("  * * ");
-            Console.WriteLine("       ");
             Console.ResetColor();
 
            /* Console.BackgroundColor = ConsoleColor.Blue;

@@ -13,7 +13,8 @@ namespace quarto_mjma
         // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
         static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" },
                                                      { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" },
-                                                     };
+
+        static int cursor = 7;
         static int largeurGrandCarre = 11;
         static int hauteurGrandCarre = 6;
         static int largeurPetitCarre = 7;
@@ -326,8 +327,8 @@ namespace quarto_mjma
                 Console.WriteLine("      |                |                |                |                |");
             }
 
-            Console.WriteLine("      +----------------+----------------+----------------+----------------+");
-            Console.WriteLine("               0                1               2                 3");
+            Console.WriteLine("          +----------------+----------------+----------------+----------------+");
+            Console.WriteLine("               0                  1                  2                 3       ");
         }
 
         /// <summary>
@@ -749,7 +750,7 @@ namespace quarto_mjma
             Console.ForegroundColor = ConsoleColor.Blue;
             for (int i = 0; i < hauteurGrandCarre; i++)
             {
-                Console.SetCursorPosition(curseur, 1 + i);
+                Console.SetCursorPosition(cursor, 1 + i);
                 Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             }
             Console.ResetColor();
@@ -798,7 +799,17 @@ namespace quarto_mjma
             Console.WriteLine("      ***     ");
             Console.ResetColor();
         }
-    }      
+
+        static void pieceVide ()
+        {
+            for (int i = 0; i < hauteurGrandCarre; i++)
+            {
+                Console.SetCursorPosition(cursor, 1 + i);
+                Console.WriteLine(string.Concat(Enumerable.Repeat(" ", largeurGrandCarre)));
+            }
+        }
+
+    }     
 }
 
 
