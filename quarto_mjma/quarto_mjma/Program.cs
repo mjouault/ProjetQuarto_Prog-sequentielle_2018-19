@@ -11,7 +11,7 @@ namespace quarto_mjma
         static string[,] Grille;    // Grille de jeu
         static string caseVide = "    ";
 
-        static int ligne; static int col; //lignes et colonnes que le joueur/l'ordi a choisi
+        static int ligne; static int col; static int diago; //lignes et colonnes que le joueur/l'ordi a choisi
         static int nbreLignes = 4;
         static int nbreCaractéristiques = 4;
 
@@ -634,6 +634,14 @@ namespace quarto_mjma
                         tabcol0[col, n] += 1;
                     }
                 }
+                if (Grille[diago,diago][n]=='0')
+                {
+                    diago0[diago, n] += 1;
+                }
+                if (Grille[diago, diago][n] == '1')
+                {
+                    diagos1[diago, n] += 1;
+                }
                 else
                 {
                     if (simul)
@@ -651,6 +659,7 @@ namespace quarto_mjma
                     {
                         tablignes1[ligne, n] += 1; //compteur du nombre de 1 de la n ième caractéristique sur la ligne considérée
                         tabcol1[col, n] += 1;
+                        diagos1[diago, n] += 1;
                     }
                 }
                 if (mauvaiseStrategie)
@@ -805,6 +814,37 @@ namespace quarto_mjma
                     n++;
                 }
             }
+
+            n = 0;
+
+            while (n < nbreCaractéristiques && !AGagne)
+            {
+                int k = 0;
+                if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
+                {
+
+                    while (k < nbreLignes && diago0[k, n] != 3)
+                    {
+                        k++;
+                    }
+                }
+                else
+                {
+                    while (k < nbreLignes && diagos1[k, n] != 3)
+                    {
+                        k++;
+                    }
+                }
+                if (k != 4 && TrouverCaseIAdiago(k))
+                {
+                    Grille[k, k] = ChoixPiece;
+                    AGagne = true;
+                }
+                else
+                {
+                    n++;
+                }
+            }
         }
 
         /// <summary>
@@ -855,6 +895,23 @@ namespace quarto_mjma
                 caseVide = true;
             }
             ligne = i;
+            return caseVide;
+        }
+
+        static bool TrouverCaseIAdiago(int k)
+        {
+            if (trace)
+                Console.WriteLine("TrouveCasediago");
+
+            bool caseVide = false;
+            while (k < nbreLignes && AvoirCaseRemplie(k, k))
+            {
+                k++;
+            }
+            if (k < nbreLignes)
+            {
+                caseVide = true;
+            }
             return caseVide;
         }
 
