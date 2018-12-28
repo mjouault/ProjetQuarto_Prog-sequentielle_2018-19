@@ -213,16 +213,16 @@ namespace PiecesStylees
         */
         static void piece9 ()
         {
-            /*Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("      * *     ");
             Console.WriteLine("   *       * ");
             Console.WriteLine("  *         * ");
             Console.WriteLine("  *         * ");
             Console.WriteLine("   *       * ");
             Console.WriteLine("      * *     ");
-            Console.ResetColor();*/
+            Console.ResetColor();
 
-            Console.BackgroundColor = ConsoleColor.Blue;
+           /* Console.BackgroundColor = ConsoleColor.Blue;
             Console.SetCursorPosition(7, 1);
             Console.WriteLine("      ");
             Console.SetCursorPosition(7+9, 1);
@@ -242,7 +242,7 @@ namespace PiecesStylees
             Console.SetCursorPosition(7, 5);
             Console.WriteLine("      ");
             Console.SetCursorPosition(7+9, 5);
-            Console.WriteLine("      ");
+            Console.WriteLine("      ");*/
         }
         static void piece10()
         {
