@@ -20,20 +20,20 @@ namespace PiecesStylees
             for (int i = 0; i < 7; i++) //indice ligne
             {
                
-                Console.WriteLine("      +--------------------+--------------------+--------------------+--------------------+");
-                Console.WriteLine("      |                    |                    |                    |                    |");
-                Console.WriteLine("      |                    |                    |                    |                    |");
-                Console.WriteLine("      |                    |                    |                    |                    |");
-                Console.WriteLine("      |                    |                    |                    |                    |");
+                Console.WriteLine("      +----------------+----------------+----------------+----------------+");
+                Console.WriteLine("      |                |                |                |                |");
+                Console.WriteLine("      |                |                |                |                |");
+                Console.WriteLine("      |                |                |                |                | ");
+                Console.WriteLine("      |                |                |                |                |");
                // Console.Write("{0}   ", i);
                // Console.Write("                    |");
 
                 //Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
-                Console.WriteLine("      |                    |                    |                    |                    |");
+                Console.WriteLine("      |                |                |                |                |");
             }
 
-            Console.WriteLine("      +--------------------+--------------------+--------------------+--------------------+");
-            Console.WriteLine("         0      1      2      3");
+            Console.WriteLine("      +----------------+----------------+----------------+----------------+");
+            Console.WriteLine("               0                1               2                 3");
         }
 
         static void Main(string[] args)
@@ -92,25 +92,27 @@ namespace PiecesStylees
             Console.ResetColor();
         }
         static void piece2()
-        {
-            Console.BackgroundColor = ConsoleColor.White;
-            //Console.ForegroundColor = ConsoleColor.Red;
-            for (int i = 0; i < hauteurGrandCarre; i++)
-            {
-                Console.SetCursorPosition(curseur, 7 + i);
-                Console.WriteLine(string.Concat(Enumerable.Repeat(" ", largeurGrandCarre)));
-            }
-            Console.ResetColor();
-        }
-        // static void piece2 ()
-        /*   {
-               for (int i=0; i<2; i++)
+         {
+            // Console.BackgroundColor = ConsoleColor.White;
+             Console.ForegroundColor = ConsoleColor.Red;
+             for (int i = 0; i < hauteurGrandCarre; i++)
+             {
+                 Console.SetCursorPosition(curseur, 7 + i);
+                 Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
+             }
+             Console.ResetColor();
+         }
+
+       /* static void piece2 ()
+         {
+            Console.ForegroundColor = ConsoleColor.Red;
+            for (int i=0; i<2; i++)
              Console.WriteLine("**************");
                for (int i = 0; i < 3; i++)
                    Console.WriteLine("****      ****");
                for (int i = 0; i < 2; i++)
                    Console.WriteLine("**************");
-           }*/
+         }*/
 
         static void piece3 ()
         {
