@@ -30,11 +30,8 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
-<<<<<<< HEAD
-            Console.SetWindowSize(100, 24);
-=======
             Console.SetWindowSize(100, 40);
->>>>>>> IdeeeIATab
+
             AfficherEnTete();
             AfficherRegles();
             Console.ReadKey();
