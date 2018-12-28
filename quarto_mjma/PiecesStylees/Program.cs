@@ -8,10 +8,10 @@ namespace PiecesStylees
 {
     class Program
     {
-        static int largeurGrandCarre = 7;
-        static int hauteurGrandCarre = 4;
-        static int largeurPetitCarre = 5;
-        static int hauteurPetitCarre = 3;
+        static int largeurGrandCarre =11;
+        static int hauteurGrandCarre =6;
+        static int largeurPetitCarre = 7;
+        static int hauteurPetitCarre = 4;
 
        static int curseur = 7;
 
@@ -38,16 +38,19 @@ namespace PiecesStylees
 
         static void Main(string[] args)
         {
-            AfficherGrille();
+            /* AfficherGrille();
 
-            piece9();
+             piece9();
+             Console.WriteLine("");
+
+             curseur = 7;
+
+             piece2();*/
+
+            piece1();
             Console.WriteLine("");
-
-            curseur = 7;
-       
             piece2();
-
-            /*Console.WriteLine("");
+            Console.WriteLine("");
             piece3();
             Console.WriteLine("");
             piece4();
@@ -74,7 +77,7 @@ namespace PiecesStylees
             Console.WriteLine("");
             piece15();
             Console.WriteLine("");
-            piece16();*/
+            piece16();
 
 
             Console.ReadLine();
@@ -86,7 +89,7 @@ namespace PiecesStylees
             Console.ForegroundColor = ConsoleColor.Blue;
             for (int i = 0; i < hauteurGrandCarre; i++)
             {
-                Console.SetCursorPosition(curseur,1+i);
+                //Console.SetCursorPosition(curseur,1+i);
                 Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             }
             Console.ResetColor();
@@ -97,7 +100,7 @@ namespace PiecesStylees
              Console.ForegroundColor = ConsoleColor.Red;
              for (int i = 0; i < hauteurGrandCarre; i++)
              {
-                 Console.SetCursorPosition(curseur, 7 + i);
+                // Console.SetCursorPosition(curseur, 7 + i);
                  Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
              }
              Console.ResetColor();
@@ -214,12 +217,13 @@ namespace PiecesStylees
         static void piece9 ()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("      * *     ");
-            Console.WriteLine("   *       * ");
-            Console.WriteLine("  *         * ");
-            Console.WriteLine("  *         * ");
-            Console.WriteLine("   *       * ");
-            Console.WriteLine("      * *     ");
+            Console.WriteLine("       ");
+            Console.WriteLine("       ");
+            Console.WriteLine("  * * ");
+            Console.WriteLine("*     *");
+            Console.WriteLine("*     *");
+            Console.WriteLine("  * * ");
+            Console.WriteLine("       ");
             Console.ResetColor();
 
            /* Console.BackgroundColor = ConsoleColor.Blue;
@@ -258,16 +262,16 @@ namespace PiecesStylees
 
         static void piece11()
         {
-           /* Console.ForegroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("      ***     ");
             Console.WriteLine("   ********* ");
             Console.WriteLine("  *********** ");
             Console.WriteLine("  *********** ");
             Console.WriteLine("   ********* ");
             Console.WriteLine("      ***     ");
-            Console.ResetColor();*/
+            Console.ResetColor();
 
-            Console.BackgroundColor = ConsoleColor.White;
+           /* Console.BackgroundColor = ConsoleColor.White;
             Console.SetCursorPosition(7 + 6, 1);
             Console.WriteLine("  ");
             Console.SetCursorPosition(7 + 4, 2);
@@ -277,7 +281,7 @@ namespace PiecesStylees
             Console.SetCursorPosition(7 + 4, 4);
             Console.WriteLine("      ");
             Console.SetCursorPosition(7 + 6, 5);
-            Console.WriteLine("  ");
+            Console.WriteLine("  ");*/
         }
         static void piece12()
         {
