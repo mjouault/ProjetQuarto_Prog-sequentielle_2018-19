@@ -706,9 +706,9 @@ namespace quarto_mjma
             GagnerIA(ChoixPiece);
             if (!AGagne)
             {
-                PlacerPieceIA(ChoixPiece);
+               // PlacerPieceIA();
 
-                /*if (trace)
+               if (trace)
                 Console.WriteLine("aléatoire");
 
                 Random R = new Random();
@@ -719,7 +719,7 @@ namespace quarto_mjma
                     col = R.Next(0, nbreLignes);
                 } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-                Grille[ligne, col] = ChoixPiece;*/
+                Grille[ligne, col] = ChoixPiece;
             }
         }
 
@@ -910,17 +910,6 @@ namespace quarto_mjma
                 Console.WriteLine("aléatoire");
             }
 
-        static void TrouverEmplacementPiece (string choixPiece)
-        {
-            int i = 0;
-
-            // Recherche de l'indice
-            while (i < nbPiecesTotales && choixPiece != TabPieces[0, i])
-            {
-                // Incrémentation
-                i++;
-            }
-        }
     }
 }
 
