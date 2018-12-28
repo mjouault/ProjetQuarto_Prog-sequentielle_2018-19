@@ -15,6 +15,8 @@ namespace quarto_mjma
                                                      { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
 
         static int cursor = 7;
+        static int longueurCase = 8;
+        static int largeurCase = 15;
         static int largeurGrandCarre = 11;
         static int hauteurGrandCarre = 6;
         static int largeurPetitCarre = 7;
@@ -315,20 +317,23 @@ namespace quarto_mjma
             for (int i = 0; i < 7; i++) //indice ligne
             {
 
-                Console.WriteLine("      +----------------+----------------+----------------+----------------+");
-                Console.WriteLine("      |                |                |                |                |");
-                Console.WriteLine("      |                |                |                |                |");
-                Console.WriteLine("      |                |                |                |                | ");
-                Console.WriteLine("      |                |                |                |                |");
+                Console.WriteLine("      +-------------+-------------+-------------+-------------+");
+                Console.WriteLine("      |             |             |             |             |");
+                Console.WriteLine("      |             |             |             |             |");
+                Console.WriteLine("      |             |             |             |             |");
+                Console.WriteLine("      |             |             |             |             |");
+                Console.WriteLine("      |             |             |             |             |");
+                Console.WriteLine("      |             |             |             |             |");
+                Console.WriteLine("      |             |             |             |             |");
                 // Console.Write("{0}   ", i);
                 // Console.Write("                    |");
 
                 //Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
-                Console.WriteLine("      |                |                |                |                |");
+                Console.WriteLine("      |             |             |             |             |");
             }
 
-            Console.WriteLine("          +----------------+----------------+----------------+----------------+");
-            Console.WriteLine("               0                  1                  2                 3       ");
+            Console.WriteLine("          +-------------+-------------+-------------+-------------+");
+            Console.WriteLine("               0                1             2            3       ");
         }
 
         /// <summary>
@@ -668,136 +673,154 @@ namespace quarto_mjma
 
         static void AfficherPiece(string piece)
         {
-            // 0000 = ronde, petite creuse, rouge
-            if (piece[0] == 0) // pièce ronde
+            for (int i=0;  i<nbreLignes; i++)
             {
-                if (piece[1] == 0) //petite
+                for (int j=0; j<nbreLignes; i++)
                 {
-                    pieceRondePetite();
-
-                    if (piece[2] == 1)
-                    {
-                        pieceRondePetitePleine();
-                    }
+                    ligne = i;
+                    col = j;
                 }
-                else //grande
-                {
-                    pieceRondeGrande(); 
 
-                    if (piece[2] == 1)
-                    {
-                        pieceRondeGrandePleine();
-                    }
-                }
+               
             }
-            else // piece carrée
+        } 
+
+        static void TrouverDessin (string piece, int ligne, int col) // Trouver le dessin qui correspond à la pièce voulue
+        {
+            if (piece[4] == 0)
             {
-                if (piece[1] == 0) //petite
-                {
-                    pieceCarreePetite();
-
-                    if (piece[2] == 1)
-                    {
-                        pieceCarrePetitePleine();
-                    }
-
-                }
-                else //grande
-                {
-                    pieceCarreeGrande();
-
-                    if (piece[2] == 1)
-                    {
-                        pieceCarreeGrandePleine();
-                    }
-                }
+                Console.ForegroundColor = ConsoleColor.Red;
             }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+            }
+                // 0000 = ronde, petite creuse, rouge
+                if (piece[0] == ' ')
+                {
+
+                }
+                if (piece[0] == '0') // pièce ronde
+                {
+                    if (piece[1] == '0') //petite
+                    {
+                        pieceRondePetite();
+
+                        if (piece[2] == '1')
+                        {
+                            pieceRondePetitePleine();
+                        }
+                    }
+                    else //grande
+                    {
+                        pieceRondeGrande();
+
+                        if (piece[2] == '1')
+                        {
+                            pieceRondeGrandePleine();
+                        }
+                    }
+                }
+                else // piece carrée
+                {
+                    if (piece[1] == '0') //petite
+                    {
+                        pieceCarreePetite();
+
+                        if (piece[2] == '1')
+                        {
+                            pieceCarrePetitePleine();
+                        }
+
+                    }
+                    else //grande
+                    {
+                        pieceCarreeGrande();
+
+                        if (piece[2] == '1')
+                        {
+                            pieceCarreeGrandePleine();
+                        }
+                    }
+                }
+            Console.ResetColor();
         }
 
         static void pieceCarreePetite()
         {
-            Console.ForegroundColor = ConsoleColor.Red;
             for (int i = 0; i < hauteurPetitCarre; i++)
             {
+                Console.SetCursorPosition(cursor, largeurCase + i);
                 Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
             }
-            Console.ResetColor();
 
         }
         static void pieceCarrePetitePleine()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
             for (int i = 0; i < hauteurPetitCarre; i++)
             {
+                Console.SetCursorPosition(cursor + col*largeurCase, ligne*longueurCase + i);
                 Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
             }
-            Console.ResetColor();
 
         }
         static void pieceCarreeGrande()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+           
             Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             for (int i = 0; i < hauteurGrandCarre - 2; i++)
+            {
+                Console.SetCursorPosition(cursor + col * largeurCase, ligne * longueurCase + i);
                 Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre - 2)) + "*");
-            Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
-            Console.ResetColor();
+                Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
+            }
+           
         }
 
         static void pieceCarreeGrandePleine()
         {
 
-            Console.ForegroundColor = ConsoleColor.Blue;
             for (int i = 0; i < hauteurGrandCarre; i++)
             {
-                Console.SetCursorPosition(cursor, 1 + i);
+                Console.SetCursorPosition(cursor, largeurCase + i);
                 Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
             }
-            Console.ResetColor();
         }
 
    
         static void pieceRondePetite()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("  * * ");
             Console.WriteLine("*     *");
             Console.WriteLine("*     *");
             Console.WriteLine("  * * ");
-            Console.ResetColor();
         }
 
 
         static void pieceRondePetitePleine()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("  *** ");
             Console.WriteLine("*******");
             Console.WriteLine("*******");
             Console.WriteLine("  *** ");
-            Console.ResetColor();
         }
         static void pieceRondeGrande()
         {
-            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("      * *     ");
             Console.WriteLine("   *       * ");
             Console.WriteLine("  *         * ");
             Console.WriteLine("  *         * ");
             Console.WriteLine("   *       * ");
             Console.WriteLine("      * *     ");
-            Console.ResetColor();
         }
         static void pieceRondeGrandePleine()
         {
-            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("      ***     ");
             Console.WriteLine("   ********* ");
             Console.WriteLine("  *********** ");
             Console.WriteLine("  *********** ");
             Console.WriteLine("   ********* ");
             Console.WriteLine("      ***     ");
-            Console.ResetColor();
         }
 
         static void pieceVide ()
