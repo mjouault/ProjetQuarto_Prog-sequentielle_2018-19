@@ -15,12 +15,9 @@ namespace quarto_mjma
                                                      { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
 
         static int cursor = 7;
-        static int longueurCase = 8;
-        static int largeurCase = 15;
-        static int largeurGrandCarre = 11;
-        static int hauteurGrandCarre = 6;
-        static int largeurPetitCarre = 7;
-        static int hauteurPetitCarre = 4;
+        static int longueurCase = 6;
+        static int largeurCase = 11;
+       
 
         static string[,] Grille;    // Grille de jeu
         static string caseVide = "    ";
@@ -28,6 +25,7 @@ namespace quarto_mjma
         static int ligne; static int col;
         static int nbreLignes = 4;
         static int nbreCaractéristiques = 4;
+
 
         // Main
         static void Main(string[] args)
@@ -80,7 +78,7 @@ namespace quarto_mjma
             do
             {
                 afficherRegles = Console.ReadLine();
-                Console.Clear();
+               // Console.Clear();
                 if (afficherRegles != "o" && afficherRegles != "n")
                 {
                     Console.Beep(400, 300);
@@ -134,14 +132,15 @@ namespace quarto_mjma
 
         static void Jouer()
         {
+
             bool joueurCourant = choisir1erJoueur();
+            Console.Clear();
+            AfficherTitre();
+            AfficherGrille();
 
             while (!Gagner() && !AvoirGrilleRemplie())
             {
-                Console.Clear();
-                AfficherTitre();
-                AfficherGrille();
-
+         
                 if (joueurCourant)  // joueur etre humain
                 {
                     JouerJoueur();
@@ -161,6 +160,11 @@ namespace quarto_mjma
                 if (AvoirGrilleRemplie() && !Gagner()) // Cas où la grille est remplie mais personne ne gagne : c'est un match nul
                     Console.WriteLine("Match nul");
 
+                Console.Clear();
+                AfficherTitre();
+                AfficherGrille();
+                AfficherPiece();
+
                 joueurCourant = !joueurCourant;
             }
         }
@@ -172,6 +176,7 @@ namespace quarto_mjma
         {
 
             //choix pièce par le joueur
+            Console.SetCursorPosition(0, (longueurCase + 2) * nbreLignes + 5);
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
                 "- 1111 correspond à grande, pleine, ronde, foncee \n" +
@@ -193,18 +198,19 @@ namespace quarto_mjma
 
             //choix case par l'ordi
 
-             Random R = new Random();
-              // choisit aléatoirement la ligne et la colonne pour placer le pion
-              do
-              {
-                  ligne = R.Next(0, nbreLignes);
-                  col = R.Next(0, nbreLignes);
-              } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+            Random R = new Random();
+            // choisit aléatoirement la ligne et la colonne pour placer le pion
+            do
+            {
+                ligne = R.Next(0, nbreLignes);
+                col = R.Next(0, nbreLignes);
+            } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-              Grille[ligne, col] = ChoixPiece;
-             AfficherGrille();
+            Grille[ligne, col] = ChoixPiece;
+        
+           // AfficherGrille();
 
-           // ChoixIntell2();
+            // ChoixIntell2();
 
         }
 
@@ -226,6 +232,7 @@ namespace quarto_mjma
             while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée
 
             JouerPiece(ChoixPiece);
+            Console.SetCursorPosition(0, (longueurCase +2) * nbreLignes + 5);
             Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
                 "- 1111 correspond à grande, pleine, ronde, foncee \n" +
@@ -266,7 +273,7 @@ namespace quarto_mjma
             } while (caseRemplie); //tant que la case choisie est remplie, le joueur doit choisir une autre case. Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             Grille[ligne, col] = ChoixPiece;
-            // AfficherGrille();
+            //AfficherGrille();
             //ArreterPartie();
         }
 
@@ -314,7 +321,7 @@ namespace quarto_mjma
         /// </summary>
         static void AfficherGrille()
         {
-            for (int i = 0; i < 7; i++) //indice ligne
+            for (int i = 0; i < nbreLignes; i++) //indice ligne
             {
 
                 Console.WriteLine("      +-------------+-------------+-------------+-------------+");
@@ -325,11 +332,10 @@ namespace quarto_mjma
                 Console.WriteLine("      |             |             |             |             |");
                 Console.WriteLine("      |             |             |             |             |");
                 Console.WriteLine("      |             |             |             |             |");
-                // Console.Write("{0}   ", i);
+               // Console.WriteLine("{0}   ", i);
                 // Console.Write("                    |");
 
                 //Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
-                Console.WriteLine("      |             |             |             |             |");
             }
 
             Console.WriteLine("          +-------------+-------------+-------------+-------------+");
@@ -671,24 +677,136 @@ namespace quarto_mjma
             return caracCommune;
         }
 
-        static void AfficherPiece(string piece)
+        static void AfficherPiece()
         {
-            for (int i=0;  i<nbreLignes; i++)
+            string[,] dessin; 
+
+            for (int i = 0; i < nbreLignes; i++)
             {
-                for (int j=0; j<nbreLignes; i++)
+                for (int j = 0; j < nbreLignes; j++)
                 {
-                    ligne = i;
-                    col = j;
-                    Console.SetCursorPosition(cursor, largeurCase + i);
+                    //ligne = i;
+                   // col = j;
+                  dessin = TrouverDessin(Grille[i, j]);
+
+                    for (int k = 0; k < longueurCase; k++)
+                    {
+                        Console.SetCursorPosition(cursor + largeurCase *i , longueurCase*j +1  + k);
+                        Console.WriteLine(dessin[k, 0]);
+                    }
+                    Console.ResetColor();
                 }
 
-               
-            }
-        } 
 
-        static void TrouverDessin (string piece, int ligne, int col) // Trouver le dessin qui correspond à la pièce voulue
+            }
+        }
+
+        static string [,] TrouverDessin(string piece) // Trouver le dessin qui correspond à la pièce voulue
         {
-            if (piece[4] == 0)
+
+         string largeurGrandCarre = "*          *";
+         string largeurGrandCarrePlein = "***********";
+         //int hauteurGrandCarre = 6;
+         string largeurPetitCarre = "  *     *  ";
+         string largeurPetitCarrePlein = "  *******  ";
+        // int hauteurPetitCarre = 4;
+         string blanc = "           ";
+
+         string[,] pieceCarreePetite =
+        {
+        { blanc},
+        { largeurPetitCarrePlein },
+        { largeurPetitCarre },
+        { largeurPetitCarre },
+        { largeurPetitCarrePlein },
+         { blanc},
+        };
+
+         string[,] pieceCarrePetitePleine =
+        {
+        { blanc},
+        { largeurPetitCarrePlein},
+        { largeurPetitCarrePlein},
+        { largeurPetitCarrePlein},
+        { largeurPetitCarrePlein},
+        { blanc},
+        };
+
+         string[,] pieceCarreeGrande =
+        {
+        { largeurGrandCarrePlein },
+        { largeurGrandCarre },
+        { largeurGrandCarre },
+        { largeurGrandCarre },
+        { largeurGrandCarre },
+        { largeurGrandCarrePlein },
+        };
+
+        string[,] pieceCarreeGrandePleine =
+        {
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        };
+
+        string[,] pieceRondePetite = 
+        {
+        { blanc},
+        { "  * * "},
+        {"*     *"},
+        {"*     *"},
+        {"  * * "},
+        { blanc}
+         };
+
+
+            string[,] pieceRondePetitePleine =
+         {
+         { blanc},
+         {"  ***  "},
+         {"*******"},
+         {"*******"},
+         {"  ***  "},
+          { blanc}
+        };
+
+            string[,] pieceRondeGrande =
+            {
+           { "    * *    "},
+           { " *       * "},
+           { "*         *"},
+           { "*         *"},
+           { " *       * "},
+           { "    * *    "}
+        };
+
+            string[,] pieceRondeGrandePleine =
+            {
+           {"     *     "},
+           {"  *******  "},
+           {" ********* "},
+           {" ********* "},
+           {"  *******  "},
+           {"     *     "}
+        };
+
+         string[,] pieceVide =
+            {
+            { blanc},
+            { blanc},
+            { blanc},
+            { blanc},
+            { blanc},
+            { blanc}
+        };
+
+
+        string[,] dessin = new string [6,1];
+
+            if (piece[3] == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
@@ -696,139 +814,59 @@ namespace quarto_mjma
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
             }
-                // 0000 = ronde, petite creuse, rouge
-                if (piece[0] == ' ')
+            // 0000 = ronde, petite creuse, rouge
+            if (piece[0] == ' ')
+            {
+               dessin = pieceVide;
+            }
+            else if (piece[0] == '0') // pièce ronde
+            {
+                if (piece[1] == '0') //petite
                 {
+                    dessin = pieceRondePetite;
 
-                }
-                if (piece[0] == '0') // pièce ronde
-                {
-                    if (piece[1] == '0') //petite
+                    if (piece[2] == '1')
                     {
-                        pieceRondePetite();
-
-                        if (piece[2] == '1')
-                        {
-                            pieceRondePetitePleine();
-                        }
-                    }
-                    else //grande
-                    {
-                        pieceRondeGrande();
-
-                        if (piece[2] == '1')
-                        {
-                            pieceRondeGrandePleine();
-                        }
+                        dessin = pieceRondePetitePleine;
                     }
                 }
-                else // piece carrée
+                else //grande
                 {
-                    if (piece[1] == '0') //petite
+                  dessin =  pieceRondeGrande;
+
+                    if (piece[2] == '1')
                     {
-                        pieceCarreePetite();
-
-                        if (piece[2] == '1')
-                        {
-                            pieceCarrePetitePleine();
-                        }
-
-                    }
-                    else //grande
-                    {
-                        pieceCarreeGrande();
-
-                        if (piece[2] == '1')
-                        {
-                            pieceCarreeGrandePleine();
-                        }
+                       dessin = pieceRondeGrandePleine;
                     }
                 }
-            Console.ResetColor();
-        }
-
-        static void pieceCarreePetite()
-        {
-            for (int i = 0; i < hauteurPetitCarre; i++)
-            {
-                Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
             }
-
-        }
-        static void pieceCarrePetitePleine()
-        {
-            for (int i = 0; i < hauteurPetitCarre; i++)
+            else if (piece[0] =='1') // piece carrée
             {
-                Console.WriteLine(" " + string.Concat(Enumerable.Repeat("*", largeurPetitCarre)));
+                if (piece[1] == '0') //petite
+                {
+                    dessin = pieceCarreePetite;
+
+                    if (piece[2] == '1')
+                    {
+                       dessin = pieceCarrePetitePleine;
+                    }
+
+                }
+                else //grande
+                {
+                  dessin = pieceCarreeGrande;
+
+                    if (piece[2] == '1')
+                    {
+                       dessin = pieceCarreeGrandePleine;
+                    }
+                }
             }
-
-        }
-        static void pieceCarreeGrande()
-        {
-           
-            Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
-            for (int i = 0; i < hauteurGrandCarre - 2; i++)
-            {
-                Console.WriteLine("*" + string.Concat(Enumerable.Repeat(" ", largeurGrandCarre - 2)) + "*");
-                Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
-            }
-           
+           // Console.ResetColor();
+            return dessin;
         }
 
-        static void pieceCarreeGrandePleine()
-        {
-
-            for (int i = 0; i < hauteurGrandCarre; i++)
-            {
-                Console.WriteLine(string.Concat(Enumerable.Repeat("*", largeurGrandCarre)));
-            }
-        }
-
-   
-        static void pieceRondePetite()
-        {
-            Console.WriteLine("  * * ");
-            Console.WriteLine("*     *");
-            Console.WriteLine("*     *");
-            Console.WriteLine("  * * ");
-        }
-
-
-        static void pieceRondePetitePleine()
-        {
-            Console.WriteLine("  *** ");
-            Console.WriteLine("*******");
-            Console.WriteLine("*******");
-            Console.WriteLine("  *** ");
-        }
-        static void pieceRondeGrande()
-        {
-            Console.WriteLine("      * *     ");
-            Console.WriteLine("   *       * ");
-            Console.WriteLine("  *         * ");
-            Console.WriteLine("  *         * ");
-            Console.WriteLine("   *       * ");
-            Console.WriteLine("      * *     ");
-        }
-        static void pieceRondeGrandePleine()
-        {
-            Console.WriteLine("      ***     ");
-            Console.WriteLine("   ********* ");
-            Console.WriteLine("  *********** ");
-            Console.WriteLine("  *********** ");
-            Console.WriteLine("   ********* ");
-            Console.WriteLine("      ***     ");
-        }
-
-        static void pieceVide ()
-        {
-            for (int i = 0; i < hauteurGrandCarre; i++)
-            {
-                Console.SetCursorPosition(cursor, 1 + i);
-                Console.WriteLine(string.Concat(Enumerable.Repeat(" ", largeurGrandCarre)));
-            }
-        }
-
+       
     }     
 }
 
