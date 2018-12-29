@@ -14,9 +14,9 @@ namespace quarto_mjma
         static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" },
                                                      { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
 
-        static int cursor = 7;
-        static int longueurCase = 6;
-        static int largeurCase = 11;
+        static int cursor = 10;
+        static int longueurCase = 6; // nbre de lignes dans chaque case
+        static int largeurCase = 11; //nbre de colonnes (carcatères) dans chaque case
        
 
         static string[,] Grille;    // Grille de jeu
@@ -178,26 +178,38 @@ namespace quarto_mjma
             //choix pièce par le joueur
             Console.SetCursorPosition(0, (longueurCase + 2) * nbreLignes + 5);
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
-                "- 0000 correspond à petite, creuse, carrée, clair\n" +
-                "- 1111 correspond à grande, pleine, ronde, foncee \n" +
+                "- 0000 correspond à ronde, petite, creuse, rouge\n" +
+                "- 1111 correspond à carrée, grande, pleine, bleue \n" +
                 "vous pouvez mixer plusieurs caractères évidemment.");
+
             do
             {
                 //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
                 ChoixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
-                pieceUtilisee = VerifierSiPieceUtilisee(ChoixPiece);
-                if (pieceUtilisee)
+
+                if (ChoixPiece.Length != nbreCaractéristiques)
                 {
                     Console.Beep(500, 300);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
+                    Console.WriteLine("Erreur : une pièce doit avoir 4 caractères. Veuillez entrer un nom de pièce valide :");
                     Console.ResetColor();
                 }
-                if (ChoixPiece.Length != nbreCaractéristiques)
+                else 
                 {
-                    Console.WriteLine("Erreur : une pièce doit avoir 4 caractères");
+                    pieceUtilisee = VerifierSiPieceUtilisee(ChoixPiece);
+
+                    if (pieceUtilisee)
+                    {
+                        Console.Beep(500, 300);
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
+                        Console.ResetColor();
+                    }
                 }
+
             } while ( ChoixPiece.Length != nbreCaractéristiques && pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
+
+           
 
             JouerPiece(ChoixPiece);
 
@@ -329,22 +341,23 @@ namespace quarto_mjma
             for (int i = 0; i < nbreLignes; i++) //indice ligne
             {
 
-                Console.WriteLine("      +-------------+-------------+-------------+-------------+");
-                Console.WriteLine("      |             |             |             |             |");
-                Console.WriteLine("      |             |             |             |             |");
-                Console.WriteLine("      |             |             |             |             |");
-                Console.WriteLine("      |             |             |             |             |");
-                Console.WriteLine("      |             |             |             |             |");
-                Console.WriteLine("      |             |             |             |             |");
-                Console.WriteLine("      |             |             |             |             |");
-               // Console.WriteLine("{0}   ", i);
+                Console.WriteLine("      +---------------+---------------+---------------+---------------+");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                // Console.WriteLine("{0}   ", i);
                 // Console.Write("                    |");
 
                 //Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
             }
 
-            Console.WriteLine("          +-------------+-------------+-------------+-------------+");
-            Console.WriteLine("               0                1             2            3       ");
+            Console.WriteLine("          +---------------+---------------+---------------+---------------+");
+            Console.WriteLine("               0                  1               2              3       ");
         }
 
         /// <summary>
@@ -684,19 +697,22 @@ namespace quarto_mjma
 
         static void AfficherPiece()
         {
-            string[,] dessin; 
+            string[,] dessin;
 
-            for (int i = 0; i < nbreLignes; i++)
+            int i = 0;
+            int j = 0;
+
+            for (i = 0; i < nbreLignes; i++)
             {
-                for (int j = 0; j < nbreLignes; j++)
+                for (j = 0; j < nbreLignes; j++)
                 {
-                    //ligne = i;
-                   // col = j;
+                   // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
                   dessin = TrouverDessin(Grille[i, j]);
+                  //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
                     for (int k = 0; k < longueurCase; k++)
                     {
-                        Console.SetCursorPosition(cursor + largeurCase *i , longueurCase*j +  + k);
+                        Console.SetCursorPosition (cursor+ largeurCase *(j+1) , 5+ longueurCase*(i+1) + k);
                         Console.WriteLine(dessin[k, 0]);
                     }
                     Console.ResetColor();
@@ -811,59 +827,68 @@ namespace quarto_mjma
 
         string[,] dessin = new string [6,1];
 
-            if (piece[3] == 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Blue;
-            }
+
             // 0000 = ronde, petite creuse, rouge
             if (piece[0] == ' ')
             {
-               dessin = pieceVide;
+                dessin = pieceVide;
             }
-            else if (piece[0] == '0') // pièce ronde
+            else
             {
-                if (piece[1] == '0') //petite
+                //identifie d'abord la couleur
+                if (piece[3] == '0')
                 {
-                    dessin = pieceRondePetite;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else 
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                }
 
-                    if (piece[2] == '1')
+                //identifie la forme
+                if (piece[0] == '0') // pièce ronde
+                {
+                    //identifie la grandeur
+                    if (piece[1] == '0') //petite
                     {
-                        dessin = pieceRondePetitePleine;
+                        dessin = pieceRondePetite;
+
+                        //identifie le caractère creux/plein
+                        if (piece[2] == '1')
+                        {
+                            dessin = pieceRondePetitePleine;
+                        }
+                    }
+                    else //grande
+                    {
+                        dessin = pieceRondeGrande;
+
+                        if (piece[2] == '1')
+                        {
+                            dessin = pieceRondeGrandePleine;
+                        }
                     }
                 }
-                else //grande
+                else if (piece[0] == '1') // piece carrée
                 {
-                  dessin =  pieceRondeGrande;
-
-                    if (piece[2] == '1')
+                    if (piece[1] == '0') //petite
                     {
-                       dessin = pieceRondeGrandePleine;
+                        dessin = pieceCarreePetite;
+
+                        if (piece[2] == '1')
+                        {
+                            dessin = pieceCarrePetitePleine;
+                        }
+
                     }
-                }
-            }
-            else if (piece[0] =='1') // piece carrée
-            {
-                if (piece[1] == '0') //petite
-                {
-                    dessin = pieceCarreePetite;
-
-                    if (piece[2] == '1')
+                    else //grande
                     {
-                       dessin = pieceCarrePetitePleine;
-                    }
+                        dessin = pieceCarreeGrande;
 
-                }
-                else //grande
-                {
-                  dessin = pieceCarreeGrande;
-
-                    if (piece[2] == '1')
-                    {
-                       dessin = pieceCarreeGrandePleine;
+                        if (piece[2] == '1')
+                        {
+                            dessin = pieceCarreeGrandePleine;
+                        }
                     }
                 }
             }
