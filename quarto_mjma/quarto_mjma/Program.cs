@@ -174,7 +174,7 @@ namespace quarto_mjma
         /// </summary>
         static void JouerOrdi()
         {
-
+            bool pieceUtilisee = false;
             //choix pièce par le joueur
             Console.SetCursorPosition(0, (longueurCase + 2) * nbreLignes + 5);
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
@@ -185,14 +185,19 @@ namespace quarto_mjma
             {
                 //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
                 ChoixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
-                if (VerifierSiPieceUtilisee(ChoixPiece))
+                pieceUtilisee = VerifierSiPieceUtilisee(ChoixPiece);
+                if (pieceUtilisee)
                 {
                     Console.Beep(500, 300);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
                     Console.ResetColor();
                 }
-            } while (VerifierSiPieceUtilisee(ChoixPiece)); //tant que la pièce n'est pas bonne on en rechoisit une autre
+                if (ChoixPiece.Length != nbreCaractéristiques)
+                {
+                    Console.WriteLine("Erreur : une pièce doit avoir 4 caractères");
+                }
+            } while ( ChoixPiece.Length != nbreCaractéristiques && pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
 
             JouerPiece(ChoixPiece);
 
@@ -691,7 +696,7 @@ namespace quarto_mjma
 
                     for (int k = 0; k < longueurCase; k++)
                     {
-                        Console.SetCursorPosition(cursor + largeurCase *i , longueurCase*j +1  + k);
+                        Console.SetCursorPosition(cursor + largeurCase *i , longueurCase*j +  + k);
                         Console.WriteLine(dessin[k, 0]);
                     }
                     Console.ResetColor();
