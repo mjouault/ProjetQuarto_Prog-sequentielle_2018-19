@@ -21,7 +21,7 @@ namespace quarto_mjma
         static int[,] tabcol1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque colonne
         static int[,] diago0 = new int[4, 4];   //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque diagonale
         static int[,] diagos1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque diagonale
-
+        
 
         static bool trace = false;
         static bool AGagne = false;
@@ -634,14 +634,11 @@ namespace quarto_mjma
                         tabcol0[col, n] += 1;
                     }
                 }
-                if (Grille[diago,diago][n]=='0')
+                if (Grille[ligne,ligne][n]=='0')
                 {
-                    diago0[diago, n] += 1;
+                    diago0[ligne, n] += 1;
                 }
-                if (Grille[diago, diago][n] == '1')
-                {
-                    diagos1[diago, n] += 1;
-                }
+                
                 else
                 {
                     if (simul)
@@ -659,7 +656,10 @@ namespace quarto_mjma
                     {
                         tablignes1[ligne, n] += 1; //compteur du nombre de 1 de la n ième caractéristique sur la ligne considérée
                         tabcol1[col, n] += 1;
-                        diagos1[diago, n] += 1;
+                    }
+                    if (Grille[ligne, ligne][n] == '1')
+                    {
+                        diagos1[ligne, n] += 1;
                     }
                 }
                 if (mauvaiseStrategie)
