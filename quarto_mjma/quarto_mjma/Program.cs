@@ -814,7 +814,7 @@ namespace quarto_mjma
             while (n < nbreCaractéristiques && !AGagne)
             {
                 int k = 0,j=0;
-                if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
+                if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur une diagonale pour 1 caractéristique
                 {
 
                     while (k < nbreLignes && diago0[k, n] != 3)
