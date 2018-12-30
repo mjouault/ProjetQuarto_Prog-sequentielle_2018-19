@@ -632,11 +632,8 @@ namespace quarto_mjma
                     {
                         tablignes0[ligne, n] += 1;
                         tabcol0[col, n] += 1;
+                        diago0[ligne, n] += 1;
                     }
-                }
-                if (Grille[ligne,ligne][n]=='0')
-                {
-                    diago0[ligne, n] += 1;
                 }
                 
                 else
@@ -656,9 +653,6 @@ namespace quarto_mjma
                     {
                         tablignes1[ligne, n] += 1; //compteur du nombre de 1 de la n ième caractéristique sur la ligne considérée
                         tabcol1[col, n] += 1;
-                    }
-                    if (Grille[ligne, ligne][n] == '1')
-                    {
                         diagos1[ligne, n] += 1;
                     }
                 }
@@ -819,13 +813,14 @@ namespace quarto_mjma
 
             while (n < nbreCaractéristiques && !AGagne)
             {
-                int k = 0;
+                int k = 0,j=0;
                 if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
                 {
 
                     while (k < nbreLignes && diago0[k, n] != 3)
                     {
                         k++;
+                        j++;
                     }
                 }
                 else
@@ -833,11 +828,12 @@ namespace quarto_mjma
                     while (k < nbreLignes && diagos1[k, n] != 3)
                     {
                         k++;
+                        j++;
                     }
                 }
                 if (k != 4 && TrouverCaseIAdiago(k))
                 {
-                    Grille[k, k] = ChoixPiece;
+                    Grille[k, j] = ChoixPiece;
                     AGagne = true;
                 }
                 else
