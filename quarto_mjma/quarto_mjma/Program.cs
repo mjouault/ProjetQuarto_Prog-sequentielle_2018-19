@@ -28,7 +28,9 @@ namespace quarto_mjma
 
         static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
         static bool grilleRemplie = false;
-        static bool trouveCase = false; // booléen déterminant si une case est avantageuse pour l'IA (true) ou non (false)
+        static bool trouveCaseAvantageuseIA = false; // booléen déterminant si une case est avantageuse pour l'IA (true) ou non (false)
+        static bool verif4alignees = false;
+        static bool verif3alignees = false;
 
         // Main
         static void Main(string[] args)
@@ -286,7 +288,7 @@ namespace quarto_mjma
               Grille[ligne, col] = ChoixPiece;
              AfficherGrille();*/
             ChoisirCaseIA();
-            MettreAJourStrategies(false);
+            MettreAJourStrategies(false, 0);
 
             //AfficherGrille();
 
@@ -371,7 +373,7 @@ namespace quarto_mjma
                 Console.WriteLine("yolo1");
 
             Grille[ligne, col] = choixPiece;
-            MettreAJourStrategies(false);
+            MettreAJourStrategies(false, 0);
 
 
             if (trace)
@@ -616,26 +618,34 @@ namespace quarto_mjma
         /// MettreAJourStrategies : l'IA calcule le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
         /// </summary>
         /// <returns></returns>
-        static bool MettreAJourStrategies(bool simul)
+        static bool MettreAJourStrategies(bool simul, int nbPiecesAlignees)  /* La fonction MettreAJour est appelée dans TrouverCase afin de s'assurer qu'après simulation du placement de la pièce dans la grille,
+                                                                                  il n'y aurait pas 3 pièces alignées car cela permettrait au joueur humain de gagner au tour d'après
+
+                                                                                                                     dans TrouverPiece afin de s'assurer qu'après simulation du placement de la pièce dans la grille,
+                                                                                 il n'y aurait pas 4 pièces alignées (car cela permettrait au joueur humain de gagner en plaçant la pièce comme dans la simulation)
+
+                                                                                                                       après chaque tour des joueurs mais dans ce cas, le mode simulation n'est pas activé donc 
+                                                                                                                       on ne cherche pas à vérifier un nombre de pièces alignées d'où nbPiecesAlignees = 0*/
         {
-            bool mauvaiseStrategie = false;
-            // Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
+            bool mauvaiseStrategiePrIA = false;
+
+          
+
             for (int n = 0; n < nbreCaractéristiques; n++)
             {
-                //Console.WriteLine("case :" +Grille[ligne, col][n]);
 
                 //Mise à jour lignes et colonnes
                 if (Grille[ligne, col][n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
                 {
                     if (simul)
                     {
-                        if (tablignes0[ligne, n] == 2)
+                        if (tablignes0[ligne, n] == nbPiecesAlignees)
                         {
-                            mauvaiseStrategie = true;
+                            mauvaiseStrategiePrIA = true;
                         }
                         else if (tabcol0[col, n] == 2)
                         {
-                            mauvaiseStrategie = true;
+                            mauvaiseStrategiePrIA = true;
                         }
                     }
                     else
@@ -648,13 +658,13 @@ namespace quarto_mjma
                 {
                     if (simul)
                     {
-                        if (tablignes1[ligne, n] == 2)
+                        if (tablignes1[ligne, n] == nbPiecesAlignees)
                         {
-                            mauvaiseStrategie = true;
+                            mauvaiseStrategiePrIA = true;
                         }
                         else if (tabcol1[col, n] == 2)
                         {
-                            mauvaiseStrategie = true;
+                            mauvaiseStrategiePrIA = true;
                         }
                     }
                     else
@@ -663,9 +673,9 @@ namespace quarto_mjma
                         tabcol1[col, n] += 1;
                     }
                 }
-                if (mauvaiseStrategie)
+                if (mauvaiseStrategiePrIA)
                 {
-                    return mauvaiseStrategie;
+                    return mauvaiseStrategiePrIA;
                 }
             }
 
@@ -706,7 +716,7 @@ namespace quarto_mjma
                 }
             }
 
-            return mauvaiseStrategie;
+            return mauvaiseStrategiePrIA;
         }
 
         /// <summary>
@@ -877,24 +887,24 @@ namespace quarto_mjma
             // l'IA commence par vérifier les 4 coins 
             int[] tabLigne = { 0, 3 };
             int[] tabCol = { 0, 3 };
-            trouveCase = VerifierBonneStrategie(tabLigne, tabCol);
+            trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabCol, 2); 
 
             // Puis elle vérifie les cases restantes des lignes 0 et 3
-            if (!trouveCase)
+            if (!trouveCaseAvantageuseIA)
             {
                 tabCol[0] = 1; tabCol[1] = 2;
-                trouveCase = VerifierBonneStrategie(tabLigne, tabCol);
+                trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabCol, 2);
             }
 
             //Puis les cases des lignes 1 et 2 
-            if (!trouveCase)
+            if (!trouveCaseAvantageuseIA)
             {
                 tabLigne = tabCol;
                 int[] tabColInterieur = { 0, 1, 2, 3, };
-                trouveCase = VerifierBonneStrategie(tabLigne, tabColInterieur);
+                trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabColInterieur, 2);
             }
 
-            if (trouveCase)
+            if (trouveCaseAvantageuseIA)
             {
                 Grille[ligne, col] = choixPiece;
                 // UtiliserPiece();
@@ -916,16 +926,16 @@ namespace quarto_mjma
             }
         }
 
-        static bool VerifierBonneStrategie(int[] tab1, int[] tab2)
+        static bool VerifierBonneStrategiePrIA(int[] tab1, int[] tab2, int nbPiecesAlignees) // true : l'IA a trouvé une case telle que ça ne génère pas un alignement de 3 pièces si elle la place à cet endroit
         {
             bool mauvaiseStrategie = false; //permet d'appeler MettreAJourStrategie en mode simulation
             int i = 0; int j = 0;
 
-            while (i < tab1.Length && !trouveCase)
+            while (i < tab1.Length && !trouveCaseAvantageuseIA)
             {
                 //Console.WriteLine("i={0}, j={1}", i, j);
 
-                while (j < tab2.Length && !trouveCase) // tant que l'ordi n'a pas trouvé une case à son avantage
+                while (j < tab2.Length && !trouveCaseAvantageuseIA) // tant que l'ordi n'a pas trouvé une case à son avantage
                 {
                     ligne = tab1[i];
                     col = tab2[j];
@@ -935,13 +945,13 @@ namespace quarto_mjma
                         j++;
                     else
                     {
-                        mauvaiseStrategie = MettreAJourStrategies(true); // si après simulation, 3 pièces alignées, c'est une mauvaise stratégie
+                        mauvaiseStrategie = MettreAJourStrategies(true, nbPiecesAlignees); // si après simulation, 3 pièces alignées, c'est une mauvaise stratégie pour l'IA --> mauvaise stratégie = true
 
-                        if (mauvaiseStrategie)
+                        if (mauvaiseStrategie) // si mauvaisestrategie = true, l'IA cherche une nouvelle case qui ne sera pasavantageuse pour son adversaire
                             j++;
                         else
                         {
-                            trouveCase = true;
+                            trouveCaseAvantageuseIA = true;
 
                         }
                     }
@@ -953,7 +963,7 @@ namespace quarto_mjma
                     i++;
                 }
             }
-            return trouveCase;
+            return trouveCaseAvantageuseIA;
         }
 
         static void TrouverPieceIA()
@@ -965,7 +975,9 @@ namespace quarto_mjma
             int[] tabIndiceLigneGrille;
             int[] tabIndiceColGrille;
 
-            while (k < TabPieces.GetLength(0) && !trouvePiece)
+            string[] piecesPossiblesIA; // création d'un tableaux qui recensera toutes les pièces que l'IA peut jouer sans risquer de faire gagner l'adversaire. Elle choisira alors aléatoirement entre ces pièces
+
+            while (k < TabPieces.GetLength(0) && !trouvePiece) // choix d'une pièce parmi les pièces dispos
             {
                 if (TabPieces[1, k] == "1")// si case déjà remplie
                 {
@@ -974,30 +986,21 @@ namespace quarto_mjma
                 else // si case vide
                 {
 
-                    // choisit aléatoirement la ligne et la colonne pour placer le pion
-                    Random R = new Random();
-
-                    do
+                    // une fois une pièce non utilisée trouvée, l'IA parcourt tout le tableau pour s'assurer que cette pièce ne peut être gagante pour l'adversaire dans aucune case
+                    while (i < nbreLignes && trouveCaseAvantageuseIA)
                     {
-                        ligne = R.Next(0, nbreLignes);
-                        col = R.Next(0, nbreLignes);
-                    } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'IA doit replacer sa pièce 
-
-                    // une fois une pièce non utilisée trouvée, l'IA parcourt tou le tableau pour s'assurer que cette pièce ne peut être gagante pour l'adversaire dans aucune case
-                    while (i < nbreLignes && trouveCase)
-                    {
-                        while (j < nbreLignes && trouveCase)
+                        while (j < nbreLignes && trouveCaseAvantageuseIA)
                         {
                             // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille
                             tabIndiceLigneGrille = new int[] { i };
                             tabIndiceColGrille = new int[] { j };
-                            VerifierBonneStrategie(tabIndiceLigneGrille, tabIndiceColGrille);
+                            VerifierBonneStrategiePrIA(tabIndiceLigneGrille, tabIndiceColGrille, 3);
 
-                            if (trouveCase)
+                            if (trouveCaseAvantageuseIA) // l'IA trouve une case
                                 j++;
                         }
 
-                        if (trouveCase)
+                        if (trouveCaseAvantageuseIA)
                         {
                             i++;
                             if (j == nbreLignes)
@@ -1005,7 +1008,7 @@ namespace quarto_mjma
                         }
                     }
 
-                    if (i == nbreLignes && j == nbreLignes && trouveCase)
+                    if (i == nbreLignes && j == nbreLignes && trouveCaseAvantageuseIA)
                     {
                         trouvePiece = true;
                         choixPiece = TabPieces[0, k];
