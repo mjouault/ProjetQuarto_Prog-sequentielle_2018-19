@@ -269,7 +269,7 @@ namespace quarto_mjma
                 }
             } while (pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
 
-            JouerPiece();
+            UtiliserPiece();
 
             //choix case par l'ordi
 
@@ -310,7 +310,7 @@ namespace quarto_mjma
             }
             while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée
 
-            JouerPiece();
+            UtiliserPiece();
             Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
                 "- 1111 correspond à grande, pleine, ronde, foncee \n" +
@@ -378,10 +378,10 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// JouerPiece : Fonction permettant de ne jouer qu'une seule fois chaque pièce
+        /// UtiliserPiece : Fonction permettant de ne jouer qu'une seule fois chaque pièce
         /// </summary>
         /// <param name="choixPiece"></param>
-        static void JouerPiece()
+        static void UtiliserPiece()
         {
             int i = 0;
 
@@ -713,7 +713,7 @@ namespace quarto_mjma
             GagnerIA();
             if (!AGagne)
             {
-                PlacerPieceIA();
+                TrouverCaseIA();
 
                 /*if (trace)
                 Console.WriteLine("aléatoire");
@@ -866,9 +866,8 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// PlacerPieceIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans l'un des 4 coins
-        /// </summary>
-        static void PlacerPieceIA()
+        /// TrouverCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles
+        static bool TrouverCaseIA()
         {
             bool trouveCase = false;
 
@@ -889,8 +888,15 @@ namespace quarto_mjma
             {
                 tabLigne = tabCol;
                 int[] tabColInterieur = { 0, 1, 2, 3, };
-                VerifierBonneStrategie(tabLigne, tabColInterieur);
+                trouveCase= VerifierBonneStrategie(tabLigne, tabColInterieur);
             }
+
+            if (trouveCase)
+            {
+                Grille[ligne, col] = choixPiece;
+                UtiliserPiece();
+            }
+            return trouveCase;
         }
 
         static bool VerifierBonneStrategie (int [] tab1, int[] tab2)
@@ -901,27 +907,26 @@ namespace quarto_mjma
 
             while (i < tab1.Length && !trouveCase)
             {
-                Console.WriteLine("i={0}, j={1}", i, j);
+                //Console.WriteLine("i={0}, j={1}", i, j);
 
-                while (j < tab2.Length && !trouveCase)
+                while (j < tab2.Length && !trouveCase) // tant que l'ordi n'a pas trouvé une case à son avantage
                 {
                     ligne = tab1[i];
                     col = tab2[j];
-                    Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
+                   // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
 
                     if (Grille[ligne, col] != caseVide)
                         j++;
                     else
                     {
-                        mauvaiseStrategie = MettreAJourStrategies(true);
+                        mauvaiseStrategie = MettreAJourStrategies(true); // si après simulation, 3 pièces alignées, c'est une mauvaise stratégie
 
                         if (mauvaiseStrategie)
                             j++;
                         else
                         {
                             trouveCase = true;
-                            Grille[ligne, col] = choixPiece;
-                            JouerPiece();
+
                         }
                     }
 
@@ -934,7 +939,22 @@ namespace quarto_mjma
             }
             return trouveCase;
         }
+
+        static bool TrouverPieceIA ()
+        {
+            bool trouvePiece = false;
+            int j = 0;
+
+            while (j<TabPieces.GetLength(0))
+            {
+                if (TabPieces[1, j] == "1")
+                {
+                    
+                }
+            }
+        }
     }
 }
+
 
 
