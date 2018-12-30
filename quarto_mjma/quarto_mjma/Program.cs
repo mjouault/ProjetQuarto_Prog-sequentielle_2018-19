@@ -12,9 +12,9 @@ namespace quarto_mjma
         static string caseVide = "    ";
 
         static int ligne; static int col; //lignes et colonnes que le joueur/l'ordi a choisi
-        static string choixPiece;
-        static int nbreLignes = 4;
-        static int nbreCaractéristiques = 4;
+        static string choixPiece; // variable globale désignant une pièce choise pour être jouée par l'un des joueurs
+        static int nbreLignes = 4; // constante donnant le nombre de lignes et de colonnes puisque le plateau est carré
+        static int nbreCaractéristiques = 4; // constante donnant le nombre de caractéristiques des pièces
 
         static int[,] tablignes0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque ligne 
         static int[,] tablignes1 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque ligne 
@@ -24,9 +24,11 @@ namespace quarto_mjma
         static int[,] diagos1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque diagonale
 
 
-        static bool trace = false;
-        static bool AGagne = false;
+        static bool trace = false;  //  true si l'on veut afficher des messages pour débugueur notre code, false sinon
+
+        static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
         static bool grilleRemplie = false;
+        static bool trouveCase = false; // booléen déterminant si une case est avantageuse pour l'IA (true) ou non (false)
 
         // Main
         static void Main(string[] args)
@@ -173,7 +175,7 @@ namespace quarto_mjma
             return estHumain;
         }
 
-        
+
         /// <summary>
         /// Jouer() : Permet que le joueur et l'ordinateur jouent chacun leur tour
         /// </summary>
@@ -186,8 +188,8 @@ namespace quarto_mjma
             while (!AGagne && !grilleRemplie)
             {
                 //Console.Clear();
-               // AfficherTitre();
-               // AfficherGrille();
+                // AfficherTitre();
+                // AfficherGrille();
 
                 if (trace)
                     Console.WriteLine("la partie commence");
@@ -235,7 +237,7 @@ namespace quarto_mjma
                 {
                     AvoirGrilleRemplie();
                     if (grilleRemplie)
-                    Console.WriteLine("Match nul");
+                        Console.WriteLine("Match nul");
                 }
 
                 AfficherTitre();
@@ -297,28 +299,29 @@ namespace quarto_mjma
         /// </summary>
         static void JouerHumain()
         {
-            string ChoixPiece;
-
             //choix de la pièce dans le tableau par l'ordi
+            TrouverPieceIA();
 
-            int randomPiece;
+            /*int randomPiece;
             Random R = new Random();
             do
             {
                 randomPiece = R.Next(0, 16);
                 ChoixPiece = TabPieces[0, randomPiece];
             }
-            while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée
+            while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée*/
 
             UtiliserPiece();
             Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
                 "- 1111 correspond à grande, pleine, ronde, foncee \n" +
-                "Les caractères peuvent être mélangés entre eux", ChoixPiece);
+                "Les caractères peuvent être mélangés entre eux", choixPiece);
             // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
 
-            bool caseRemplie = false;
+
             //choix de la case par le joueur
+
+            bool caseRemplie = false;
 
             if (trace)
                 Console.WriteLine("début while");
@@ -367,7 +370,7 @@ namespace quarto_mjma
             if (trace)
                 Console.WriteLine("yolo1");
 
-            Grille[ligne, col] = ChoixPiece;
+            Grille[ligne, col] = choixPiece;
             MettreAJourStrategies(false);
 
 
@@ -416,7 +419,7 @@ namespace quarto_mjma
         }
 
 
-       /// <summary>
+        /// <summary>
         /// Gagner () : Fonction donnant toutes les combinaisons gagnantes et terminant la partie
         /// </summary>
         /// <returns></returns>
@@ -571,7 +574,7 @@ namespace quarto_mjma
         /// RejouerPartie : Le joueur décide, à chaque fin de partie, s'il souhaite en refaire une ou non
         /// </summary>
         /// <returns></returns>
-         static bool RejouerPartie()
+        static bool RejouerPartie()
         {
             Console.WriteLine("Tapez [r] pour rejouer ou [a] pour arrêter");
             string reponse = Console.ReadLine(); //le joueur choisit s'il veut refaire une partie
@@ -607,30 +610,30 @@ namespace quarto_mjma
             return arret;
         }
 
-       
+
 
         /// <summary>
         /// MettreAJourStrategies : l'IA calcule le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
         /// </summary>
         /// <returns></returns>
-        static bool MettreAJourStrategies( bool simul)
+        static bool MettreAJourStrategies(bool simul)
         {
             bool mauvaiseStrategie = false;
-           // Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
+            // Console.WriteLine(ligne + "\t" + col + Grille [ligne, col]);
             for (int n = 0; n < nbreCaractéristiques; n++)
             {
                 //Console.WriteLine("case :" +Grille[ligne, col][n]);
 
                 //Mise à jour lignes et colonnes
-                if ( Grille[ligne,col][n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
+                if (Grille[ligne, col][n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
                 {
                     if (simul)
                     {
-                        if (tablignes0 [ligne, n] == 2)
+                        if (tablignes0[ligne, n] == 2)
                         {
                             mauvaiseStrategie = true;
-                        }  
-                        else if (tabcol0[col, n] ==2)
+                        }
+                        else if (tabcol0[col, n] == 2)
                         {
                             mauvaiseStrategie = true;
                         }
@@ -714,6 +717,7 @@ namespace quarto_mjma
             if (!AGagne)
             {
                 TrouverCaseIA();
+                UtiliserPiece();
 
                 /*if (trace)
                 Console.WriteLine("aléatoire");
@@ -736,7 +740,7 @@ namespace quarto_mjma
         static void GagnerIA()
         {
             if (trace)
-            Console.WriteLine("entre ds gagnerIA");
+                Console.WriteLine("entre ds gagnerIA");
 
             // l'IA recherche s'il y a déjà  sur une mm ligne, 3 pièces "alignées" et ayant 1 même caractéristique 
             int n = 0;
@@ -746,11 +750,11 @@ namespace quarto_mjma
                 int i = 0;
                 if (choixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
                 {
-                    
+
                     while (i < nbreLignes && tablignes0[i, n] != 3)
                     {
                         if (trace)
-                       Console.WriteLine("lablignes0" + i);
+                            Console.WriteLine("lablignes0" + i);
                         i++;
                     }
                 }
@@ -759,19 +763,19 @@ namespace quarto_mjma
                     while (i < nbreLignes && tablignes1[i, n] != 3)
                     {
                         if (trace)
-                        Console.WriteLine("lablignes1" + i);
+                            Console.WriteLine("lablignes1" + i);
                         i++;
                     }
                 }
-                  if (trace)
-                 Console.WriteLine("i ={0}, n={1}", i, n);
-                if (i!=4 && TrouverCaseIALigne(i))
+                if (trace)
+                    Console.WriteLine("i ={0}, n={1}", i, n);
+                if (i != 4 && TrouverCaseIALigne(i))
                 {
                     Grille[i, col] = choixPiece;
                     AGagne = true;
                 }
                 else
-                { 
+                {
                     n++;
                 }
             }
@@ -782,13 +786,13 @@ namespace quarto_mjma
             {
                 int j = 0;
                 if (trace)
-                Console.WriteLine("piècesalignéescolonnes");
+                    Console.WriteLine("piècesalignéescolonnes");
                 if (choixPiece[n] == '0')
                 {
                     while (j < nbreLignes && tabcol0[j, n] != 3)
                     {
                         if (trace)
-                        Console.WriteLine("tabcol0" + j);
+                            Console.WriteLine("tabcol0" + j);
                         j++;
                     }
                 }
@@ -797,14 +801,14 @@ namespace quarto_mjma
                     while (j < nbreLignes && tabcol1[j, n] != 3)
                     {
                         if (trace)
-                        Console.WriteLine("tabcol1" + j);
+                            Console.WriteLine("tabcol1" + j);
                         j++;
                     }
                 }
 
-                if (j!=4 && TrouverCaseIACol(j))
+                if (j != 4 && TrouverCaseIACol(j))
                 {
-                    Grille[ligne, j] =choixPiece;
+                    Grille[ligne, j] = choixPiece;
                     AGagne = true;
                 }
                 else
@@ -817,10 +821,10 @@ namespace quarto_mjma
         /// <summary>
         /// TrouverCaseIALigne(): permet à l'IA de recherche où est la case vide sur cette ligne où il y a déjà 3 pièces d'alignées
         /// </summary>
-        static bool TrouverCaseIALigne (int i)
+        static bool TrouverCaseIALigne(int i)
         {
             if (trace)
-            Console.WriteLine("TrouveCaseLigne" + i);
+                Console.WriteLine("TrouveCaseLigne" + i);
 
             bool caseVide = false;
             int j = 0;
@@ -828,17 +832,17 @@ namespace quarto_mjma
             {
                 j++;
             }
-            if (j<nbreLignes)
+            if (j < nbreLignes)
             {
-             caseVide = true;
-              col = j;
+                caseVide = true;
+                col = j;
             }
-            
+
             if (trace)
-            Console.WriteLine("TrouveCaseLigneFin col={0}, caseVide ={1}", col, caseVide);
+                Console.WriteLine("TrouveCaseLigneFin col={0}, caseVide ={1}", col, caseVide);
 
             return caseVide;
-            
+
         }
 
         /// <summary>
@@ -846,10 +850,10 @@ namespace quarto_mjma
         /// </summary>
         /// <param name="j"></param>
         /// <returns></returns>
-        static bool TrouverCaseIACol ( int j)
+        static bool TrouverCaseIACol(int j)
         {
             if (trace)
-            Console.WriteLine("TrouveCasecol" + j);
+                Console.WriteLine("TrouveCasecol" + j);
 
             bool caseVide = false;
             int i = 0;
@@ -867,20 +871,19 @@ namespace quarto_mjma
 
         /// <summary>
         /// TrouverCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles
-        static bool TrouverCaseIA()
+        static void TrouverCaseIA()
         {
-            bool trouveCase = false;
 
-             // l'IA commence par vérifier les 4 coins 
+            // l'IA commence par vérifier les 4 coins 
             int[] tabLigne = { 0, 3 };
             int[] tabCol = { 0, 3 };
-           trouveCase = VerifierBonneStrategie(tabLigne, tabCol );
+            trouveCase = VerifierBonneStrategie(tabLigne, tabCol);
 
             // Puis elle vérifie les cases restantes des lignes 0 et 3
             if (!trouveCase)
             {
                 tabCol[0] = 1; tabCol[1] = 2;
-               trouveCase = VerifierBonneStrategie(tabLigne, tabCol);
+                trouveCase = VerifierBonneStrategie(tabLigne, tabCol);
             }
 
             //Puis les cases des lignes 1 et 2 
@@ -888,22 +891,35 @@ namespace quarto_mjma
             {
                 tabLigne = tabCol;
                 int[] tabColInterieur = { 0, 1, 2, 3, };
-                trouveCase= VerifierBonneStrategie(tabLigne, tabColInterieur);
+                trouveCase = VerifierBonneStrategie(tabLigne, tabColInterieur);
             }
 
             if (trouveCase)
             {
                 Grille[ligne, col] = choixPiece;
-                UtiliserPiece();
+                // UtiliserPiece();
             }
-            return trouveCase;
+            else
+            {
+                // choisit aléatoirement la ligne et la colonne pour placer le pion ouisque dans tous les cas il a perdu
+                Random R = new Random();
+
+                do
+                {
+                    ligne = R.Next(0, nbreLignes);
+                    col = R.Next(0, nbreLignes);
+                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+
+                Grille[ligne, col] = choixPiece;
+                AfficherGrille();
+
+            }
         }
 
-        static bool VerifierBonneStrategie (int [] tab1, int[] tab2)
+        static bool VerifierBonneStrategie(int[] tab1, int[] tab2)
         {
-            bool mauvaiseStrategie = false;
+            bool mauvaiseStrategie = false; //permet d'appeler MettreAJourStrategie en mode simulation
             int i = 0; int j = 0;
-            bool trouveCase = false;
 
             while (i < tab1.Length && !trouveCase)
             {
@@ -913,7 +929,7 @@ namespace quarto_mjma
                 {
                     ligne = tab1[i];
                     col = tab2[j];
-                   // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
+                    // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
 
                     if (Grille[ligne, col] != caseVide)
                         j++;
@@ -931,7 +947,7 @@ namespace quarto_mjma
                     }
 
                 }
-                if (j== tab2.Length)
+                if (j == tab2.Length)
                 {
                     j = 0;
                     i++;
@@ -940,16 +956,62 @@ namespace quarto_mjma
             return trouveCase;
         }
 
-        static bool TrouverPieceIA ()
+        static void TrouverPieceIA()
         {
             bool trouvePiece = false;
-            int j = 0;
+            int k = 0; int i = 0; int j = 0;
 
-            while (j<TabPieces.GetLength(0))
+            // création de tableaux  pour pouvoir réutiliser la fonction VerifierBonneStrategie qui nécessite des tableaux d'indice en entrée
+            int[] tabIndiceLigneGrille;
+            int[] tabIndiceColGrille;
+
+            while (k < TabPieces.GetLength(0) && !trouvePiece)
             {
-                if (TabPieces[1, j] == "1")
+                if (TabPieces[1, k] == "1")// si case déjà remplie
                 {
-                    
+                    k++;
+                }
+                else // si case vide
+                {
+
+                    // choisit aléatoirement la ligne et la colonne pour placer le pion
+                    Random R = new Random();
+
+                    do
+                    {
+                        ligne = R.Next(0, nbreLignes);
+                        col = R.Next(0, nbreLignes);
+                    } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'IA doit replacer sa pièce 
+
+                    // une fois une pièce non utilisée trouvée, l'IA parcourt tou le tableau pour s'assurer que cette pièce ne peut être gagante pour l'adversaire dans aucune case
+                    while (i < nbreLignes && trouveCase)
+                    {
+                        while (j < nbreLignes && trouveCase)
+                        {
+                            // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille
+                            tabIndiceLigneGrille = new int[] { i };
+                            tabIndiceColGrille = new int[] { j };
+                            VerifierBonneStrategie(tabIndiceLigneGrille, tabIndiceColGrille);
+
+                            if (trouveCase)
+                                j++;
+                        }
+
+                        if (trouveCase)
+                        {
+                            i++;
+                            if (j == nbreLignes)
+                                j = 0;
+                        }
+                    }
+
+                    if (i == nbreLignes && j == nbreLignes && trouveCase)
+                    {
+                        trouvePiece = true;
+                        choixPiece = TabPieces[0, k];
+                    }
+
+
                 }
             }
         }
