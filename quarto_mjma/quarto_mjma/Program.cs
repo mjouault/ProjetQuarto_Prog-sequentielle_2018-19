@@ -874,6 +874,7 @@ namespace quarto_mjma
                 }
             }
 
+            n = 0;
             while (n < nbreCaractéristiques && !AGagne)
             {
                 int k = 0;
@@ -899,7 +900,7 @@ namespace quarto_mjma
                     }
                 }
                  if (trace)
-                Console.WriteLine("avant if trouverCaseIAdiago,j={0}, choixpiece={1}", k, ChoixPiece);
+                Console.WriteLine("avant if trouverCaseIAdiago,k={0}, choixpiece={1}, n={2}", k, ChoixPiece,n);
 
                 if (k != diago0.GetLength(0)  && TrouverCaseIAdiago(k)) // même nombre de lignes pour les tableaux diago0 et diago1
                 {
@@ -966,8 +967,14 @@ namespace quarto_mjma
             return caseVide;
         }
 
-        static bool TrouverCaseIAdiago(int k) //diago de la gauche vers la droite, du haut vers le bas
-        {
+        /// <summary>
+        /// TrouverCaseIAdiago : permet à l'IA de recherche où est la case vide sur la diagonale où il y a déjà 3 pièces d'alignées
+        /// </summary>
+        /// </summary>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        static bool TrouverCaseIAdiago(int k) //l'indice k indique sur quelle diagonale les 3pièces alignées se trouvent
+        { 
             bool caseVide = false;
             int i = 0;  
 
@@ -989,9 +996,11 @@ namespace quarto_mjma
 
             if(k==1)
             {
+                Console.WriteLine("début if k=1, on a k={0}", k);
                 while (i < nbreLignes && AvoirCaseRemplie (i, (nbreLignes-1) - i) )
                 {
                     i++;
+                    Console.WriteLine("dans if k=1, ds while, on a k={0} et i={1}", k, i);
                 }
                 if (i < nbreLignes)
                 {
@@ -999,7 +1008,6 @@ namespace quarto_mjma
                 }
                 ligne = i;
                 col = (nbreLignes-1) -i;
-
             }
 
             return caseVide;
