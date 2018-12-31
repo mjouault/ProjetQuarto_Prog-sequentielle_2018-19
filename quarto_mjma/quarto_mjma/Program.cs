@@ -19,11 +19,11 @@ namespace quarto_mjma
         static int[,] tablignes1 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque ligne 
         static int[,] tabcol0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque colonne
         static int[,] tabcol1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque colonne
-        static int[,] diago0 = new int[4, 4];   //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque diagonale
-        static int[,] diagos1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque diagonale
+        static int[,] diago0 = new int[2, 4];   //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque diagonale
+        static int[,] diago1 = new int[2, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque diagonale
         
 
-        static bool trace = false;
+        static bool trace = true;
         static bool AGagne = false;
         static bool grilleRemplie = false;
 
@@ -615,7 +615,7 @@ namespace quarto_mjma
                 //Console.WriteLine("case :" +Grille[ligne, col][n]);
 
                 //Mise à jour lignes et colonnes
-                if ( Grille[ligne,col][n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
+                if ( Grille[ligne,col][n] == '0') //competur de 1 sur chaque ligne/colonne/diagonale pour la caractéristique considérée
                 {
                     if (simul)
                     {
@@ -630,13 +630,18 @@ namespace quarto_mjma
                     }
                     else
                     {
-                        tablignes0[ligne, n] += 1;
-                        tabcol0[col, n] += 1;
-                        diago0[ligne, n] += 1;
+                        tablignes0[ligne, n] ++;
+                        tabcol0[col, n] ++;
+
+                        if (ligne== col)
+                        diago0[0, n] ++;
+
+                        else if (ligne == ((nbreLignes-1) - col) || col == (nbreLignes-1) - ligne) 
+                        diago0[1, n] ++;
                     }
                 }
                 
-                else
+                else //competur de 1 sur chaque ligne/colonne/diagonale pour la caractéristique considérée
                 {
                     if (simul)
                     {
@@ -651,9 +656,14 @@ namespace quarto_mjma
                     }
                     else
                     {
-                        tablignes1[ligne, n] += 1; //compteur du nombre de 1 de la n ième caractéristique sur la ligne considérée
-                        tabcol1[col, n] += 1;
-                        diagos1[ligne, n] += 1;
+                        tablignes1[ligne, n] ++; //compteur du nombre de 1 de la n ième caractéristique sur la ligne considérée
+                        tabcol1[col, n] ++;
+
+                        if (ligne == col)
+                           diago1[0, n ]++;
+
+                        if (ligne == ((nbreLignes-1) - col) || col == ((nbreLignes-1) - ligne ) )
+                            diago1[1, n]++;
                     }
                 }
                 if (mauvaiseStrategie)
@@ -696,6 +706,22 @@ namespace quarto_mjma
                     Console.WriteLine("");
                     for (int j = 0; j < 4; j++)
                         Console.Write(tabcol1[i, j] + "\t");
+                }
+
+                Console.WriteLine("diago0");
+                for (int i = 0; i < diago0.GetLength(0); i++) // afiche tabdiago0
+                {
+                    Console.WriteLine("");
+                    for (int j = 0; j < diago0.GetLength(1); j++)
+                        Console.Write(diago0[i, j] + "\t");
+                }
+
+                Console.WriteLine("diago1");
+                for (int i = 0; i < diago1.GetLength(0); i++) // afiche tabdiago1
+                {
+                    Console.WriteLine("");
+                    for (int j = 0; j < diago0.GetLength(1); j++)
+                        Console.Write(diago1 [i, j] + "\t");
                 }
             }
 
@@ -743,25 +769,26 @@ namespace quarto_mjma
                 if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
                 {
                     
-                    while (i < nbreLignes && tablignes0[i, n] != 3)
+                    while (i < tablignes0.GetLength(0) && tablignes0[i, n] != 3)
                     {
                         if (trace)
-                       Console.WriteLine("lablignes0" + i);
+                       Console.WriteLine("tablignes0" + i);
                         i++;
                     }
                 }
                 else
                 {
-                    while (i < nbreLignes && tablignes1[i, n] != 3)
+                    while (i < tablignes1.GetLength(0) && tablignes1[i, n] != 3)
                     {
                         if (trace)
-                        Console.WriteLine("lablignes1" + i);
+                        Console.WriteLine("tablignes1" + i);
                         i++;
                     }
                 }
                   if (trace)
                  Console.WriteLine("i ={0}, n={1}", i, n);
-                if (i!=4 && TrouverCaseIALigne(i))
+
+                if (i!= tablignes0.GetLength(0) && TrouverCaseIALigne(i))
                 {
                     Grille[i, col] = ChoixPiece;
                     AGagne = true;
@@ -781,7 +808,7 @@ namespace quarto_mjma
                 Console.WriteLine("piècesalignéescolonnes");
                 if (ChoixPiece[n] == '0')
                 {
-                    while (j < nbreLignes && tabcol0[j, n] != 3)
+                    while (j < tabcol0.GetLength(0) && tabcol0[j, n] != 3)
                     {
                         if (trace)
                         Console.WriteLine("tabcol0" + j);
@@ -790,7 +817,7 @@ namespace quarto_mjma
                 }
                 else
                 {
-                    while (j < nbreLignes && tabcol1[j, n] != 3)
+                    while (j < tabcol1.GetLength(0) && tabcol1[j, n] != 3)
                     {
                         if (trace)
                         Console.WriteLine("tabcol1" + j);
@@ -798,7 +825,7 @@ namespace quarto_mjma
                     }
                 }
 
-                if (j!=4 && TrouverCaseIACol(j))
+                if (j!= tabcol0.GetLength(0) && TrouverCaseIACol(j))
                 {
                     Grille[ligne, j] = ChoixPiece;
                     AGagne = true;
@@ -813,27 +840,72 @@ namespace quarto_mjma
 
             while (n < nbreCaractéristiques && !AGagne)
             {
-                int k = 0,j=0;
-                if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur une diagonale pour 1 caractéristique
+                int k=0;
+                if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de gauche vers droite, du haut vers bas pour 1 caractéristique
                 {
 
-                    while (k < nbreLignes && diago0[k, n] != 3)
+                    while ( k< diago0.GetLength(0) && diago0[0, n] != 3)
                     {
                         k++;
-                        j++;
+                        Console.WriteLine("ds while diago0DGHB, j={0}", k);
                     }
                 }
                 else
                 {
-                    while (k < nbreLignes && diagos1[k, n] != 3)
+                    while (k < diago1.GetLength(0) && diago1[0, n] != 3)
                     {
                         k++;
-                        j++;
+                        Console.WriteLine("ds while diago1DGHB j={0}", k);
                     }
                 }
-                if (k != 4 && TrouverCaseIAdiago(k))
+                if (trace)
+                Console.WriteLine("avant if trouverCaseIAdiagoGDHB, j={0}, choixpiece={1}", k, ChoixPiece);
+
+                if (k != diago0.GetLength(0) && TrouverCaseIAdiago(k))
                 {
-                    Grille[k, j] = ChoixPiece;
+                    if (trace)
+                    Console.WriteLine("ds if trouverCaseIAdiagoGDHB, j={0}, choixpiece={1}", k, ChoixPiece);
+                    Grille[ligne, col] = ChoixPiece;
+                    AGagne = true;
+                }
+                else
+                {
+                    n++;
+                }
+            }
+
+            while (n < nbreCaractéristiques && !AGagne)
+            {
+                int k = 0;
+                if (ChoixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de droite vers la gauche, du haut vers bas pour 1 caractéristique
+                {
+
+                    while (k < diago0.GetLength(0) && diago0[1, n] != 3)
+                    {
+                        k++;
+                        if (trace)
+                        Console.WriteLine("ds while diago0DGHB, j={0}", k);
+
+                    }
+                }
+                else
+                {
+                    while (k < diago1.GetLength(0) && diago1[1, n] != 3)
+                    {
+                        k++;
+                        if (trace)
+                        Console.WriteLine("ds while diago0DGHB, j={0}", k);
+
+                    }
+                }
+                 if (trace)
+                Console.WriteLine("avant if trouverCaseIAdiago,j={0}, choixpiece={1}", k, ChoixPiece);
+
+                if (k != diago0.GetLength(0)  && TrouverCaseIAdiago(k)) // même nombre de lignes pour les tableaux diago0 et diago1
+                {
+                    if (trace)
+                    Console.WriteLine("ds if trouverCaseIAdiagoDGHB, j={0}, choixpiece={1}", k, ChoixPiece);
+                    Grille[ligne, col] = ChoixPiece;
                     AGagne = true;
                 }
                 else
@@ -878,7 +950,7 @@ namespace quarto_mjma
         static bool TrouverCaseIACol ( int j)
         {
             if (trace)
-            Console.WriteLine("TrouveCasecol" + j);
+            Console.WriteLine("TrouveCasecol, j={0}", j);
 
             bool caseVide = false;
             int i = 0;
@@ -894,22 +966,45 @@ namespace quarto_mjma
             return caseVide;
         }
 
-        static bool TrouverCaseIAdiago(int k)
+        static bool TrouverCaseIAdiago(int k) //diago de la gauche vers la droite, du haut vers le bas
         {
-            if (trace)
-                Console.WriteLine("TrouveCasediago");
-
             bool caseVide = false;
-            while (k < nbreLignes && AvoirCaseRemplie(k, k))
+            int i = 0;  
+
+            if (trace)
+                Console.WriteLine("TrouveCasediago, k={0}", k);
+            if (k==0) // les 3 pièces aligénes sont sur la diagonale de la gauche vers la droite et haut vers bas (diagonale 1)
             {
-                k++;
+                while (i < nbreLignes && AvoirCaseRemplie(i, i) )
+                {
+                    i++;
+                }
+                if (i < nbreLignes)
+                {
+                    caseVide = true;
+                }
+                ligne = i;
+                col = i;
             }
-            if (k < nbreLignes)
+
+            if(k==1)
             {
-                caseVide = true;
+                while (i < nbreLignes && AvoirCaseRemplie (i, (nbreLignes-1) - i) )
+                {
+                    i++;
+                }
+                if (i < nbreLignes)
+                {
+                    caseVide = true;
+                }
+                ligne = i;
+                col = (nbreLignes-1) -i;
+
             }
+
             return caseVide;
         }
+
 
         /// <summary>
         /// PlacerPieceIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans l'un des 4 coins
