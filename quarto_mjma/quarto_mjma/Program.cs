@@ -27,6 +27,7 @@ namespace quarto_mjma
         static bool trace = false;  //  true si l'on veut afficher des messages pour débugueur notre code, false sinon
         static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
         static bool grilleRemplie = false;
+       static bool modeIntell = false;
 
         // Main
         static void Main(string[] args)
@@ -35,7 +36,7 @@ namespace quarto_mjma
 
             AfficherEnTete();
             AfficherRegles();
-            choisirMode();
+            ChoisirMode();
             do
             {
 
@@ -113,9 +114,8 @@ namespace quarto_mjma
 
         //Sous-programmes
 
-            static bool choisirMode()
+            static bool ChoisirMode()
         {
-            bool modeIntell=false;
             int choix;
             Console.WriteLine("Tu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant\n[2]: Ordinateur intelligent");
                 choix = int.Parse(Console.ReadLine());
@@ -289,7 +289,7 @@ namespace quarto_mjma
 
             UtiliserPiece();
 
-            if (!choisirMode())
+            if (!modeIntell)
             {
                 Random R = new Random();
                 // choisit aléatoirement la ligne et la colonne pour placer le pion
@@ -301,14 +301,11 @@ namespace quarto_mjma
 
                 Grille[ligne, col] = choixPiece;
             }
-            if (choisirMode())
+            else
             {
                 ChoisirCaseIA();
                 MettreAJourStrategies(false, 0);
-                AfficherGrille();
             }
-
-            //AfficherGrille();
         }
 
 
@@ -319,7 +316,7 @@ namespace quarto_mjma
         static void JouerHumain()
         {
             //choix de la pièce dans le tableau par l'ordi
-            TrouverPieceIA();
+            ChoisirPieceIA();
 
             /*int randomPiece;
             Random R = new Random();
@@ -910,14 +907,15 @@ namespace quarto_mjma
                     }
                 }
 
+                // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de droite vers la gauche, du haut vers bas pour 1 caractéristique
                 n = 0;
                 while (n < nbreCaractéristiques && !AGagne)
                 {
                     int k = 0;
-                    if (choixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de droite vers la gauche, du haut vers bas pour 1 caractéristique
+                    if (choixPiece[n] == '0') // Cas si la caracctéristique considérée =0
                     {
 
-                        while (k < diago0.GetLength(0) && diago0[1, n] != 3)
+                        while (k < diago0.GetLength(0) && diago0[k, n] != 3) // vérifie s'il y a 3 pièces alignées avec une caractéristique égale à 0 ne sur la diagonale 
                         {
                             k++;
                             if (trace)
@@ -925,9 +923,9 @@ namespace quarto_mjma
 
                         }
                     }
-                    else
+                    else // cas si la caractéristique considérée = 1
                     {
-                        while (k < diago1.GetLength(0) && diago1[1, n] != 3)
+                        while (k < diago1.GetLength(0) && diago1[k, n] != 3) // vérifie s'il y a 3 pièces alignées avec une caractéristique égale à 0 ne sur la diagonale 
                         {
                             k++;
                             if (trace)
@@ -1145,7 +1143,7 @@ namespace quarto_mjma
             return trouveCaseAvantageuse;
         }
 
-        static void TrouverPieceIA()
+        static void ChoisirPieceIA()
         {
             bool trouvePieceAvantageuseIA = false;
             bool trouveCaseAvantageuseIA = false;
