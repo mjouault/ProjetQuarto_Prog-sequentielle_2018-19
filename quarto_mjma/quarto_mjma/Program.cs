@@ -794,43 +794,38 @@ namespace quarto_mjma
 
             bool trouveCasePossible = false;
 
-            do
+            while (ligne < nbreLignes)
             {
-                do
+                while(col < nbreLignes)
                 {
-                    if (Grille[ligne, col] != caseVide)
-                    {
-                        col++;
-                    }
-                    else
+                    Console.WriteLine("entre ds 2eme do col");
+                    if (Grille[ligne, col] == caseVide)
                     {
                         alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
 
-                        if (alignement3pieces)
-                        {
-                            col++;
-                        }
-                        else
+                        if (!alignement3pieces)
                         {
                             trouveCasePossible = true;
                             casesPossiblesIA[indice] = new int[2] { ligne, col }; // a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces en effet le prochain joueur est l'humain!
-                            indice++;
+                            if (indice < 15)
+                                indice++;
                         }
                     }
-                } while (col < nbreLignes);
+                    col++;
+                }
 
                 if (col == nbreLignes && alignement3pieces)
                 {
                     col = 0;
-                    ligne++;
                 }
-            } while (ligne < nbreLignes);
+                ligne++;
+            } 
 
 
-            for (int m = 0; m < casesPossiblesIA.Length; m++)
+           /* for (int m = 0; m < casesPossiblesIA.Length; m++)
             {
-                Console.WriteLine("casepossible = {0}", casesPossiblesIA[m]);
-            }
+                Console.WriteLine("casepossibleLigne = {0}, col ={1}", casesPossiblesIA[m] [0], casesPossiblesIA[m][1]);
+            }*/
 
             if ( trouveCasePossible) 
             {
@@ -848,7 +843,8 @@ namespace quarto_mjma
 
                 ligne = casesPossiblesIA[randomCasePossible] [0];
                 col = casesPossiblesIA[randomCasePossible][1];
-                choixPiece = Grille[ligne, col];
+                 Grille[ligne, col] = choixPiece;
+                Console.WriteLine("choisit au pif");
             }
             else // toutes les cases disponiblent génèrent un alignement de 3 pièces ayant une caractéristique commune
             {
@@ -862,7 +858,7 @@ namespace quarto_mjma
                 } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
                 Grille[ligne, col] = choixPiece;
-                AfficherGrille();
+               // AfficherGrille();
 
             }
         }
