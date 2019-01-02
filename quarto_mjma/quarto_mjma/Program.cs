@@ -30,13 +30,12 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
-            Console.SetWindowSize(100, 50);
+            Console.SetWindowSize(100, 44);
             AfficherEnTete();
             AfficherRegles();
             do
             {
-
-
+                
                 Grille = new string[nbreLignes, nbreLignes];
 
                 InitialiserGrille();
@@ -115,7 +114,6 @@ namespace quarto_mjma
                 }
             }
         }
-
 
         static bool choisir1erJoueur()
         {
@@ -358,6 +356,13 @@ namespace quarto_mjma
 
             Console.WriteLine("          +---------------+---------------+---------------+---------------+");
             Console.WriteLine("               0                  1               2              3       ");
+
+            //permet d'afficher les pièces restantes à la droite de la grille
+            Console.SetCursorPosition(75, 4);
+            for (int n=0; n <= nbPiecesTotales; n++)
+            {
+                Console.WriteLine("{0}", TrouverDessin(TabPieces[n, 0]));
+            }
         }
 
         /// <summary>
