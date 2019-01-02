@@ -262,52 +262,7 @@ namespace quarto_mjma
             }
         }
 
-        /// <summary>
-        /// JouerOrdi : Fonction permettant à l'ordinateur de jouer son tour soit de placer une pièce choisie par le joueur
-        /// </summary>
-        static void JouerOrdi()
-        {
-            bool pieceUtilisee = false;
-            //choix pièce par le joueur
-            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
-                "- 0000 correspond à petite, creuse, carrée, clair\n" +
-                "- 1111 correspond à grande, pleine, ronde, foncee \n" +
-                "vous pouvez mixer plusieurs caractères évidemment.");
-            do
-            {
-                //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
-                choixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
-                pieceUtilisee = VerifierSiPieceUtilisee();
-                if (pieceUtilisee)
-                {
-                    Console.Beep(500, 300);
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
-                    Console.ResetColor();
-                }
-            } while (pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
-
-            UtiliserPiece();
-
-            if (!modeIntell)
-            {
-                Random R = new Random();
-                // choisit aléatoirement la ligne et la colonne pour placer le pion
-                do
-                {
-                    ligne = R.Next(0, nbreLignes);
-                    col = R.Next(0, nbreLignes);
-                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
-
-                Grille[ligne, col] = choixPiece;
-            }
-            else
-            {
-                ChoisirCaseIA();
-                MettreAJourStrategies(false, 0);
-            }
-        }
-
+        
 
 
         /// <summary>
@@ -316,18 +271,25 @@ namespace quarto_mjma
         static void JouerHumain()
         {
             //choix de la pièce dans le tableau par l'ordi
-            ChoisirPieceIA();
 
-            /*int randomPiece;
-            Random R = new Random();
-            do
+            if (!modeIntell)
             {
-                randomPiece = R.Next(0, 16);
-                ChoixPiece = TabPieces[0, randomPiece];
+                int randomPiece;
+                Random R = new Random();
+                do
+                {
+                    randomPiece = R.Next(0, 16);
+                    choixPiece = TabPieces[0, randomPiece];
+                }
+                while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée*/
             }
-            while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée*/
+            else
+            {
+                ChoisirPieceIA();
+            }
 
             UtiliserPiece();
+
             Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
                 "- 1111 correspond à grande, pleine, ronde, foncee \n" +
@@ -394,6 +356,534 @@ namespace quarto_mjma
                 Console.WriteLine("yolo2");
             //AfficherGrille();
             //ArreterPartie();
+        }
+
+        /// <summary>
+        /// JouerOrdi : Fonction permettant à l'ordinateur de jouer son tour soit de placer une pièce choisie par le joueur
+        /// </summary>
+        static void JouerOrdi()
+        {
+            bool pieceUtilisee = false;
+            //choix pièce par le joueur
+            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
+                "- 0000 correspond à petite, creuse, carrée, clair\n" +
+                "- 1111 correspond à grande, pleine, ronde, foncee \n" +
+                "vous pouvez mixer plusieurs caractères évidemment.");
+            do
+            {
+                //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
+                choixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
+                pieceUtilisee = VerifierSiPieceUtilisee();
+                if (pieceUtilisee)
+                {
+                    Console.Beep(500, 300);
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
+                    Console.ResetColor();
+                }
+            } while (pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
+
+            UtiliserPiece();
+
+            if (!modeIntell)
+            {
+                Random R = new Random();
+                // choisit aléatoirement la ligne et la colonne pour placer le pion
+                do
+                {
+                    ligne = R.Next(0, nbreLignes);
+                    col = R.Next(0, nbreLignes);
+                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+
+                Grille[ligne, col] = choixPiece;
+            }
+            else
+            {
+                ChoisirCaseIA();
+                MettreAJourStrategies(false, 0);
+            }
+        }
+
+
+        /// <summary>
+        /// ChoisirCaseIA : L'IA choisit intelligemment la case dans laquelle elle va jouer la pièce donnée. Si 3 pièces alignées, met la pièce donnée dans la case qu'il reste sinon, joue dans les coins
+        static void ChoisirCaseIA()
+        {
+            GagnerIA();
+            if (!AGagne)
+            {
+                TrouverCaseIA();
+                UtiliserPiece();
+
+                /*if (trace)
+                Console.WriteLine("aléatoire");
+
+                Random R = new Random();
+                // choisit aléatoirement la ligne et la colonne pour placer le pion
+                do
+                {
+                    ligne = R.Next(0, nbreLignes);
+                    col = R.Next(0, nbreLignes);
+                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+
+                Grille[ligne, col] = ChoixPiece;*/
+            }
+        }
+
+        /// <summary>
+        /// GagnerIA () : l'IA cherche si elle peut directement gagner avec la pièce qu'elle a. S'il l y a déjà 3 pièces d' "alignées", elle regarde si sa pièce est compatible
+        /// </summary>
+        static void GagnerIA()
+        {
+            if (trace)
+                Console.WriteLine("entre ds gagnerIA");
+
+            // l'IA recherche s'il y a déjà  sur une mm ligne, 3 pièces "alignées" et ayant 1 même caractéristique 
+            int n = 0;
+
+            while (n < nbreCaractéristiques && !AGagne)
+            {
+                int i = 0;
+                if (choixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
+                {
+
+                    while (i < tablignes0.GetLength(0) && tablignes0[i, n] != 3)
+                    {
+                        if (trace)
+                            Console.WriteLine("lablignes0" + i);
+                        i++;
+                    }
+                }
+                else
+                {
+                    while (i < tablignes1.GetLength(0) && tablignes1[i, n] != 3)
+                    {
+                        if (trace)
+                            Console.WriteLine("lablignes1" + i);
+                        i++;
+                    }
+                }
+                if (trace)
+                    Console.WriteLine("i ={0}, n={1}", i, n);
+                if (i != tablignes0.GetLength(0) && TrouverCaseIALigne(i))
+                {
+                    Grille[i, col] = choixPiece;
+                    AGagne = true;
+                }
+                else
+                {
+                    n++;
+                }
+            }
+
+            n = 0;
+            // l'IA recherche où il y a déjà sur une même colonne, 3 pièces "alignées" et ayant 1 même caractéristique 
+            while (n < nbreCaractéristiques && !AGagne)
+            {
+                int j = 0;
+                if (trace)
+                    Console.WriteLine("piècesalignéescolonnes");
+                if (choixPiece[n] == '0')
+                {
+                    while (j < tabcol0.GetLength(0) && tabcol0[j, n] != 3)
+                    {
+                        if (trace)
+                            Console.WriteLine("tabcol0" + j);
+                        j++;
+                    }
+                }
+                else
+                {
+                    while (j < tabcol1.GetLength(0) && tabcol1[j, n] != 3)
+                    {
+                        if (trace)
+                            Console.WriteLine("tabcol1" + j);
+                        j++;
+                    }
+                }
+
+                if (j != tabcol0.GetLength(0) && TrouverCaseIACol(j))
+                {
+                    Grille[ligne, j] = choixPiece;
+                    AGagne = true;
+                }
+                else
+                {
+                    n++;
+                }
+
+                n = 0;
+
+                while (n < nbreCaractéristiques && !AGagne)
+                {
+                    int k = 0;
+                    if (choixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de gauche vers droite, du haut vers bas pour 1 caractéristique
+                    {
+
+                        while (k < diago0.GetLength(0) && diago0[0, n] != 3)
+                        {
+                            k++;
+                            Console.WriteLine("ds while diago0DGHB, j={0}", k);
+                        }
+                    }
+                    else
+                    {
+                        while (k < diago1.GetLength(0) && diago1[0, n] != 3)
+                        {
+                            k++;
+                            Console.WriteLine("ds while diago1DGHB j={0}", k);
+                        }
+                    }
+                    if (trace)
+                        Console.WriteLine("avant if trouverCaseIAdiagoGDHB, j={0}, choixpiece={1}", k, choixPiece);
+
+                    if (k != diago0.GetLength(0) && TrouverCaseIAdiago(k))
+                    {
+                        if (trace)
+                            Console.WriteLine("ds if trouverCaseIAdiagoGDHB, j={0}, choixpiece={1}", k, choixPiece);
+                        Grille[ligne, col] = choixPiece;
+                        AGagne = true;
+                    }
+                    else
+                    {
+                        n++;
+                    }
+                }
+
+                // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de droite vers la gauche, du haut vers bas pour 1 caractéristique
+                n = 0;
+                while (n < nbreCaractéristiques && !AGagne)
+                {
+                    int k = 0;
+                    if (choixPiece[n] == '0') // Cas si la caracctéristique considérée =0
+                    {
+
+                        while (k < diago0.GetLength(0) && diago0[k, n] != 3) // vérifie s'il y a 3 pièces alignées avec une caractéristique égale à 0 ne sur la diagonale 
+                        {
+                            k++;
+                            if (trace)
+                                Console.WriteLine("ds while diago0DGHB, j={0}", k);
+
+                        }
+                    }
+                    else // cas si la caractéristique considérée = 1
+                    {
+                        while (k < diago1.GetLength(0) && diago1[k, n] != 3) // vérifie s'il y a 3 pièces alignées avec une caractéristique égale à 0 ne sur la diagonale 
+                        {
+                            k++;
+                            if (trace)
+                                Console.WriteLine("ds while diago0DGHB, j={0}", k);
+
+                        }
+                    }
+                    if (trace)
+                        Console.WriteLine("avant if trouverCaseIAdiago,k={0}, choixpiece={1}, n={2}", k, choixPiece, n);
+
+                    if (k != diago0.GetLength(0) && TrouverCaseIAdiago(k)) // même nombre de lignes pour les tableaux diago0 et diago1
+                    {
+                        if (trace)
+                            Console.WriteLine("ds if trouverCaseIAdiagoDGHB, j={0}, choixpiece={1}", k, choixPiece);
+                        Grille[ligne, col] = choixPiece;
+                        AGagne = true;
+                    }
+                    else
+                    {
+                        n++;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// TrouverCaseIALigne(): permet à l'IA de recherche où est la case vide sur cette ligne où il y a déjà 3 pièces d'alignées
+        /// </summary>
+        static bool TrouverCaseIALigne(int i)
+        {
+            if (trace)
+                Console.WriteLine("TrouveCaseLigne" + i);
+
+            bool caseVide = false;
+            int j = 0;
+            while (j < nbreLignes && AvoirCaseRemplie(i, j))
+            {
+                j++;
+            }
+            if (j < nbreLignes)
+            {
+                caseVide = true;
+                col = j;
+            }
+
+            if (trace)
+                Console.WriteLine("TrouveCaseLigneFin col={0}, caseVide ={1}", col, caseVide);
+
+            return caseVide;
+
+        }
+
+        /// <summary>
+        /// /// TrouverCaseIACol(): permet à l'IA de recherche où est la case vide sur cette colonne où il y a déjà 3 pièces d'alignées
+        /// </summary>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        static bool TrouverCaseIACol(int j)
+        {
+            if (trace)
+                Console.WriteLine("TrouveCasecol" + j);
+
+            bool caseVide = false;
+            int i = 0;
+            while (i < nbreLignes && AvoirCaseRemplie(i, j))
+            {
+                i++;
+            }
+            if (i < nbreLignes)
+            {
+                caseVide = true;
+            }
+            ligne = i;
+            return caseVide;
+        }
+
+        /// <summary>
+        /// TrouverCaseIAdiago : permet à l'IA de recherche où est la case vide sur la diagonale où il y a déjà 3 pièces d'alignées
+        /// </summary>
+        /// </summary>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        static bool TrouverCaseIAdiago(int k) //l'indice k indique sur quelle diagonale les 3pièces alignées se trouvent
+        {
+            bool caseVide = false;
+            int i = 0;
+
+            if (trace)
+                Console.WriteLine("TrouveCasediago, k={0}", k);
+            if (k == 0) // les 3 pièces aligénes sont sur la diagonale de la gauche vers la droite et haut vers bas (diagonale 1)
+            {
+                while (i < nbreLignes && AvoirCaseRemplie(i, i))
+                {
+                    i++;
+                }
+                if (i < nbreLignes)
+                {
+                    caseVide = true;
+                }
+                ligne = i;
+                col = i;
+            }
+
+            if (k == 1)
+            {
+                Console.WriteLine("début if k=1, on a k={0}", k);
+                while (i < nbreLignes && AvoirCaseRemplie(i, (nbreLignes - 1) - i))
+                {
+                    i++;
+                    Console.WriteLine("dans if k=1, ds while, on a k={0} et i={1}", k, i);
+                }
+                if (i < nbreLignes)
+                {
+                    caseVide = true;
+                }
+                ligne = i;
+                col = (nbreLignes - 1) - i;
+            }
+
+            return caseVide;
+        }
+
+
+
+        /// <summary>
+        /// TrouverCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles
+        static void TrouverCaseIA()
+        {
+            bool trouveCaseAvantageuseIA = false; /*booléen déterminant si une case est avantageuse pour l'IA (true) ou non (false) cad que la simulation de placement de la pièce (donnée par l'humain) 
+                                                    ne génère par un alignement de 3 pièces. en effet, le prochain joueur est l'humain !*/
+            // l'IA commence par vérifier les 4 coins 
+            int[] tabLigne = { 0, 3 };
+            int[] tabCol = { 0, 3 };
+            trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabCol, 2);
+            Console.WriteLine("ds trouvercaseIA coin, trouveCaseavntageuse = {0}", trouveCaseAvantageuseIA);
+
+            // Puis elle vérifie les cases restantes des lignes 0 et 3
+            if (!trouveCaseAvantageuseIA)
+            {
+                tabCol[0] = 1; tabCol[1] = 2;
+                trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabCol, 2);
+            }
+
+            //Puis les cases des lignes 1 et 2 
+            if (!trouveCaseAvantageuseIA)
+            {
+                tabLigne = tabCol;
+                int[] tabColInterieur = { 0, 1, 2, 3, };
+                trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabColInterieur, 2);
+            }
+
+            if (trouveCaseAvantageuseIA)
+            {
+                Grille[ligne, col] = choixPiece;
+                // UtiliserPiece();
+            }
+            else
+            {
+                // choisit aléatoirement la ligne et la colonne pour placer le pion ouisque dans tous les cas il a perdu
+                Random R = new Random();
+
+                do
+                {
+                    ligne = R.Next(0, nbreLignes);
+                    col = R.Next(0, nbreLignes);
+                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
+
+                Grille[ligne, col] = choixPiece;
+                AfficherGrille();
+
+            }
+        }
+
+        static bool VerifierBonneStrategiePrIA(int[] tab1, int[] tab2, int nbPiecesAlignees) // true : l'IA a trouvé une case telle que ça ne génère pas un alignement de 3 ou 4 pièces (selon nbrePiecesALignees) après simulation
+        {
+            bool mauvaiseStrategieIA = false; //permet d'appeler MettreAJourStrategie en mode simulation
+            int i = 0; int j = 0;
+            bool trouveCaseAvantageuse = false;
+
+            Console.WriteLine("entrée ds fction verifbonnestrategie");
+            while (i < tab1.Length && !trouveCaseAvantageuse)
+            {
+                //Console.WriteLine("i={0}, j={1}", i, j);
+
+                while (j < tab2.Length && !trouveCaseAvantageuse) // tant que l'ordi n'a pas trouvé une case à son avantage
+                {
+                    ligne = tab1[i];
+                    col = tab2[j];
+                    // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
+
+                    if (Grille[ligne, col] != caseVide)
+                        j++;
+                    else
+                    {
+                        //  attention : était mis en commentaire
+                        mauvaiseStrategieIA = MettreAJourStrategies(true, nbPiecesAlignees); // si après simulation, 3 pièces alignées, c'est une mauvaise stratégie pour l'IA --> mauvaise stratégie = true
+                                                                                             //  Console.ReadLine();
+
+                        if (mauvaiseStrategieIA) // si mauvaisestrategie = true, l'IA cherche une nouvelle case qui ne sera pas avantageuse pour son adversaire
+                            j++;
+                        else
+                        {
+                            trouveCaseAvantageuse = true;
+
+                        }
+                    }
+
+                }
+                if (j == tab2.Length)
+                {
+                    j = 0;
+                    i++;
+                }
+            }
+            return trouveCaseAvantageuse;
+        }
+
+        static void ChoisirPieceIA()
+        {
+            bool trouvePieceAvantageuseIA = false;
+            bool trouveCaseAvantageuseIA = false;
+            int k = 0; int i = 0; int j = 0;
+
+            // création de tableaux  pour pouvoir réutiliser la fonction VerifierBonneStrategie qui nécessite des tableaux d'indice en entrée
+            int[] tabIndiceLigneGrille;
+            int[] tabIndiceColGrille;
+
+            string[] piecesPossiblesIA = new string[16]; // création d'un tableaux qui recensera toutes les pièces que l'IA peut jouer sans risquer de faire gagner l'adversaire. Elle choisira alors aléatoirement entre ces pièces
+
+            for (k = 0; k < TabPieces.GetLength(1); k++) // choix d'une pièce parmi les pièces dispos
+            {
+
+                if (TabPieces[1, k] == "1")// si case déjà remplie
+                {
+                    Console.WriteLine("if case déja remplie. k = {0}", k);
+                }
+                else // si case vide
+                {
+                    Console.WriteLine("else k = {0}, pièce={1}", k, (TabPieces[0, k]));
+                    i = 0;
+                    trouveCaseAvantageuseIA = false;
+                    /* une fois une pièce non utilisée trouvée, l'IA parcourt tout le tableau pour s'assurer que cette pièce ne puisse pas être placée dans une case avantageuse (en effet, le prochain joueur est l'humain !)
+                          Rappel : une pièce est avantageuse pour l'IA si, pour n'importe quelle case vide de la grille, elle ne génère pas une case avantageuse*/
+
+                    do
+                    {
+                        do
+                        {
+                            Console.WriteLine("début while vérif pièce avantageuse i= {0}, j={1}", i, j);
+                            // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille
+                            tabIndiceLigneGrille = new int[] { i };
+                            tabIndiceColGrille = new int[] { j };
+                            trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabIndiceLigneGrille, tabIndiceColGrille, 3); // l'IA vérifie pour la case considérée qu'elle n'est pas avantageuse (en effet, le prochain joueur est l'humain)
+
+                            Console.WriteLine("trouvePieceavantageuse ={0}", trouvePieceAvantageuseIA);
+
+                            if (trouveCaseAvantageuseIA) // l'IA trouve une case désavantageuse pour elle-même soit une case qui engendre l'alignement de 3 pièces pour l'adversaire
+                                j++; //  Elle cherche donc une autre case
+                        } while (j < nbreLignes && trouveCaseAvantageuseIA);
+
+                        if (trouveCaseAvantageuseIA && j == nbreLignes) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case avantageuse pour l'IA
+                        {
+                            i++; // Elle change donc de ligne
+                            j = 0; // Et remet l'indice des colonnes à 0 pour toutes les parcourir de nouveau
+                        }
+                    } while (i < nbreLignes && trouveCaseAvantageuseIA);
+
+                    Console.WriteLine("fin des 2 whiles i={0}, j= {1}", i, j);
+                    Console.WriteLine("trouveCaseeavantageuse ={0}", trouveCaseAvantageuseIA);
+
+                    if (/*i == nbreLignes && j == nbreLignes &&*/ trouveCaseAvantageuseIA)
+                    {
+                        Console.WriteLine("rentre dans le if");
+                        trouvePieceAvantageuseIA = true;
+                        piecesPossiblesIA[k] = TabPieces[0, k]; // remplissage du tableau recensant toutes les pièces que peut jouer l'IA sans faire gagner l'adversaire
+                    }
+                }
+            }
+
+            for (int m = 0; m < piecesPossiblesIA.Length; m++)
+            {
+                Console.WriteLine("piecepossible = {0}", piecesPossiblesIA[m]);
+            }
+
+            if (!trouvePieceAvantageuseIA) // si le tableau recensant les pièces que l'IA peut jouer est nul
+            {
+                Console.WriteLine("tableau de possibilités nul, choix aléatoire");
+                // l'IA choisit au hasard dans les pièces encore disponibles celle qu'elle donnera puisque de toute façon, si le tableau est nul, c'est qu'elle ne peut éviter que le joueur adverse gagne
+                int randomPiece;
+                Random R = new Random();
+                do
+                {
+                    randomPiece = R.Next(0, 16);
+                    choixPiece = TabPieces[0, randomPiece];
+                }
+                while (TabPieces[1, randomPiece] == "1"); //l'IA choisit de nouveau la pièce s'il en a choisi une déjà jouée
+            }
+
+            else  // si le tableau recensant les pièces que l'IA peut jouer n'est pas nul
+            {
+                // L'IA choit au hasard entre les pièces du tableau celle qu'elle va donner  l'adversaire (afin que son choix ne soit pas prévisible)
+                int randomPiece;
+                Random R = new Random();
+
+                do
+                {
+                    Console.WriteLine("pdt while random ds tableau possibilitées");
+                    randomPiece = R.Next(0, 16); // [0,16] ou [0, 17] ?? car [0,17] provoque un outOfRange
+
+                }
+                while (piecesPossiblesIA[randomPiece] == null);
+
+                choixPiece = piecesPossiblesIA[randomPiece];
+            }
+
         }
 
         /// <summary>
@@ -762,486 +1252,6 @@ namespace quarto_mjma
             return mauvaiseStrategiePrIA;
         }
 
-        /// <summary>
-        /// ChoisirCaseIA : L'IA choisit intelligemment la case dans laquelle elle va jouer la pièce donnée. Si 3 pièces alignées, met la pièce donnée dans la case qu'il reste sinon, joue dans les coins
-        static void ChoisirCaseIA()
-        {
-            GagnerIA();
-            if (!AGagne)
-            {
-                TrouverCaseIA();
-                UtiliserPiece();
-
-                /*if (trace)
-                Console.WriteLine("aléatoire");
-
-                Random R = new Random();
-                // choisit aléatoirement la ligne et la colonne pour placer le pion
-                do
-                {
-                    ligne = R.Next(0, nbreLignes);
-                    col = R.Next(0, nbreLignes);
-                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
-
-                Grille[ligne, col] = ChoixPiece;*/
-            }
-        }
-
-        /// <summary>
-        /// GagnerIA () : l'IA cherche si elle peut directement gagner avec la pièce qu'elle a. S'il l y a déjà 3 pièces d' "alignées", elle regarde si sa pièce est compatible
-        /// </summary>
-        static void GagnerIA()
-        {
-            if (trace)
-                Console.WriteLine("entre ds gagnerIA");
-
-            // l'IA recherche s'il y a déjà  sur une mm ligne, 3 pièces "alignées" et ayant 1 même caractéristique 
-            int n = 0;
-
-            while (n < nbreCaractéristiques && !AGagne)
-            {
-                int i = 0;
-                if (choixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées pour 1 caractéristique
-                {
-
-                    while (i < tablignes0.GetLength (0) && tablignes0[i, n] != 3)
-                    {
-                        if (trace)
-                            Console.WriteLine("lablignes0" + i);
-                        i++;
-                    }
-                }
-                else
-                {
-                    while (i < tablignes1.GetLength(0) && tablignes1[i, n] != 3)
-                    {
-                        if (trace)
-                            Console.WriteLine("lablignes1" + i);
-                        i++;
-                    }
-                }
-                if (trace)
-                    Console.WriteLine("i ={0}, n={1}", i, n);
-                if (i != tablignes0.GetLength(0) && TrouverCaseIALigne(i))
-                {
-                    Grille[i, col] = choixPiece;
-                    AGagne = true;
-                }
-                else
-                {
-                    n++;
-                }
-            }
-
-            n = 0;
-            // l'IA recherche où il y a déjà sur une même colonne, 3 pièces "alignées" et ayant 1 même caractéristique 
-            while (n < nbreCaractéristiques && !AGagne)
-            {
-                int j = 0;
-                if (trace)
-                    Console.WriteLine("piècesalignéescolonnes");
-                if (choixPiece[n] == '0')
-                {
-                    while (j < tabcol0.GetLength(0) && tabcol0[j, n] != 3)
-                    {
-                        if (trace)
-                            Console.WriteLine("tabcol0" + j);
-                        j++;
-                    }
-                }
-                else
-                {
-                    while (j < tabcol1.GetLength(0) && tabcol1[j, n] != 3)
-                    {
-                        if (trace)
-                            Console.WriteLine("tabcol1" + j);
-                        j++;
-                    }
-                }
-
-                if (j != tabcol0.GetLength(0) && TrouverCaseIACol(j))
-                {
-                    Grille[ligne, j] = choixPiece;
-                    AGagne = true;
-                }
-                else
-                {
-                    n++;
-                }
-
-                n = 0;
-
-                while (n < nbreCaractéristiques && !AGagne)
-                {
-                    int k = 0;
-                    if (choixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de gauche vers droite, du haut vers bas pour 1 caractéristique
-                    {
-
-                        while (k < diago0.GetLength(0) && diago0[0, n] != 3)
-                        {
-                            k++;
-                            Console.WriteLine("ds while diago0DGHB, j={0}", k);
-                        }
-                    }
-                    else
-                    {
-                        while (k < diago1.GetLength(0) && diago1[0, n] != 3)
-                        {
-                            k++;
-                            Console.WriteLine("ds while diago1DGHB j={0}", k);
-                        }
-                    }
-                    if (trace)
-                        Console.WriteLine("avant if trouverCaseIAdiagoGDHB, j={0}, choixpiece={1}", k, choixPiece);
-
-                    if (k != diago0.GetLength(0) && TrouverCaseIAdiago(k))
-                    {
-                        if (trace)
-                            Console.WriteLine("ds if trouverCaseIAdiagoGDHB, j={0}, choixpiece={1}", k, choixPiece);
-                        Grille[ligne, col] = choixPiece;
-                        AGagne = true;
-                    }
-                    else
-                    {
-                        n++;
-                    }
-                }
-
-                // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de droite vers la gauche, du haut vers bas pour 1 caractéristique
-                n = 0;
-                while (n < nbreCaractéristiques && !AGagne)
-                {
-                    int k = 0;
-                    if (choixPiece[n] == '0') // Cas si la caracctéristique considérée =0
-                    {
-
-                        while (k < diago0.GetLength(0) && diago0[k, n] != 3) // vérifie s'il y a 3 pièces alignées avec une caractéristique égale à 0 ne sur la diagonale 
-                        {
-                            k++;
-                            if (trace)
-                                Console.WriteLine("ds while diago0DGHB, j={0}", k);
-
-                        }
-                    }
-                    else // cas si la caractéristique considérée = 1
-                    {
-                        while (k < diago1.GetLength(0) && diago1[k, n] != 3) // vérifie s'il y a 3 pièces alignées avec une caractéristique égale à 0 ne sur la diagonale 
-                        {
-                            k++;
-                            if (trace)
-                                Console.WriteLine("ds while diago0DGHB, j={0}", k);
-
-                        }
-                    }
-                    if (trace)
-                        Console.WriteLine("avant if trouverCaseIAdiago,k={0}, choixpiece={1}, n={2}", k, choixPiece, n);
-
-                    if (k != diago0.GetLength(0) && TrouverCaseIAdiago(k)) // même nombre de lignes pour les tableaux diago0 et diago1
-                    {
-                        if (trace)
-                            Console.WriteLine("ds if trouverCaseIAdiagoDGHB, j={0}, choixpiece={1}", k, choixPiece);
-                        Grille[ligne, col] = choixPiece;
-                        AGagne = true;
-                    }
-                    else
-                    {
-                        n++;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// TrouverCaseIALigne(): permet à l'IA de recherche où est la case vide sur cette ligne où il y a déjà 3 pièces d'alignées
-        /// </summary>
-        static bool TrouverCaseIALigne(int i)
-        {
-            if (trace)
-                Console.WriteLine("TrouveCaseLigne" + i);
-
-            bool caseVide = false;
-            int j = 0;
-            while (j < nbreLignes && AvoirCaseRemplie(i, j))
-            {
-                j++;
-            }
-            if (j < nbreLignes)
-            {
-                caseVide = true;
-                col = j;
-            }
-
-            if (trace)
-                Console.WriteLine("TrouveCaseLigneFin col={0}, caseVide ={1}", col, caseVide);
-
-            return caseVide;
-
-        }
-
-        /// <summary>
-        /// /// TrouverCaseIACol(): permet à l'IA de recherche où est la case vide sur cette colonne où il y a déjà 3 pièces d'alignées
-        /// </summary>
-        /// <param name="j"></param>
-        /// <returns></returns>
-        static bool TrouverCaseIACol(int j)
-        {
-            if (trace)
-                Console.WriteLine("TrouveCasecol" + j);
-
-            bool caseVide = false;
-            int i = 0;
-            while (i < nbreLignes && AvoirCaseRemplie(i, j))
-            {
-                i++;
-            }
-            if (i < nbreLignes)
-            {
-                caseVide = true;
-            }
-            ligne = i;
-            return caseVide;
-        }
-
-        /// <summary>
-        /// TrouverCaseIAdiago : permet à l'IA de recherche où est la case vide sur la diagonale où il y a déjà 3 pièces d'alignées
-        /// </summary>
-        /// </summary>
-        /// <param name="k"></param>
-        /// <returns></returns>
-        static bool TrouverCaseIAdiago(int k) //l'indice k indique sur quelle diagonale les 3pièces alignées se trouvent
-        {
-            bool caseVide = false;
-            int i = 0;
-
-            if (trace)
-                Console.WriteLine("TrouveCasediago, k={0}", k);
-            if (k == 0) // les 3 pièces aligénes sont sur la diagonale de la gauche vers la droite et haut vers bas (diagonale 1)
-            {
-                while (i < nbreLignes && AvoirCaseRemplie(i, i))
-                {
-                    i++;
-                }
-                if (i < nbreLignes)
-                {
-                    caseVide = true;
-                }
-                ligne = i;
-                col = i;
-            }
-
-            if (k == 1)
-            {
-                Console.WriteLine("début if k=1, on a k={0}", k);
-                while (i < nbreLignes && AvoirCaseRemplie(i, (nbreLignes - 1) - i))
-                {
-                    i++;
-                    Console.WriteLine("dans if k=1, ds while, on a k={0} et i={1}", k, i);
-                }
-                if (i < nbreLignes)
-                {
-                    caseVide = true;
-                }
-                ligne = i;
-                col = (nbreLignes - 1) - i;
-            }
-
-            return caseVide;
-        }
-
-
-
-        /// <summary>
-        /// TrouverCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles
-        static void TrouverCaseIA()
-        {
-            bool trouveCaseAvantageuseIA = false; /*booléen déterminant si une case est avantageuse pour l'IA (true) ou non (false) cad que la simulation de placement de la pièce (donnée par l'humain) 
-                                                    ne génère par un alignement de 3 pièces. en effet, le prochain joueur est l'humain !*/
-            // l'IA commence par vérifier les 4 coins 
-            int[] tabLigne = { 0, 3 };
-            int[] tabCol = { 0, 3 };
-            trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabCol, 2);
-            Console.WriteLine("ds trouvercaseIA coin, trouveCaseavntageuse = {0}", trouveCaseAvantageuseIA);
-
-            // Puis elle vérifie les cases restantes des lignes 0 et 3
-            if (!trouveCaseAvantageuseIA)
-            {
-                tabCol[0] = 1; tabCol[1] = 2;
-                trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabCol, 2);
-            }
-
-            //Puis les cases des lignes 1 et 2 
-            if (!trouveCaseAvantageuseIA)
-            {
-                tabLigne = tabCol;
-                int[] tabColInterieur = { 0, 1, 2, 3, };
-                trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabColInterieur, 2);
-            }
-
-            if (trouveCaseAvantageuseIA)
-            {
-                Grille[ligne, col] = choixPiece;
-                // UtiliserPiece();
-            }
-            else
-            {
-                // choisit aléatoirement la ligne et la colonne pour placer le pion ouisque dans tous les cas il a perdu
-                Random R = new Random();
-
-                do
-                {
-                    ligne = R.Next(0, nbreLignes);
-                    col = R.Next(0, nbreLignes);
-                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
-
-                Grille[ligne, col] = choixPiece;
-                AfficherGrille();
-
-            }
-        }
-
-        static bool VerifierBonneStrategiePrIA(int[] tab1, int[] tab2, int nbPiecesAlignees) // true : l'IA a trouvé une case telle que ça ne génère pas un alignement de 3 ou 4 pièces (selon nbrePiecesALignees) après simulation
-        {
-            bool mauvaiseStrategieIA = false; //permet d'appeler MettreAJourStrategie en mode simulation
-            int i = 0; int j = 0;
-            bool trouveCaseAvantageuse = false;
-
-            Console.WriteLine("entrée ds fction verifbonnestrategie");
-            while (i < tab1.Length && !trouveCaseAvantageuse)
-            {
-                //Console.WriteLine("i={0}, j={1}", i, j);
-
-                while (j < tab2.Length && !trouveCaseAvantageuse) // tant que l'ordi n'a pas trouvé une case à son avantage
-                {
-                    ligne = tab1[i];
-                    col = tab2[j];
-                    // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
-
-                    if (Grille[ligne, col] != caseVide)
-                        j++;
-                    else
-                    {
-                        //  attention : était mis en commentaire
-                      mauvaiseStrategieIA = MettreAJourStrategies(true, nbPiecesAlignees); // si après simulation, 3 pièces alignées, c'est une mauvaise stratégie pour l'IA --> mauvaise stratégie = true
-                      //  Console.ReadLine();
-
-                        if (mauvaiseStrategieIA) // si mauvaisestrategie = true, l'IA cherche une nouvelle case qui ne sera pas avantageuse pour son adversaire
-                            j++;
-                        else
-                        {
-                            trouveCaseAvantageuse = true;
-
-                        }
-                    }
-
-                }
-                if (j == tab2.Length)
-                {
-                    j = 0;
-                    i++;
-                }
-            }
-            return trouveCaseAvantageuse;
-        }
-
-        static void ChoisirPieceIA()
-        {
-            bool trouvePieceAvantageuseIA = false;
-            bool trouveCaseAvantageuseIA = false;
-            int k = 0; int i = 0; int j = 0;
-
-            // création de tableaux  pour pouvoir réutiliser la fonction VerifierBonneStrategie qui nécessite des tableaux d'indice en entrée
-            int[] tabIndiceLigneGrille;
-            int[] tabIndiceColGrille;
-
-            string[] piecesPossiblesIA = new string [16]; // création d'un tableaux qui recensera toutes les pièces que l'IA peut jouer sans risquer de faire gagner l'adversaire. Elle choisira alors aléatoirement entre ces pièces
-
-            for ( k =0; k < TabPieces.GetLength(1); k++) // choix d'une pièce parmi les pièces dispos
-            {
-
-                if (TabPieces[1, k] == "1")// si case déjà remplie
-                {
-                    Console.WriteLine("if case déja remplie. k = {0}", k);
-                }
-                else // si case vide
-                {
-                    Console.WriteLine("else k = {0}, pièce={1}", k, (TabPieces[0, k]) );
-                    i = 0;
-                    trouveCaseAvantageuseIA = false;
-                    /* une fois une pièce non utilisée trouvée, l'IA parcourt tout le tableau pour s'assurer que cette pièce ne puisse pas être placée dans une case avantageuse (en effet, le prochain joueur est l'humain !)
-                          Rappel : une pièce est avantageuse pour l'IA si, pour n'importe quelle case vide de la grille, elle ne génère pas une case avantageuse*/
-
-                    do
-                    {
-                        do
-                        {
-                            Console.WriteLine("début while vérif pièce avantageuse i= {0}, j={1}", i, j);
-                            // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille
-                            tabIndiceLigneGrille = new int[] { i };
-                            tabIndiceColGrille = new int[] { j };
-                            trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabIndiceLigneGrille, tabIndiceColGrille, 3); // l'IA vérifie pour la case considérée qu'elle n'est pas avantageuse (en effet, le prochain joueur est l'humain)
-
-                            Console.WriteLine("trouvePieceavantageuse ={0}", trouvePieceAvantageuseIA);
-
-                            if (trouveCaseAvantageuseIA) // l'IA trouve une case désavantageuse pour elle-même soit une case qui engendre l'alignement de 3 pièces pour l'adversaire
-                                j++; //  Elle cherche donc une autre case
-                        } while (j < nbreLignes && trouveCaseAvantageuseIA);
-
-                        if (trouveCaseAvantageuseIA && j == nbreLignes) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case avantageuse pour l'IA
-                        {
-                            i++; // Elle change donc de ligne
-                            j = 0; // Et remet l'indice des colonnes à 0 pour toutes les parcourir de nouveau
-                        }
-                    } while (i < nbreLignes && trouveCaseAvantageuseIA);
-
-                    Console.WriteLine("fin des 2 whiles i={0}, j= {1}", i, j);
-                    Console.WriteLine("trouveCaseeavantageuse ={0}", trouveCaseAvantageuseIA);
-
-                    if (/*i == nbreLignes && j == nbreLignes &&*/ trouveCaseAvantageuseIA)
-                    {
-                        Console.WriteLine("rentre dans le if");
-                        trouvePieceAvantageuseIA = true;
-                        piecesPossiblesIA [k] = TabPieces[0, k]; // remplissage du tableau recensant toutes les pièces que peut jouer l'IA sans faire gagner l'adversaire
-                    }
-                }
-            }
-           
-            for (int m = 0; m < piecesPossiblesIA.Length; m++) 
-            {
-                Console.WriteLine("piecepossible = {0}", piecesPossiblesIA[m]);
-            }
-
-            if (!trouvePieceAvantageuseIA) // si le tableau recensant les pièces que l'IA peut jouer est nul
-            {
-                Console.WriteLine("tableau de possibilités nul, choix aléatoire");
-                // l'IA choisit au hasard dans les pièces encore disponibles celle qu'elle donnera puisque de toute façon, si le tableau est nul, c'est qu'elle ne peut éviter que le joueur adverse gagne
-                int randomPiece;
-                Random R = new Random();
-                do
-                {
-                    randomPiece = R.Next(0, 16);
-                    choixPiece = TabPieces[0, randomPiece];
-                }
-                while (TabPieces[1, randomPiece] == "1"); //l'IA choisit de nouveau la pièce s'il en a choisi une déjà jouée
-            }
-
-            else  // si le tableau recensant les pièces que l'IA peut jouer n'est pas nul
-            {
-                 // L'IA choit au hasard entre les pièces du tableau celle qu'elle va donner  l'adversaire (afin que son choix ne soit pas prévisible)
-               int randomPiece;
-              Random R = new Random();
-
-              do
-              {
-                      Console.WriteLine("pdt while random ds tableau possibilitées");
-                      randomPiece = R.Next(0, 16); // [0,16] ou [0, 17] ?? car [0,17] provoque un outOfRange
-
-              }
-              while (piecesPossiblesIA [randomPiece] == null);
-
-                  choixPiece = piecesPossiblesIA[randomPiece];
-            }
-
-        }
     }
 }
 
