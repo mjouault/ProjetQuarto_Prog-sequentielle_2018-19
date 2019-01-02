@@ -697,37 +697,37 @@ namespace quarto_mjma
         /// TrouverCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles
         static void TrouverCaseIA()
         {
-            bool trouveCaseAvantageuseIA = false; /*booléen déterminant si une case est avantageuse pour l'IA (true) ou non (false) cad que la simulation de placement de la pièce (donnée par l'humain) 
-                                                    ne génère par un alignement de 3 pièces. en effet, le prochain joueur est l'humain !*/
+            bool alignement3pieces = false; //booléen déterminant si  la simulation de placement de la pièce (donnée par l'humain) génère un alignement de 3 pièces avc une cractéristique commune (true) ou non. 
+
             // l'IA commence par vérifier les 4 coins 
             int[] tabLigne = { 0, 3 };
             int[] tabCol = { 0, 3 };
-            trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabCol, 2);
-            Console.WriteLine("ds trouvercaseIA coin, trouveCaseavntageuse = {0}", trouveCaseAvantageuseIA);
+            alignement3pieces = VerifierAlignementPieces(tabLigne, tabCol, 2);
+            Console.WriteLine("ds trouvercaseIA coin, alignementpieces = {0}", alignement3pieces);
 
             // Puis elle vérifie les cases restantes des lignes 0 et 3
-            if (!trouveCaseAvantageuseIA)
+            if (alignement3pieces) // l'objectif de l'IA est dene pas générer un alignement de 3 pièces. En effet, le prochain joueur est l'humain !*/
             {
                 tabCol[0] = 1; tabCol[1] = 2;
-                trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabCol, 2);
+                alignement3pieces = VerifierAlignementPieces(tabLigne, tabCol, 2);
             }
 
             //Puis les cases des lignes 1 et 2 
-            if (!trouveCaseAvantageuseIA)
+            if (alignement3pieces)
             {
                 tabLigne = tabCol;
                 int[] tabColInterieur = { 0, 1, 2, 3, };
-                trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabLigne, tabColInterieur, 2);
+                alignement3pieces = VerifierAlignementPieces(tabLigne, tabColInterieur, 2);
             }
 
-            if (trouveCaseAvantageuseIA)
+            if (!alignement3pieces) // a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces en effet le prochain joueur est l'humain!
             {
                 Grille[ligne, col] = choixPiece;
                 // UtiliserPiece();
             }
-            else
+            else // toutes les cases disponiblent génèrent un alignement de 3 pièces ayant une caractéristique commune
             {
-                // choisit aléatoirement la ligne et la colonne pour placer le pion ouisque dans tous les cas il a perdu
+                // choisit aléatoirement la ligne et la colonne pour placer le pion puisque dans tous les cas il a perdu
                 Random R = new Random();
 
                 do
@@ -742,18 +742,19 @@ namespace quarto_mjma
             }
         }
 
-        static bool VerifierBonneStrategiePrIA(int[] tab1, int[] tab2, int nbPiecesAlignees) // true : l'IA a trouvé une case telle que ça ne génère pas un alignement de 3 ou 4 pièces (selon nbrePiecesALignees) après simulation
+        static bool VerifierAlignementPieces(int[] tab1, int[] tab2, int nbPiecesAlignees) // true : l'IA a trouvé une case générant un alignement de 3 ou 4 pièces (selon nbrePiecesALignees) après simulation de placement d'une pièce 
+                                            // les tableaux en paramètres sont des tableaux d'indices (de lignes, colonnes particulières) --> Permet de parcourir tout ou partie de la grille de jeu
         {
-            bool mauvaiseStrategieIA = false; //permet d'appeler MettreAJourStrategie en mode simulation
+            bool alignementPieces = false; //permet d'appeler MettreAJourStrategie en mode simulation
             int i = 0; int j = 0;
-            bool trouveCaseAvantageuse = false;
+          //  bool trouveCaseAvantageuse = false; // une case est avantageuse pour l'IA si elle ne génère pas un alignement de 3
 
-            Console.WriteLine("entrée ds fction verifbonnestrategie");
-            while (i < tab1.Length && !trouveCaseAvantageuse)
+            Console.WriteLine("entrée ds fction VerifierAlignementPieces");
+            while (i < tab1.Length && !alignementPieces)
             {
                 //Console.WriteLine("i={0}, j={1}", i, j);
 
-                while (j < tab2.Length && !trouveCaseAvantageuse) // tant que l'ordi n'a pas trouvé une case à son avantage
+                while (j < tab2.Length && !alignementPieces) // tant que l'ordi trouve une case qui génère un alignement de pièces
                 {
                     ligne = tab1[i];
                     col = tab2[j];
@@ -764,16 +765,8 @@ namespace quarto_mjma
                     else
                     {
                         //  attention : était mis en commentaire
-                        mauvaiseStrategieIA = MettreAJourStrategies(true, nbPiecesAlignees); // si après simulation, 3 pièces alignées, c'est une mauvaise stratégie pour l'IA --> mauvaise stratégie = true
-                                                                                             //  Console.ReadLine();
-
-                        if (mauvaiseStrategieIA) // si mauvaisestrategie = true, l'IA cherche une nouvelle case qui ne sera pas avantageuse pour son adversaire
-                            j++;
-                        else
-                        {
-                            trouveCaseAvantageuse = true;
-
-                        }
+                        alignementPieces = MettreAJourStrategies(true, nbPiecesAlignees); // il y a un alignement de pièces si la fonction MettreAJourStrategie retourne true.
+                                                                                         // L'argument true dans MettrAJourStrategies signifie que l'on va simuler le placement d'une pièce dans la case Grille[ligne, col] considérée
                     }
 
                 }
@@ -782,17 +775,24 @@ namespace quarto_mjma
                     j = 0;
                     i++;
                 }
+                //  Console.ReadLine();
+
+                if (alignementPieces) // si alignement = true, l'IA cherche une nouvelle case qui ne sera pas avantageuse pour son adversaire
+                    alignementPieces = true;
             }
-            return trouveCaseAvantageuse;
+
+
+        
+            return alignementPieces;
         }
 
         static void ChoisirPieceIA()
         {
-            bool trouvePieceAvantageuseIA = false;
-            bool trouveCaseAvantageuseIA = false;
+            bool empecheVictoireHumain = false;
+            bool alignement4Pieces = false;
             int k = 0; int i = 0; int j = 0;
 
-            // création de tableaux  pour pouvoir réutiliser la fonction VerifierBonneStrategie qui nécessite des tableaux d'indice en entrée
+            // création de tableaux  pour pouvoir réutiliser la fonction VerifierAlignementPieces qui nécessite des tableaux d'indice en entrée
             int[] tabIndiceLigneGrille;
             int[] tabIndiceColGrille;
 
@@ -809,9 +809,9 @@ namespace quarto_mjma
                 {
                     Console.WriteLine("else k = {0}, pièce={1}", k, (TabPieces[0, k]));
                     i = 0;
-                    trouveCaseAvantageuseIA = false;
-                    /* une fois une pièce non utilisée trouvée, l'IA parcourt tout le tableau pour s'assurer que cette pièce ne puisse pas être placée dans une case avantageuse (en effet, le prochain joueur est l'humain !)
-                          Rappel : une pièce est avantageuse pour l'IA si, pour n'importe quelle case vide de la grille, elle ne génère pas une case avantageuse*/
+                    alignement4Pieces = false;
+                    /* une fois une pièce non utilisée trouvée, l'IA parcourt tout le tableau pour s'assurer que cette pièce empêche l'humain de gagner.
+                          Une pièce empêche l'humain de gagner si, pour n'importe quelle case vide de la grille, elle ne génère pas un alignement de 4 pièces avec 1 caractéristique commune*/
 
                     do
                     {
@@ -821,30 +821,33 @@ namespace quarto_mjma
                             // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille
                             tabIndiceLigneGrille = new int[] { i };
                             tabIndiceColGrille = new int[] { j };
-                            trouveCaseAvantageuseIA = VerifierBonneStrategiePrIA(tabIndiceLigneGrille, tabIndiceColGrille, 3); // l'IA vérifie pour la case considérée qu'elle n'est pas avantageuse (en effet, le prochain joueur est l'humain)
+                            alignement4Pieces = VerifierAlignementPieces(tabIndiceLigneGrille, tabIndiceColGrille, 3); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
 
-                            Console.WriteLine("trouvePieceavantageuse ={0}", trouvePieceAvantageuseIA);
+                            Console.WriteLine("empecheVictoireHumain ={0}", empecheVictoireHumain);
 
-                            if (trouveCaseAvantageuseIA) // l'IA trouve une case désavantageuse pour elle-même soit une case qui engendre l'alignement de 3 pièces pour l'adversaire
-                                j++; //  Elle cherche donc une autre case
-                        } while (j < nbreLignes && trouveCaseAvantageuseIA);
+                        } while (j < nbreLignes && !alignement4Pieces);
 
-                        if (trouveCaseAvantageuseIA && j == nbreLignes) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case avantageuse pour l'IA
+                        if (!alignement4Pieces /*&& j == nbreLignes*/) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case générant un alignement de 4 pièces avec 1 caractéristique commune
                         {
                             i++; // Elle change donc de ligne
                             j = 0; // Et remet l'indice des colonnes à 0 pour toutes les parcourir de nouveau
                         }
-                    } while (i < nbreLignes && trouveCaseAvantageuseIA);
+                    } while (i < nbreLignes && !alignement4Pieces);
 
-                    Console.WriteLine("fin des 2 whiles i={0}, j= {1}", i, j);
-                    Console.WriteLine("trouveCaseeavantageuse ={0}", trouveCaseAvantageuseIA);
 
-                    if (/*i == nbreLignes && j == nbreLignes &&*/ trouveCaseAvantageuseIA)
+                    if (alignement4Pieces) // l'IA trouve une case désavantageuse pour elle-même soit une case qui engendre l'alignement de 4 pièces pour l'adversaire
+                        k++; //  Elle cherche donc une autre pièce
+                    else // L'IA a parcouru toutes les cases du tableau sans que le placement de la pièce considérée puisse génére un alignement de 4 pièces
                     {
                         Console.WriteLine("rentre dans le if");
-                        trouvePieceAvantageuseIA = true;
+                        empecheVictoireHumain = true; // cette pièce empêche donc l'humain de gagner avec cette pièce si on la lui donne
                         piecesPossiblesIA[k] = TabPieces[0, k]; // remplissage du tableau recensant toutes les pièces que peut jouer l'IA sans faire gagner l'adversaire
                     }
+
+                    Console.WriteLine("fin des 2 whiles i={0}, j= {1}", i, j);
+                    Console.WriteLine("alignemt4pieces ={0}", alignement4Pieces);
+
+                   
                 }
             }
 
@@ -853,7 +856,7 @@ namespace quarto_mjma
                 Console.WriteLine("piecepossible = {0}", piecesPossiblesIA[m]);
             }
 
-            if (!trouvePieceAvantageuseIA) // si le tableau recensant les pièces que l'IA peut jouer est nul
+            if (!empecheVictoireHumain) // si le tableau recensant les pièces que l'IA peut jouer est nul
             {
                 Console.WriteLine("tableau de possibilités nul, choix aléatoire");
                 // l'IA choisit au hasard dans les pièces encore disponibles celle qu'elle donnera puisque de toute façon, si le tableau est nul, c'est qu'elle ne peut éviter que le joueur adverse gagne
