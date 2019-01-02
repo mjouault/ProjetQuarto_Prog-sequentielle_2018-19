@@ -27,7 +27,7 @@ namespace quarto_mjma
         static bool trace = false;  //  true si l'on veut afficher des messages pour débugueur notre code, false sinon
         static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
         static bool grilleRemplie = false;
-       static bool modeIntell = false;
+        static bool modeIntell = false;
 
         // Main
         static void Main(string[] args)
@@ -114,18 +114,18 @@ namespace quarto_mjma
 
         //Sous-programmes
 
-            static bool ChoisirMode()
+        static bool ChoisirMode()
         {
             int choix;
             Console.WriteLine("Tu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant\n[2]: Ordinateur intelligent");
-                choix = int.Parse(Console.ReadLine());
-           while (choix != 1 && choix != 2)
+            choix = int.Parse(Console.ReadLine());
+            while (choix != 1 && choix != 2)
             {
                 Console.WriteLine("Erreur de saisie, il faut répondre par 1 ou par 2:");
                 choix = int.Parse(Console.ReadLine());
             }
             if (choix == 2)
-                    modeIntell = true;
+                modeIntell = true;
             return modeIntell;
         }
 
@@ -181,9 +181,9 @@ namespace quarto_mjma
         /// <returns></returns>
         static bool choisir1erJoueur()
         {
-           // Random R = new Random();
-           // int choix1er = R.Next(0, 2);
-           int choix1er = 1; 
+            // Random R = new Random();
+            // int choix1er = R.Next(0, 2);
+            int choix1er = 1;
             bool estHumain = true;
 
             if (choix1er == 0)
@@ -253,7 +253,7 @@ namespace quarto_mjma
                 {
                     AvoirGrilleRemplie();
                     if (grilleRemplie)
-                    Console.WriteLine("Match nul");
+                        Console.WriteLine("Match nul");
                 }
 
                 AfficherTitre();
@@ -262,7 +262,7 @@ namespace quarto_mjma
             }
         }
 
-        
+
 
 
         /// <summary>
@@ -699,32 +699,156 @@ namespace quarto_mjma
         static void TrouverCaseIA()
         {
             bool alignement3pieces = false; //booléen déterminant si  la simulation de placement de la pièce (donnée par l'humain) génère un alignement de 3 pièces avc une cractéristique commune (true) ou non. 
+            Console.WriteLine("entre ds trouverCaseIA");
+            /* // l'IA commence par vérifier les 4 coins 
+             ligne = 0;
+             col = 0;
 
-            // l'IA commence par vérifier les 4 coins 
-            int[] tabLigne = { 0, 3 };
-            int[] tabCol = { 0, 3 };
-            alignement3pieces = VerifierAlignementPieces(tabLigne, tabCol, 2);
-            Console.WriteLine("ds trouvercaseIA coin, alignementpieces = {0}", alignement3pieces);
+             if (Grille[ligne, col] ==caseVide)
+             alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
 
-            // Puis elle vérifie les cases restantes des lignes 0 et 3
-            if (alignement3pieces) // l'objectif de l'IA est dene pas générer un alignement de 3 pièces. En effet, le prochain joueur est l'humain !*/
+             if (alignement3pieces)
+             {
+                 col = 3;
+                 if (Grille[ligne, col] == caseVide)
+                 alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+             }
+             if (alignement3pieces)
+             {
+                 ligne = 3;
+                 if (Grille[ligne, col] == caseVide)
+                     alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+             }
+             if (alignement3pieces)
+             {
+                 col = 0;
+                 if (Grille[ligne, col] == caseVide)
+                     alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+             }
+
+             // alignement3pieces = VerifierAlignementPieces(tabLigne, tabCol, 2);
+             // Console.WriteLine("ds trouvercaseIA coin, alignementpieces = {0}", alignement3pieces);
+
+             // Puis elle vérifie les cases restantes des lignes 0 et 3
+             if (alignement3pieces)
+             {
+                 ligne = 0; col = 1;
+                 if (Grille[ligne, col] == caseVide)
+                     alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+             }
+             if (alignement3pieces)
+             {
+                 col = 2;
+                 if (Grille[ligne, col] == caseVide)
+                     alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+             }
+             if (alignement3pieces)
+             {
+                 ligne = 3; col = 1;
+                 if (Grille[ligne, col] == caseVide)
+                     alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+             }
+             if (alignement3pieces)
+             {
+                 col = 2;
+                 if (Grille[ligne, col] == caseVide)
+                     alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+             }
+
+
+             //Puis les cases des lignes 1 et 2 
+             if (alignement3pieces)
+             {
+                 ligne = 1; col = 0;
+             }
+             while (ligne < 2 && alignement3pieces)
+             {
+                 while (col < nbreLignes && alignement3pieces)
+                 {
+                     alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+
+                     if (Grille[ligne, col] != caseVide || alignement3pieces)
+                     {
+                         col++;
+                     }
+
+                 }
+                 if (col == nbreLignes)
+                 {
+                     col = 0;
+                     ligne++;
+                 }
+             }
+
+             /* if (alignement3pieces)
+              {
+                  tabLigne = tabCol;
+                  int[] tabColInterieur = { 0, 1, 2, 3, };
+                  alignement3pieces = VerifierAlignementPieces(tabLigne, tabColInterieur, 2);
+              }*/
+
+            int[][] casesPossiblesIA = new int [16][];
+
+            ligne = 0; col = 0;
+            int indice = 0;
+
+            bool trouveCasePossible = false;
+
+            do
             {
-                tabCol[0] = 1; tabCol[1] = 2;
-                alignement3pieces = VerifierAlignementPieces(tabLigne, tabCol, 2);
+                do
+                {
+                    if (Grille[ligne, col] != caseVide)
+                    {
+                        col++;
+                    }
+                    else
+                    {
+                        alignement3pieces = VerifierAlignementPieces(ligne, col, 2);
+
+                        if (alignement3pieces)
+                        {
+                            col++;
+                        }
+                        else
+                        {
+                            trouveCasePossible = true;
+                            casesPossiblesIA[indice] = new int[2] { ligne, col }; // a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces en effet le prochain joueur est l'humain!
+                            indice++;
+                        }
+                    }
+                } while (col < nbreLignes);
+
+                if (col == nbreLignes && alignement3pieces)
+                {
+                    col = 0;
+                    ligne++;
+                }
+            } while (ligne < nbreLignes);
+
+
+            for (int m = 0; m < casesPossiblesIA.Length; m++)
+            {
+                Console.WriteLine("casepossible = {0}", casesPossiblesIA[m]);
             }
 
-            //Puis les cases des lignes 1 et 2 
-            if (alignement3pieces)
+            if ( trouveCasePossible) 
             {
-                tabLigne = tabCol;
-                int[] tabColInterieur = { 0, 1, 2, 3, };
-                alignement3pieces = VerifierAlignementPieces(tabLigne, tabColInterieur, 2);
-            }
+                int randomCasePossible;
+                Random R = new Random();
 
-            if (!alignement3pieces) // a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces en effet le prochain joueur est l'humain!
-            {
-                Grille[ligne, col] = choixPiece;
-                // UtiliserPiece();
+                do
+                {
+                    if (trace)
+                        Console.WriteLine("pdt while random ds tableau possibilitées cases");
+                    randomCasePossible = R.Next(0, 16); // [0,16] ou [0, 17] ?? car [0,17] provoque un outOfRange
+
+                }
+                while (casesPossiblesIA[randomCasePossible] == null);
+
+                ligne = casesPossiblesIA[randomCasePossible] [0];
+                col = casesPossiblesIA[randomCasePossible][1];
+                choixPiece = Grille[ligne, col];
             }
             else // toutes les cases disponiblent génèrent un alignement de 3 pièces ayant une caractéristique commune
             {
@@ -743,52 +867,26 @@ namespace quarto_mjma
             }
         }
 
-        static bool VerifierAlignementPieces(int[] tab1, int[] tab2, int nbPiecesAlignees) // true : l'IA a trouvé une case générant un alignement de 3 ou 4 pièces (selon nbrePiecesALignees) après simulation de placement d'une pièce 
-                                            // les tableaux en paramètres sont des tableaux d'indices (de lignes, colonnes particulières) --> Permet de parcourir tout ou partie de la grille de jeu
+        static bool VerifierAlignementPieces(int ligne, int col, int nbPiecesAlignees) // true : l'IA a trouvé une case générant un alignement de 3 ou 4 pièces (selon nbrePiecesALignees) après simulation de placement d'une pièce 
+                                                                                       // les tableaux en paramètres sont des tableaux d'indices (de lignes, colonnes particulières) --> Permet de parcourir tout ou partie de la grille de jeu
         {
             bool alignementPieces = false; //permet d'appeler MettreAJourStrategie en mode simulation
-            int i = 0; int j = 0;
-          //  bool trouveCaseAvantageuse = false; // une case est avantageuse pour l'IA si elle ne génère pas un alignement de 3
+                                           //  bool trouveCaseAvantageuse = false; // une case est avantageuse pour l'IA si elle ne génère pas un alignement de 3
+
 
             if (trace)
-            Console.WriteLine("entrée ds fction VerifierAlignementPieces");
-            while (i < tab1.Length && !alignementPieces)
+                Console.WriteLine(" ds while fction VerifierAlignementPieces, ligne ={0}, col={1} ", ligne, col);
+            // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
+
+            if (Grille[ligne, col] == caseVide)
             {
-                if (trace)
-                Console.WriteLine("entrée ds while fction VerifierAlignementPieces, i={0}", i);
-                //Console.WriteLine("i={0}, j={1}", i, j);
-
-                while (j < tab2.Length && !alignementPieces) // tant que l'ordi trouve une case qui génère un alignement de pièces
-                { 
-                    ligne = tab1[i];
-                    col = tab2[j];
-
-                    if (trace)
-                    Console.WriteLine(" ds while fction VerifierAlignementPieces, j={0}, ligne ={1}, col={2} ", j, ligne, col);
-                    // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
-
-                    if (Grille[ligne, col] != caseVide)
-                        j++;
-                    else
-                    {
-                        //  attention : était mis en commentaire
-                        alignementPieces = MettreAJourStrategies(true, nbPiecesAlignees); // il y a un alignement de pièces si la fonction MettreAJourStrategie retourne true.
-                        
-                        if (trace)// L'argument true dans MettrAJourStrategies signifie que l'on va simuler le placement d'une pièce dans la case Grille[ligne, col] considérée
-                        Console.WriteLine(" alignementPieces,=", alignementPieces);
-                        j++;
-                    }
-
-                }
-                if (j == tab2.Length)
-                {
-                    j = 0;
-                    i++;
-                }
-                //  Console.ReadLine();
+                //  attention : était mis en commentaire
+                alignementPieces = MettreAJourStrategies(true, nbPiecesAlignees); // il y a un alignement de pièces si la fonction MettreAJourStrategie retourne true.
+                                                        // Le paramètre true dans MettrAJourStrategies signifie que l'on va simuler le placement d'une pièce dans la case Grille[ligne, col] considérée
             }
+            //  Console.ReadLine();
             if (trace)
-            Console.WriteLine("fin fction alignementPieces");
+                Console.WriteLine("fin fction alignementPieces, alignementPiece ={0}", alignementPieces);
             return alignementPieces;
         }
 
@@ -796,11 +894,9 @@ namespace quarto_mjma
         {
             bool empecheVictoireHumain = false;
             bool alignement4Pieces = false;
-            int k = 0; //int i = 0; int j = 0;
+            int k = 0; int i = 0; int j = 0;
 
-            // création de tableaux  pour pouvoir réutiliser la fonction VerifierAlignementPieces qui nécessite des tableaux d'indice en entrée
-            int [] tabIndiceGrille = { 0, 1, 2, 3};
-
+            
             string[] piecesPossiblesIA = new string[16]; // création d'un tableaux qui recensera toutes les pièces que l'IA peut jouer sans risquer de faire gagner l'adversaire. Elle choisira alors aléatoirement entre ces pièces
 
             for (k = 0; k < TabPieces.GetLength(1); k++) // choix d'une pièce parmi les pièces dispos
@@ -813,20 +909,21 @@ namespace quarto_mjma
                 else // si case vide
                 {
                     Console.WriteLine("else k = {0}, pièce={1}", k, (TabPieces[0, k]));
-                   // i = 0;
-                   // alignement4Pieces = false;
+                   i = 0;
+                   alignement4Pieces = false;
                     /* une fois une pièce non utilisée trouvée, l'IA parcourt tout le tableau pour s'assurer que cette pièce empêche l'humain de gagner.
                           Une pièce empêche l'humain de gagner si, pour n'importe quelle case vide de la grille, elle ne génère pas un alignement de 4 pièces avec 1 caractéristique commune*/
 
-                 /*   do
+                   do
                     {
                         do
                         {
                             Console.WriteLine("début while vérif pièce avantageuse i= {0}, j={1}", i, j);
                             // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille*/
-                            alignement4Pieces = VerifierAlignementPieces(tabIndiceGrille, tabIndiceGrille, 3); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
+                            alignement4Pieces = VerifierAlignementPieces(i, j, 3); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
 
-                      /*   Console.WriteLine("empecheVictoireHumain ={0}", empecheVictoireHumain);
+                          Console.WriteLine("empecheVictoireHumain ={0}", empecheVictoireHumain);
+                            j++;
 
                         } while (j < nbreLignes && !alignement4Pieces);
 
@@ -835,7 +932,7 @@ namespace quarto_mjma
                             i++; // Elle change donc de ligne
                             j = 0; // Et remet l'indice des colonnes à 0 pour toutes les parcourir de nouveau
                         }
-                    } while (i < nbreLignes && !alignement4Pieces);  */
+                    } while (i < nbreLignes && !alignement4Pieces);  
 
 
                     if (alignement4Pieces) // l'IA trouve une case désavantageuse pour elle-même soit une case qui engendre l'alignement de 4 pièces pour l'adversaire
