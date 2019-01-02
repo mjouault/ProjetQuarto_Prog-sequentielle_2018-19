@@ -35,6 +35,7 @@ namespace quarto_mjma
 
             AfficherEnTete();
             AfficherRegles();
+            choisirMode();
             do
             {
 
@@ -111,6 +112,22 @@ namespace quarto_mjma
         }
 
         //Sous-programmes
+
+            static bool choisirMode()
+        {
+            bool modeIntell=false;
+            int choix;
+            Console.WriteLine("Tu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant\n[2]: Ordinateur intelligent");
+                choix = int.Parse(Console.ReadLine());
+           while (choix != 1 && choix != 2)
+            {
+                Console.WriteLine("Erreur de saisie, il faut répondre par 1 ou par 2:");
+                choix = int.Parse(Console.ReadLine());
+            }
+            if (choix == 2)
+                    modeIntell = true;
+            return modeIntell;
+        }
 
         static void InitialiserGrille()
         {
@@ -272,21 +289,24 @@ namespace quarto_mjma
 
             UtiliserPiece();
 
-            //choix case par l'ordi
+            if (!choisirMode())
+            {
+                Random R = new Random();
+                // choisit aléatoirement la ligne et la colonne pour placer le pion
+                do
+                {
+                    ligne = R.Next(0, nbreLignes);
+                    col = R.Next(0, nbreLignes);
+                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-            /* Random R = new Random();
-              // choisit aléatoirement la ligne et la colonne pour placer le pion
-              do
-              {
-                  ligne = R.Next(0, nbreLignes);
-                  col = R.Next(0, nbreLignes);
-              } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
-
-              Grille[ligne, col] = ChoixPiece;
-             AfficherGrille();*/
-
-            ChoisirCaseIA();
-            MettreAJourStrategies(false, 0);
+                Grille[ligne, col] = choixPiece;
+            }
+            if (choisirMode())
+            {
+                ChoisirCaseIA();
+                MettreAJourStrategies(false, 0);
+                AfficherGrille();
+            }
 
             //AfficherGrille();
         }
