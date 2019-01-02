@@ -412,6 +412,7 @@ namespace quarto_mjma
             GagnerIA();
             if (!AGagne)
             {
+                Console.WriteLine("if !AGagne");
                 TrouverCaseIA();
                 UtiliserPiece();
 
@@ -694,7 +695,7 @@ namespace quarto_mjma
 
 
         /// <summary>
-        /// TrouverCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles
+        /// TrouverCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles tout en s'assurant de ne pas permettre à l'humaind e gagner au prochain tour
         static void TrouverCaseIA()
         {
             bool alignement3pieces = false; //booléen déterminant si  la simulation de placement de la pièce (donnée par l'humain) génère un alignement de 3 pièces avc une cractéristique commune (true) ou non. 
@@ -749,15 +750,21 @@ namespace quarto_mjma
             int i = 0; int j = 0;
           //  bool trouveCaseAvantageuse = false; // une case est avantageuse pour l'IA si elle ne génère pas un alignement de 3
 
+            if (trace)
             Console.WriteLine("entrée ds fction VerifierAlignementPieces");
             while (i < tab1.Length && !alignementPieces)
             {
+                if (trace)
+                Console.WriteLine("entrée ds while fction VerifierAlignementPieces, i={0}", i);
                 //Console.WriteLine("i={0}, j={1}", i, j);
 
                 while (j < tab2.Length && !alignementPieces) // tant que l'ordi trouve une case qui génère un alignement de pièces
-                {
+                { 
                     ligne = tab1[i];
                     col = tab2[j];
+
+                    if (trace)
+                    Console.WriteLine(" ds while fction VerifierAlignementPieces, j={0}, ligne ={1}, col={2} ", j, ligne, col);
                     // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
 
                     if (Grille[ligne, col] != caseVide)
@@ -766,7 +773,10 @@ namespace quarto_mjma
                     {
                         //  attention : était mis en commentaire
                         alignementPieces = MettreAJourStrategies(true, nbPiecesAlignees); // il y a un alignement de pièces si la fonction MettreAJourStrategie retourne true.
-                                                                                         // L'argument true dans MettrAJourStrategies signifie que l'on va simuler le placement d'une pièce dans la case Grille[ligne, col] considérée
+                        
+                        if (trace)// L'argument true dans MettrAJourStrategies signifie que l'on va simuler le placement d'une pièce dans la case Grille[ligne, col] considérée
+                        Console.WriteLine(" alignementPieces,=", alignementPieces);
+                        j++;
                     }
 
                 }
@@ -776,13 +786,9 @@ namespace quarto_mjma
                     i++;
                 }
                 //  Console.ReadLine();
-
-                if (alignementPieces) // si alignement = true, l'IA cherche une nouvelle case qui ne sera pas avantageuse pour son adversaire
-                    alignementPieces = true;
             }
-
-
-        
+            if (trace)
+            Console.WriteLine("fin fction alignementPieces");
             return alignementPieces;
         }
 
@@ -790,11 +796,10 @@ namespace quarto_mjma
         {
             bool empecheVictoireHumain = false;
             bool alignement4Pieces = false;
-            int k = 0; int i = 0; int j = 0;
+            int k = 0; //int i = 0; int j = 0;
 
             // création de tableaux  pour pouvoir réutiliser la fonction VerifierAlignementPieces qui nécessite des tableaux d'indice en entrée
-            int[] tabIndiceLigneGrille;
-            int[] tabIndiceColGrille;
+            int [] tabIndiceGrille = { 0, 1, 2, 3};
 
             string[] piecesPossiblesIA = new string[16]; // création d'un tableaux qui recensera toutes les pièces que l'IA peut jouer sans risquer de faire gagner l'adversaire. Elle choisira alors aléatoirement entre ces pièces
 
@@ -808,35 +813,34 @@ namespace quarto_mjma
                 else // si case vide
                 {
                     Console.WriteLine("else k = {0}, pièce={1}", k, (TabPieces[0, k]));
-                    i = 0;
-                    alignement4Pieces = false;
+                   // i = 0;
+                   // alignement4Pieces = false;
                     /* une fois une pièce non utilisée trouvée, l'IA parcourt tout le tableau pour s'assurer que cette pièce empêche l'humain de gagner.
                           Une pièce empêche l'humain de gagner si, pour n'importe quelle case vide de la grille, elle ne génère pas un alignement de 4 pièces avec 1 caractéristique commune*/
 
-                    do
+                 /*   do
                     {
                         do
                         {
                             Console.WriteLine("début while vérif pièce avantageuse i= {0}, j={1}", i, j);
-                            // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille
-                            tabIndiceLigneGrille = new int[] { i };
-                            tabIndiceColGrille = new int[] { j };
-                            alignement4Pieces = VerifierAlignementPieces(tabIndiceLigneGrille, tabIndiceColGrille, 3); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
+                            // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille*/
+                            alignement4Pieces = VerifierAlignementPieces(tabIndiceGrille, tabIndiceGrille, 3); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
 
-                            Console.WriteLine("empecheVictoireHumain ={0}", empecheVictoireHumain);
+                      /*   Console.WriteLine("empecheVictoireHumain ={0}", empecheVictoireHumain);
 
                         } while (j < nbreLignes && !alignement4Pieces);
 
-                        if (!alignement4Pieces /*&& j == nbreLignes*/) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case générant un alignement de 4 pièces avec 1 caractéristique commune
+                        if (!alignement4Pieces) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case générant un alignement de 4 pièces avec 1 caractéristique commune
                         {
                             i++; // Elle change donc de ligne
                             j = 0; // Et remet l'indice des colonnes à 0 pour toutes les parcourir de nouveau
                         }
-                    } while (i < nbreLignes && !alignement4Pieces);
+                    } while (i < nbreLignes && !alignement4Pieces);  */
 
 
                     if (alignement4Pieces) // l'IA trouve une case désavantageuse pour elle-même soit une case qui engendre l'alignement de 4 pièces pour l'adversaire
                         k++; //  Elle cherche donc une autre pièce
+
                     else // L'IA a parcouru toutes les cases du tableau sans que le placement de la pièce considérée puisse génére un alignement de 4 pièces
                     {
                         Console.WriteLine("rentre dans le if");
@@ -844,7 +848,7 @@ namespace quarto_mjma
                         piecesPossiblesIA[k] = TabPieces[0, k]; // remplissage du tableau recensant toutes les pièces que peut jouer l'IA sans faire gagner l'adversaire
                     }
 
-                    Console.WriteLine("fin des 2 whiles i={0}, j= {1}", i, j);
+                   // Console.WriteLine("fin des 2 whiles i={0}, j= {1}", i, j);
                     Console.WriteLine("alignemt4pieces ={0}", alignement4Pieces);
 
                    
@@ -878,6 +882,7 @@ namespace quarto_mjma
 
                 do
                 {
+                    if (trace)
                     Console.WriteLine("pdt while random ds tableau possibilitées");
                     randomPiece = R.Next(0, 16); // [0,16] ou [0, 17] ?? car [0,17] provoque un outOfRange
 
@@ -1133,7 +1138,7 @@ namespace quarto_mjma
                                                                                                                        après chaque tour des joueurs mais dans ce cas, le mode simulation n'est pas activé donc 
                                                                                                                        on ne cherche pas à vérifier un nombre de pièces alignées d'où nbPiecesAlignees = 0*/
         {
-            bool mauvaiseStrategiePrIA = false;
+            bool alignementPieces = false;
 
           
 
@@ -1147,11 +1152,11 @@ namespace quarto_mjma
                     {
                         if (tablignes0[ligne, n] == nbPiecesAlignees)
                         {
-                            mauvaiseStrategiePrIA = true;
+                            alignementPieces = true;
                         }
                         else if (tabcol0[col, n] == 2)
                         {
-                            mauvaiseStrategiePrIA = true;
+                            alignementPieces = true;
                         }
                     }
                     else
@@ -1172,11 +1177,11 @@ namespace quarto_mjma
                     {
                         if (tablignes1[ligne, n] == nbPiecesAlignees)
                         {
-                            mauvaiseStrategiePrIA = true;
+                            alignementPieces = true;
                         }
                         else if (tabcol1[col, n] == 2)
                         {
-                            mauvaiseStrategiePrIA = true;
+                            alignementPieces = true;
                         }
                     }
                     else
@@ -1192,10 +1197,10 @@ namespace quarto_mjma
 
                     }
                 }
-                if (mauvaiseStrategiePrIA)
-                {
-                    return mauvaiseStrategiePrIA;
-                }
+                //if (alignementPieces)
+                //{
+                    return alignementPieces;
+                //}
             }
 
             if (trace)
@@ -1252,7 +1257,7 @@ namespace quarto_mjma
 
             }
 
-            return mauvaiseStrategiePrIA;
+            return alignementPieces;
         }
 
     }
