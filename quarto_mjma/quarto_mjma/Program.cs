@@ -513,6 +513,7 @@ namespace quarto_mjma
                     n++;
                 }
 
+
                 n = 0;
 
                 while (n < nbreCaractéristiques && !AGagne)
@@ -553,7 +554,7 @@ namespace quarto_mjma
                     }
                 }
 
-                // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de droite vers la gauche, du haut vers bas pour 1 caractéristique
+               /* // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de droite vers la gauche, du haut vers bas pour 1 caractéristique
                 n = 0;
                 while (n < nbreCaractéristiques && !AGagne)
                 {
@@ -593,7 +594,7 @@ namespace quarto_mjma
                     {
                         n++;
                     }
-                }
+                }*/
             }
         }
 
@@ -854,7 +855,7 @@ namespace quarto_mjma
                  Grille[ligne, col] = choixPiece;
                 Console.WriteLine("choisit au pif");
             }
-            else // toutes les cases disponiblent génèrent un alignement de 3 pièces ayant une caractéristique commune
+            else // toutes les cases disponibles génèrent un alignement de 3 pièces ayant une caractéristique commune
             {
                 // choisit aléatoirement la ligne et la colonne pour placer le pion puisque dans tous les cas il a perdu
                 Random R = new Random();
