@@ -14,9 +14,9 @@ namespace quarto_mjma
         static string[,] TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" },
                                                      { "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" } };
 
-        static int cursor = 10;
-        static int longueurCase = 6; // nbre de lignes dans chaque case
-        static int largeurCase = 11; //nbre de colonnes (carcatères) dans chaque case
+        static int cursor = 9;
+        static int longueurCase = 7; // nbre de lignes dans chaque case
+        static int largeurCase = 16; //nbre de colonnes (carcatères) dans chaque case
        
 
         static string[,] Grille;    // Grille de jeu
@@ -26,6 +26,7 @@ namespace quarto_mjma
         static int nbreLignes = 4;
         static int nbreCaractéristiques = 4;
 
+       static bool trace = false;
 
         // Main
         static void Main(string[] args)
@@ -63,9 +64,9 @@ namespace quarto_mjma
 
         private static void AfficherTitre()
         {
-            Console.WriteLine("==============================================");
-            Console.WriteLine("                  QUARTO");
-            Console.WriteLine("==============================================\n");
+            Console.WriteLine("                  ==============================================");
+            Console.WriteLine("                                      QUARTO");
+            Console.WriteLine("                  ==============================================\n");
         }
 
         /// <summary>
@@ -134,6 +135,8 @@ namespace quarto_mjma
             bool joueurCourant = choisir1erJoueur();
             Console.Clear();
             AfficherTitre();
+            if (trace)
+            Console.ReadLine();
             AfficherGrille();
 
             while (!Gagner() && !AvoirGrilleRemplie())
@@ -160,8 +163,11 @@ namespace quarto_mjma
 
                 Console.Clear();
                 AfficherTitre();
+                if (trace)
+                Console.ReadLine();
                 AfficherGrille();
                 AfficherPiece();
+                Console.ReadLine();
 
                 joueurCourant = !joueurCourant;
             }
@@ -174,7 +180,7 @@ namespace quarto_mjma
         {
             bool pieceUtilisee = false;
             //choix pièce par le joueur
-            Console.SetCursorPosition(0, (longueurCase + 2) * nbreLignes + 5);
+            Console.SetCursorPosition(0, longueurCase * nbreLignes);
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
                 "- 0000 correspond à ronde, petite, creuse, rouge\n" +
                 "- 1111 correspond à carrée, grande, pleine, bleue \n" +
@@ -205,7 +211,7 @@ namespace quarto_mjma
                     }
                 }
 
-            } while ( ChoixPiece.Length != nbreCaractéristiques && pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
+            } while ( ChoixPiece.Length != nbreCaractéristiques || pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
 
            
 
@@ -247,7 +253,7 @@ namespace quarto_mjma
             while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée
 
             JouerPiece(ChoixPiece);
-            Console.SetCursorPosition(0, (longueurCase +2) * nbreLignes + 5);
+            Console.SetCursorPosition(0, (longueurCase +2) * nbreLignes);
             Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
                 "- 1111 correspond à grande, pleine, ronde, foncee \n" +
@@ -304,6 +310,7 @@ namespace quarto_mjma
             while (i < nbPiecesTotales && choixPiece != TabPieces[0, i])
             {
                 // Incrémentation
+                if (i<nbPiecesTotales-1)
                 i++;
             }
 
@@ -346,33 +353,31 @@ namespace quarto_mjma
                 Console.WriteLine("      |               |               |               |               |");
                 Console.WriteLine("      |               |               |               |               |");
                 Console.WriteLine("      |               |               |               |               |");
-                Console.WriteLine("      |               |               |               |               |");
-                Console.WriteLine("      |               |               |               |               |");
+               // Console.WriteLine("      |               |               |               |               |");
                 // Console.WriteLine("{0}   ", i);
                 // Console.Write("                    |");
 
                 //Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
             }
 
-            Console.WriteLine("          +---------------+---------------+---------------+---------------+");
-            Console.WriteLine("               0                  1               2              3       ");
+                Console.WriteLine("      +---------------+---------------+---------------+---------------+");
+                Console.WriteLine("              0              1              2                3         ");
 
             //permet d'afficher les pièces restantes à la droite de la grille
-            Console.SetCursorPosition(75, 4);
+           /* Console.SetCursorPosition(75, 4);
             Console.WriteLine("Pièces restantes:");
-                for (int k = 0; k < nbPiecesTotales; k=k+1)
-                {
+                for (int k = 0; k < 44; k=k+2)
+            {
                 for (int n = 0; n < nbPiecesTotales; n++)
                 {
                         if (TabPieces[1, n]=="0")
                         {
                             Console.SetCursorPosition(75, 4 + k);
-                        string [,] dessin = TrouverDessin(TabPieces[0, n]);
-                            Console.WriteLine("{0}", dessin [k,0]); //affiche pièces restantes
+                            Console.WriteLine("{0}", TrouverDessin(TabPieces[0, n])); //affiche pièces restantes
                             Console.ResetColor();
                         }
                 }
-            }
+            }*/
            
             
         }
@@ -727,10 +732,10 @@ namespace quarto_mjma
                   dessin = TrouverDessin(Grille[i, j]);
                   //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
-                    for (int k = 0; k < longueurCase; k++)
+                    for (int k = 0; k < longueurCase-1; k++)
                     {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                         //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
-                        Console.SetCursorPosition (cursor+ largeurCase *(j+1) , 5+ longueurCase*(i+1) + k);
+                        Console.SetCursorPosition (cursor+ largeurCase *j , 5+ longueurCase*i + k);
                         Console.WriteLine(dessin[k, 0]);
                     }
                     Console.ResetColor();
@@ -743,7 +748,7 @@ namespace quarto_mjma
         static string [,] TrouverDessin(string piece) // Trouver le dessin qui correspond à la pièce voulue
         {
 
-         string largeurGrandCarre = "*          *";
+         string largeurGrandCarre = "*         *";
          string largeurGrandCarrePlein = "***********";
          //int hauteurGrandCarre = 6;
          string largeurPetitCarre = "  *     *  ";
@@ -794,10 +799,10 @@ namespace quarto_mjma
         string[,] pieceRondePetite = 
         {
         { blanc},
-        { "  * * "},
-        {"*     *"},
-        {"*     *"},
-        {"  * * "},
+        {"    * *    "},
+        {"  *     *  "},
+        {"  *     *  "},
+        {"    * *    "},
         { blanc}
          };
 
@@ -805,10 +810,10 @@ namespace quarto_mjma
             string[,] pieceRondePetitePleine =
          {
          { blanc},
-         {"  ***  "},
-         {"*******"},
-         {"*******"},
-         {"  ***  "},
+         {"    ***    "},
+         {"  *******  "},
+         {"  *******  "},
+         {"    ***    "},
           { blanc}
         };
 
@@ -824,12 +829,12 @@ namespace quarto_mjma
 
             string[,] pieceRondeGrandePleine =
             {
-           {"     *     "},
-           {"  *******  "},
+           {"   ****   "},
            {" ********* "},
+           {"***********"},
+           {"***********"},
            {" ********* "},
-           {"  *******  "},
-           {"     *     "}
+           {"   ****    "}
         };
 
          string[,] pieceVide =
