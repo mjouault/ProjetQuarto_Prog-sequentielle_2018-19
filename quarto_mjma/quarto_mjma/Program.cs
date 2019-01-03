@@ -12,7 +12,7 @@ namespace quarto_mjma
         static string caseVide = "    ";
 
         static int ligne; static int col; //lignes et colonnes que le joueur/l'ordi a choisi
-        static string choixPiece; // variable globale désignant une pièce choise pour être jouée par l'un des joueurs
+        static string choixPiece; // variable globale désignant une pièce choisie pour être jouée par l'un des joueurs
         static int nbreLignes = 4; // constante donnant le nombre de lignes et de colonnes puisque le plateau est carré
         static int nbreCaractéristiques = 4; // constante donnant le nombre de caractéristiques des pièces
 
@@ -822,17 +822,18 @@ namespace quarto_mjma
 
                 if (col == nbreLignes)
                 {
-                    Console.WriteLine("remet la colonne à 0");
                     col = 0;
                 }
                 ligne++;
-            } 
+            }
 
-
-           /*for (int m = 0; m < casesPossiblesIA.Length -1; m++)
+            int m = 0;
+            while (m < casesPossiblesIA.Length)
             {
-                Console.WriteLine("casepossibleLigne = {0}, col ={1}", casesPossiblesIA[m] [0], casesPossiblesIA[m][1]);
-            }*/
+                Console.WriteLine("casepossibleLigne = {0}, casepossibleIACol=", casesPossiblesIA[m][0], casesPossiblesIA[m][1]);
+                if (m < casesPossiblesIA.Length-1)
+                    m++;
+            }
 
             if ( trouveCasePossible) 
             {
@@ -897,59 +898,51 @@ namespace quarto_mjma
         {
             bool empecheVictoireHumain = false;
             bool alignement4Pieces = false;
-            int k = 0; int ligne = 0; int col = 0;
+            int k = 0;
+            ligne = 0;  col = 0;
 
             
             string[] piecesPossiblesIA = new string[16]; // création d'un tableaux qui recensera toutes les pièces que l'IA peut jouer sans risquer de faire gagner l'adversaire. Elle choisira alors aléatoirement entre ces pièces
 
             for (k = 0; k < TabPieces.GetLength(1); k++) // choix d'une pièce parmi les pièces dispos
             {
-
-                if (TabPieces[1, k] == "1")// si case déjà remplie
+                choixPiece = TabPieces[0, k];
+                if (TabPieces[1, k] == "0")// si pièce non utilisée
                 {
-                    Console.WriteLine("if case déja remplie. k = {0}", k);
-                }
-                else // si case vide
-                {
-                    if (trace)
-                    Console.WriteLine("else k = {0}, pièce={1}", k, (TabPieces[0, k]));
-                   ligne = 0;
-                   alignement4Pieces = false;
-                    /* une fois une pièce non utilisée trouvée, l'IA parcourt tout le tableau pour s'assurer que cette pièce empêche l'humain de gagner.
-                          Une pièce empêche l'humain de gagner si, pour n'importe quelle case vide de la grille, elle ne génère pas un alignement de 4 pièces avec 1 caractéristique commune*/
-
-                   do
+                    //  l'IA parcourt tout le tableau pour s'assurer que cette pièce empêche l'humain de gagner.
+                    //   Une pièce empêche l'humain de gagner si, pour n'importe quelle case vide de la grille, elle ne génère pas un alignement de 4 pièces avec 1 caractéristique commune
+                    while (ligne < nbreLignes && !alignement4Pieces)
                     {
-                        do
+                        while (col < nbreLignes && !alignement4Pieces)
                         {
-                            if (trace)
-                            Console.WriteLine("début while vérif pièce avantageuse ligne= {0}, col={1}", ligne, col);
-                            // les tableaux créées donnent l'indice d'une ligne et d'une colonne de la grille. Ils sont intégrés dans 2 boucles for pour parcourir tous les indices et donc toute la grille*/
-                            alignement4Pieces = MettreAJourStrategies(true, 3); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
 
-                            if (trace)
-                          Console.WriteLine("empecheVictoireHumain ={0}", empecheVictoireHumain);
+                            if (Grille[ligne, col] == caseVide)
+                            {
+                                alignement4Pieces = MettreAJourStrategies(true, 3); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
+                            }
+
                             col++;
-
-                        } while (col < nbreLignes && !alignement4Pieces);
-
-                        if (col < nbreLignes) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case générant un alignement de 4 pièces avec 1 caractéristique commune
+                        } 
+                        if (col == nbreLignes) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case générant un alignement de 4 pièces avec 1 caractéristique commune
                         {
                             col = 0; // Et remet l'indice des colonnes à 0 pour toutes les parcourir de nouveau lorsqu'elle changera de ligne
                         }
+                        if (ligne <nbreLignes)
                         ligne++;
-                    } while (ligne < nbreLignes && !alignement4Pieces);  
+                    } 
 
 
                     if (alignement4Pieces) // l'IA trouve une case désavantageuse pour elle-même soit une case qui engendre l'alignement de 4 pièces pour l'adversaire
+                    {
                         k++; //  Elle cherche donc une autre pièce
+                        ligne = 0;
+                        alignement4Pieces = false;
+                    }
 
                     else // L'IA a parcouru toutes les cases du tableau sans que le placement de la pièce considérée puisse génére un alignement de 4 pièces
                     {
-                        if (trace)
-                        Console.WriteLine("rentre dans le if");
                         empecheVictoireHumain = true; // cette pièce empêche donc l'humain de gagner avec cette pièce si on la lui donne
-                        piecesPossiblesIA[k] = TabPieces[0, k]; // remplissage du tableau recensant toutes les pièces que peut jouer l'IA sans faire gagner l'adversaire
+                        piecesPossiblesIA[k] = choixPiece; // remplissage du tableau recensant toutes les pièces que peut jouer l'IA sans faire gagner l'adversaire
                     }
 
                     // Console.WriteLine("fin des 2 whiles i={0}, j= {1}", i, j);
@@ -962,6 +955,7 @@ namespace quarto_mjma
 
             for (int m = 0; m < piecesPossiblesIA.Length; m++)
             {
+                if (trace)
                 Console.WriteLine("piecepossible = {0}", piecesPossiblesIA[m]);
             }
 
@@ -979,7 +973,6 @@ namespace quarto_mjma
                 }
                 while (TabPieces[1, randomPiece] == "1"); //l'IA choisit de nouveau la pièce s'il en a choisi une déjà jouée
             }
-
             else  // si le tableau recensant les pièces que l'IA peut jouer n'est pas nul
             {
                 // L'IA choit au hasard entre les pièces du tableau celle qu'elle va donner  l'adversaire (afin que son choix ne soit pas prévisible)
@@ -989,7 +982,7 @@ namespace quarto_mjma
                 do
                 {
                     if (trace)
-                    Console.WriteLine("pdt while random ds tableau possibilitées");
+                    Console.WriteLine("pdt while random ds tableau possibilitées pièces");
                     randomPiece = R.Next(0, 16); // [0,16] ou [0, 17] ?? car [0,17] provoque un outOfRange
 
                 }
@@ -1251,23 +1244,29 @@ namespace quarto_mjma
             for (int n = 0; n < nbreCaractéristiques; n++)
             {
 
-                //Mise à jour lignes et colonnes
-                if (Grille[ligne, col][n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
+                //Mise à jour lignes, colonnes, diagos
+                if (trace)
+                Console.WriteLine("juste avant if simul nieme carac =0, on a ligne={0}, col={1}, grille[ligne, col] ={2}, n={3}", ligne, col, Grille[ligne, col], n);
+                if (choixPiece[n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne considérée
                 {
-                    Console.WriteLine("Ds fction MettreAJour if simul nieme carac =0, on a ligne={0}, col={1}, grille[ligne, col] ={2}, n={3}", ligne, col, Grille[ligne, col], n);
+                   // Console.WriteLine("Ds fction MettreAJour if simul nieme carac =0, on a ligne={0}, col={1}, grille[ligne, col] ={2}, n={3}", ligne, col, Grille[ligne, col], n);
                     if (simul)
                     {
+                        if (trace)
+                        Console.WriteLine("entre ds if simul");
                         if (tablignes0[ligne, n] == nbPiecesAlignees)
                         {
                             alignementPieces = true;
                         }
-                       /* else */ if (tabcol0[col, n] == 2)
+                        if (tabcol0[col, n] == 2)
                         {
                             alignementPieces = true;
                         }
                     }
                     else
                     {
+
+                        Console.WriteLine("entre ds else ");
                         tablignes0[ligne, n] ++;
                         tabcol0[col, n] ++;
 
@@ -1282,6 +1281,7 @@ namespace quarto_mjma
                 {
                     if (simul)
                     {
+                        if (trace)
                         Console.WriteLine("Ds fction MettreAJour if simul, nieme carac =1, on a ligne={0}, col={1}, grille[ligne, col] ={2}, n={3}", ligne, col, Grille[ligne, col], n);
                         if (tablignes1[ligne, n] == nbPiecesAlignees)
                         {
@@ -1305,12 +1305,6 @@ namespace quarto_mjma
 
                     }
                 }
-                //if (alignementPieces)
-                //{
-                Console.WriteLine("alignementPieces= {0}", alignementPieces);
-                //return alignementPieces;
-              
-                //}
             }
 
             if (trace)
