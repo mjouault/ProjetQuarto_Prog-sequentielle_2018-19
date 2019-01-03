@@ -360,14 +360,15 @@ namespace quarto_mjma
             //permet d'afficher les pièces restantes à la droite de la grille
             Console.SetCursorPosition(75, 4);
             Console.WriteLine("Pièces restantes:");
-                for (int k = 0; k < 44; k=k+2)
-            {
+                for (int k = 0; k < nbPiecesTotales; k=k+1)
+                {
                 for (int n = 0; n < nbPiecesTotales; n++)
                 {
                         if (TabPieces[1, n]=="0")
                         {
                             Console.SetCursorPosition(75, 4 + k);
-                            Console.WriteLine("{0}", TrouverDessin(TabPieces[0, n])); //affiche pièces restantes
+                        string [,] dessin = TrouverDessin(TabPieces[0, n]);
+                            Console.WriteLine("{0}", dessin [k,0]); //affiche pièces restantes
                             Console.ResetColor();
                         }
                 }
