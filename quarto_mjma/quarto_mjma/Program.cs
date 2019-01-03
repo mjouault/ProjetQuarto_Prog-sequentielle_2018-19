@@ -364,7 +364,7 @@ namespace quarto_mjma
             {
                 for (int n = 0; n < nbPiecesTotales; n++)
                 {
-                        if (TabPieces[1, n]!="0")
+                        if (TabPieces[1, n]=="0")
                         {
                             Console.SetCursorPosition(75, 4 + k);
                             Console.WriteLine("{0}", TrouverDessin(TabPieces[0, n])); //affiche pièces restantes
