@@ -359,10 +359,21 @@ namespace quarto_mjma
 
             //permet d'afficher les pièces restantes à la droite de la grille
             Console.SetCursorPosition(75, 4);
-            for (int n=0; n <= nbPiecesTotales; n++)
+            Console.WriteLine("Pièces restantes:");
+                for (int k = 0; k < 44; k=k+2)
             {
-                Console.WriteLine("{0}", TrouverDessin(TabPieces[n, 0]));
+                for (int n = 0; n < nbPiecesTotales; n++)
+                {
+                        if (TabPieces[1, n]!="0")
+                        {
+                            Console.SetCursorPosition(75, 4 + k);
+                            Console.WriteLine("{0}", TrouverDessin(TabPieces[0, n])); //affiche pièces restantes
+                            Console.ResetColor();
+                        }
+                }
             }
+           
+            
         }
 
         /// <summary>
@@ -716,7 +727,8 @@ namespace quarto_mjma
                   //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
                     for (int k = 0; k < longueurCase; k++)
-                    {
+                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
+                        //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
                         Console.SetCursorPosition (cursor+ largeurCase *(j+1) , 5+ longueurCase*(i+1) + k);
                         Console.WriteLine(dessin[k, 0]);
                     }
@@ -841,7 +853,7 @@ namespace quarto_mjma
             else
             {
                 //identifie d'abord la couleur
-                if (piece[3] == '0')
+                if (piece[3] == '0') 
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
