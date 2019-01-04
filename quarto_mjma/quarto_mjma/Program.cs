@@ -364,23 +364,32 @@ namespace quarto_mjma
                 Console.WriteLine("              0              1              2                3         ");
 
             //permet d'afficher les pièces restantes à la droite de la grille
-           /* Console.SetCursorPosition(75, 4);
+            
+            Console.SetCursorPosition(75, 4);
             Console.WriteLine("Pièces restantes:");
-                for (int k = 0; k < 44; k=k+2)
-            {
                 for (int n = 0; n < nbPiecesTotales; n++)
+
+            {
+              for (int k = 0; k < longueurCase - 1; k++)
                 {
-                        if (TabPieces[1, n]=="0")
-                        {
-                            Console.SetCursorPosition(75, 4 + k);
-                            Console.WriteLine("{0}", TrouverDessin(TabPieces[0, n])); //affiche pièces restantes
-                            Console.ResetColor();
-                        }
+                    int i = 1;
+                    if (TabPieces[1, n] == "0")
+
+                    {
+                        Console.SetCursorPosition(75, longueurCase * i + k);
+                        string[,] dessin = TrouverDessin(TabPieces[0, n]);
+                        Console.WriteLine("{0}", dessin[k, 0]);
+                    }
+                    Console.ResetColor();
                 }
-            }*/
+          }   
+                        //affiche pièces restantes
+                  
+            }
+
            
             
-        }
+        
 
         /// <summary>
         /// Gagner () : Fonction donnant toutes les combinaisons gagnantes et terminant la partie
