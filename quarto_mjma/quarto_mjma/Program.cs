@@ -373,15 +373,27 @@ namespace quarto_mjma
             {
                 //Console.WriteLine("Pièce déjà utilisée, choisissez-en une autre");
                 choixPiece = Console.ReadLine();//on récupère la pièce que le joueur choisi pour l'ordi
-                pieceUtilisee = VerifierSiPieceUtilisee();
-                if (pieceUtilisee)
+
+                if (choixPiece.Length != nbreCaractéristiques)
                 {
                     Console.Beep(500, 300);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
+                    Console.WriteLine("Erreur : une pièce doit avoir 4 caractères. Veuillez entrer un nom de pièce valide :");
                     Console.ResetColor();
                 }
-            } while (pieceUtilisee); //tant que la pièce n'est pas bonne on en rechoisit une autre
+                else
+                {
+                    pieceUtilisee = VerifierSiPieceUtilisee();
+
+                    if (pieceUtilisee)
+                    {
+                        Console.Beep(500, 300);
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
+                        Console.ResetColor();
+                    }
+                }
+            } while (pieceUtilisee || choixPiece.Length != nbreCaractéristiques ); //tant que la pièce n'est pas bonne on en rechoisit une autre
 
             UtiliserPiece();
 
@@ -519,7 +531,7 @@ namespace quarto_mjma
                 while (n < nbreCaractéristiques && !AGagne)
                 {
                     int k = 0;
-                    if (choixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées sur la  diagonale de gauche vers droite, du haut vers bas pour 1 caractéristique
+                    if (choixPiece[n] == '0') // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées surl'une des 2 diagonales pour 1 caractéristique
                     {
 
                         while (k < diago0.GetLength(0) && diago0[0, n] != 3)
@@ -793,10 +805,11 @@ namespace quarto_mjma
                   alignement3pieces = VerifierAlignementPieces(tabLigne, tabColInterieur, 2);
               }*/
 
+            int indice = 1;
             int[][] casesPossiblesIA = new int [16][];
 
             ligne = 0; col = 0;
-            int indice = 0;
+         
 
             bool trouveCasePossible = false;
 
@@ -815,7 +828,12 @@ namespace quarto_mjma
                         {
                             trouveCasePossible = true;
                             casesPossiblesIA[indice] = new int[2] { ligne, col }; // a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces en effet le prochain joueur est l'humain!
-                                indice++;
+           
+                            for (int m=0; m< 2;m++)
+                            {
+                                Console.WriteLine("casepossibleLigne = {0}", casesPossiblesIA[indice][m]);
+                            }
+                            indice++;
                         }
                     }
                     col++;
@@ -828,13 +846,13 @@ namespace quarto_mjma
                 ligne++;
             }
 
-            int m = 0;
-            while (m < casesPossiblesIA.Length)
+           /* int m = 0;
+            while (m < casesPossiblesIA.Length -1)
             {
                 Console.WriteLine("casepossibleLigne = {0}, casepossibleIACol=", casesPossiblesIA[m][0], casesPossiblesIA[m][1]);
-                if (m < casesPossiblesIA.Length-1)
+                if (m < casesPossiblesIA.Length-2)
                     m++;
-            }
+            }*/
 
             if ( trouveCasePossible) 
             {
@@ -1255,18 +1273,26 @@ namespace quarto_mjma
                     {
                         if (trace)
                         Console.WriteLine("entre ds if simul");
-                        if (tablignes0[ligne, n] == nbPiecesAlignees)
+                        if (tablignes0[ligne, n] == nbPiecesAlignees || tabcol0[col, n] == nbPiecesAlignees)
                         {
                             alignementPieces = true;
                         }
-                        if (tabcol0[col, n] == 2)
+                       /*if (tabcol0[col, n] == nbPiecesAlignees)
+                        {
+                            alignementPieces = true;
+                        }*/
+                        if (ligne == col && diago0 [0,n] == nbPiecesAlignees)
+                        {
+                            alignementPieces = true;
+                        }
+                        if (ligne == ((nbreLignes-1) -col) && diago0[1, n] == nbPiecesAlignees || col == ((nbreLignes - 1) - ligne) && diago0[1, n] == nbPiecesAlignees)
                         {
                             alignementPieces = true;
                         }
                     }
                     else
                     {
-
+                        if (trace)
                         Console.WriteLine("entre ds else ");
                         tablignes0[ligne, n] ++;
                         tabcol0[col, n] ++;
@@ -1288,7 +1314,7 @@ namespace quarto_mjma
                         {
                             alignementPieces = true;
                         }
-                        /*else*/ if (tabcol1[col, n] == 2)
+                        /*else*/ if (tabcol1[col, n] == nbPiecesAlignees)
                         {
                             alignementPieces = true;
                         }
