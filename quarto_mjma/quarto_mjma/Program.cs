@@ -8,7 +8,7 @@ namespace quarto_mjma
         static int nbPiecesTotales = 16;
         // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
         static string[,] TabPieces;
-        static string[,] Grille = new string [nbreLignes, nbreLignes];    // Grille de jeu
+        static string[,] Grille;    // Grille de jeu
         static string caseVide = "    ";
 
         static int ligne; static int col; //lignes et colonnes que le joueur/l'ordi a choisi
@@ -40,7 +40,7 @@ namespace quarto_mjma
             do
             {
 
-               // Grille = new string[nbreLignes, nbreLignes];
+               Grille = new string[nbreLignes, nbreLignes];
 
                 InitialiserGrille();
                 InitialiserPieces();
@@ -611,6 +611,7 @@ namespace quarto_mjma
                     if (Grille[ligne, col] == caseVide) // si case vide
                     {
                         alignement3pieces =MettreAJourStrategies(true, 2); //simulation de placement de la pièce dans cette case et on vérifie si elle génère un alignement de 3 pièces identiques (en effet, le prochain joueur est l'humain!)
+                        if (trace)
                         Console.WriteLine("alignement3pieces = {0}, ligne ={1}, col={2}", alignement3pieces, ligne, col);
                         if (!alignement3pieces) /// a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces 
                         {
@@ -735,7 +736,7 @@ namespace quarto_mjma
 
             for (int m = 0; m < piecesPossiblesIA.Length; m++)
             {
-                //if (trace)
+                if (trace)
                 Console.WriteLine("piecepossible = {0}", piecesPossiblesIA[m]);
             }
 
@@ -772,6 +773,7 @@ namespace quarto_mjma
 
                     if (piecesPossiblesIA[k] != null)
                     {
+                        if (trace)
                         Console.WriteLine("entre ds le if piecepossible non null, alignement3Pieces ={0}", alignement3Pieces);
                         //  l'IA parcourt tout le tableau pour voir si, parmi les pièces qui empêchent l'humain de gagner, certaines peuvent lui permettre de gagner. 
                         // Une pièce qui permettrait à l'IA de gagner serait une pièce qui, placée dans l'une des cases, générerait un alignement de 3 pièces
@@ -779,11 +781,13 @@ namespace quarto_mjma
                         {
                             while (col < nbreLignes && !alignement3Pieces)
                             {
+                                if (trace)
                                 Console.WriteLine("entre ds le 2eme while piecepossible non null, ");
 
                                 if (Grille[ligne, col] == caseVide)
                                 {
                                     alignement3Pieces = MettreAJourStrategies(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
+                                    if (trace)
                                     Console.WriteLine("alignement3pieces={0}, ligne={1}, col={2}", alignement3Pieces, ligne, col);
                                     if (alignement3Pieces) // L'IA a trouvé une pièce qui générait un alignement de 3 pièces si elle était placée dans une case
                                     {
@@ -810,19 +814,22 @@ namespace quarto_mjma
                     ligne = 0;
                 }
 
-                for (int m = 0; m < piecesGagnantesIA.Length; m++)
+                if (trace)
                 {
+                    for (int m = 0; m < piecesGagnantesIA.Length; m++)
+                    {
                         Console.WriteLine("piecesGagnantesIA.Length= {0}, piecesGagnantesIA = {1}", piecesGagnantesIA.Length, piecesGagnantesIA[m]);
+                    }
                 }
 
                 if (potentielleVictoireIA) 
-                {
-                       
+                {    
                     // l'IA choisit au hasard dans les pièces encore disponibles celle qu'elle donnera puisque de toute façon, si le tableau est nul, c'est qu'elle ne peut éviter que le joueur adverse gagne
                     int randomPiecesGagnantes;
                     Random R2 = new Random();
                     do
                     {
+                        if (trace)
                             Console.WriteLine("pdt while random ds tableau  pièces gagnantes");
                         randomPiecesGagnantes = R2.Next(0, piecesGagnantesIA.Length); // [0,16] ou [0, 17] ?? car [0,17] provoque un outOfRange
 
@@ -839,7 +846,7 @@ namespace quarto_mjma
                     Random R = new Random();
 
                     do
-                    {    
+                    {    if (trace)
                             Console.WriteLine("tableau de pièces gagnantes nul, choix aléatoire"); 
                         randomPiece = R.Next(0, piecesPossiblesIA.Length); 
 
@@ -1057,7 +1064,6 @@ namespace quarto_mjma
             }
             if (reponse == "r")
                 return true;
-
             else
                 return false;
         }
