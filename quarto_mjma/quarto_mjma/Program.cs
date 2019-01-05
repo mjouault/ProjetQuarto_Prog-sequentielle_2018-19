@@ -32,6 +32,7 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
+            bool rejoue = false;
             Console.SetWindowSize(100, 40);
 
             AfficherEnTete();
@@ -39,13 +40,12 @@ namespace quarto_mjma
             ChoisirMode();
             do
             {
-
                Grille = new string[nbreLignes, nbreLignes];
-
+                
                 InitialiserGrille();
                 InitialiserPieces();
+                AGagne = false;
                 Jouer();
-
             } while (RejouerPartie());
         }
 
@@ -251,9 +251,6 @@ namespace quarto_mjma
                 joueurCourantHumain = !joueurCourantHumain; // le joueur courant n'est devient l'autre joueur
             }
         }
-
-
-
 
         /// <summary>
         /// JouerHumain : Fonciton permettant au joueur de jouer son tour soit de placer une pièce choisie par l'ordinateur
@@ -821,7 +818,7 @@ namespace quarto_mjma
                     Random R2 = new Random();
                     do
                     {
-                       // if (trace)
+                            if (trace)
                             Console.WriteLine("pdt while random ds tableau  pièces gagnantes");
                         randomPiecesGagnantes = R2.Next(0, piecesGagnantesIA.Length); // [0,16] ou [0, 17] ?? car [0,17] provoque un outOfRange
 
