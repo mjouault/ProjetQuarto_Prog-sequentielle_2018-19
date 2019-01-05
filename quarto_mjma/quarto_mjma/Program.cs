@@ -411,9 +411,16 @@ namespace quarto_mjma
             }
             else
             {
-                ChoisirCaseIA();
-                MettreAJourStrategies(false, 0);
+                GagnerIA();
+                if (!AGagne)
+                {
+                    if (trace)
+                        Console.WriteLine("if !AGagne");
+                    TrouverCaseIA();
+                }
             }
+                    UtiliserPiece();
+                    MettreAJourStrategies(false, 0);
         }
 
 
@@ -421,12 +428,7 @@ namespace quarto_mjma
         /// ChoisirCaseIA : L'IA choisit intelligemment la case dans laquelle elle va jouer la pièce donnée. Si 3 pièces alignées, met la pièce donnée dans la case qu'il reste sinon, joue dans les coins
         static void ChoisirCaseIA()
         {
-            GagnerIA();
-            if (!AGagne)
-            {
-                Console.WriteLine("if !AGagne");
-                TrouverCaseIA();
-                UtiliserPiece();
+           
 
                 /*if (trace)
                 Console.WriteLine("aléatoire");
@@ -440,7 +442,6 @@ namespace quarto_mjma
                 } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
                 Grille[ligne, col] = ChoixPiece;*/
-            }
         }
 
         /// <summary>
@@ -800,8 +801,6 @@ namespace quarto_mjma
                 } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
                 Grille[ligne, col] = choixPiece;
-               // AfficherGrille();
-
             }
         }
 
