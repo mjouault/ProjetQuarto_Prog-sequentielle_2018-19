@@ -367,22 +367,27 @@ namespace quarto_mjma
             
             Console.SetCursorPosition(75, 4);
             Console.WriteLine("Pièces restantes:");
-                for (int n = 0; n < nbPiecesTotales; n++)
+                
 
-            {
-              for (int k = 0; k < longueurCase - 1; k++)
+            
+              
+                for (int n = 0; n < nbPiecesTotales; n++)
                 {
-                    int i = 1;
+                for (int k = 0; k < longueurCase - 1; k++)
+                {
                     if (TabPieces[1, n] == "0")
 
                     {
-                        Console.SetCursorPosition(75, longueurCase * i + k);
+                        Console.SetCursorPosition(75, longueurCase + k);
                         string[,] dessin = TrouverDessin(TabPieces[0, n]);
                         Console.WriteLine("{0}", dessin[k, 0]);
+                        Console.SetCursorPosition(75, longueurCase + (k+1));
+                        Console.ResetColor();
+                        Console.WriteLine("Pièce {0}", TabPieces[0, n]);
                     }
-                    Console.ResetColor();
                 }
-          }   
+                }
+                
                         //affiche pièces restantes
                   
             }
