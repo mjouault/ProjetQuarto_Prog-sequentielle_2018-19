@@ -599,8 +599,8 @@ namespace quarto_mjma
             Console.WriteLine("entre ds trouverCaseIA");
            
             int indice = 0;
-            int[][] casesPossiblesIA = new int [16][]; // tableau recensant toutes les cases dans lesuelles l'IA peut jouer sa pièce sans risque de faire gagner l'humain
-
+            int[][] casesPossiblesIA = new int [16][]; // tableau recensant toutes les cases dans lesuelles l'IA peut jouer sa pièce sans risque de faire gagner l'humain. Taille maximale du tableau = nombre de pièces soit 16
+                                                       // le tableau imbriqué comportera 2 éléments : l'indice de ligne et l'indice de colonne
             ligne = 0; col = 0;
             bool trouveCasePossible = false;
 
@@ -615,7 +615,7 @@ namespace quarto_mjma
                         if (!alignement3pieces) /// a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces 
                         {
                             trouveCasePossible = true;
-                            casesPossiblesIA[indice] = new int[2] { ligne, col }; // cette case est recensée dans le tableau des cases dans lesquelles l'IA peut jouer sans risque de faire gagner l'humain
+                            casesPossiblesIA[indice] = new int[2] { ligne, col }; // cette case est recensée dans le tableau des cases dans lesquelles l'IA peut jouer sans risque de faire gagner l'humain sous forme d'un tableau imbriqué
 
                             if (trace)
                             {
@@ -649,11 +649,12 @@ namespace quarto_mjma
                     randomCasePossible = R.Next(0, casesPossiblesIA.Length); 
 
                 }
-                while (casesPossiblesIA[randomCasePossible] == null);
+                while (casesPossiblesIA[randomCasePossible] == null); // il se peut que le tableau de 16 éléments ne soit pas entièrement rempli, l'IA tire au sort jusqu'à tomber sur une case du tableau non nulle
 
-                ligne = casesPossiblesIA[randomCasePossible] [0]; 
-                col = casesPossiblesIA[randomCasePossible][1];
-                 Grille[ligne, col] = choixPiece;
+                ligne = casesPossiblesIA[randomCasePossible] [0]; // le 1er élément du tableau imbriqué donne la ligne de la grille dans laquelle sera jouée la pièce
+                col = casesPossiblesIA[randomCasePossible][1];    // le 2er élément du tableau imbriqué donne la colonne de la grille dans laquelle sera jouée la pièce
+                Grille[ligne, col] = choixPiece;
+                if (trace)
                 Console.WriteLine("choisit au pif, ligne={0}, col={1}");
             }
             else // toutes les cases disponibles génèrent un alignement de 3 pièces ayant une caractéristique commune
@@ -671,28 +672,7 @@ namespace quarto_mjma
             }
         }
 
-        static bool VerifierAlignementPieces(int ligne, int col, int nbPiecesAlignees) // true : l'IA a trouvé une case générant un alignement de 3 ou 4 pièces (selon nbrePiecesALignees) après simulation de placement d'une pièce 
-                                                                                       // les tableaux en paramètres sont des tableaux d'indices (de lignes, colonnes particulières) --> Permet de parcourir tout ou partie de la grille de jeu
-        {
-            bool alignementPieces = false; //permet d'appeler MettreAJourStrategie en mode simulation
-                                           //  bool trouveCaseAvantageuse = false; // une case est avantageuse pour l'IA si elle ne génère pas un alignement de 3
-
-
-            if (trace)
-                Console.WriteLine(" ds while fction VerifierAlignementPieces, ligne ={0}, col={1} ", ligne, col);
-            // Console.WriteLine(" ds while j : i={0}, j={1}", i, j);
-
-            if (Grille[ligne, col] == caseVide)
-            {
-                //  attention : était mis en commentaire
-                alignementPieces = MettreAJourStrategies(true, nbPiecesAlignees); // il y a un alignement de pièces si la fonction MettreAJourStrategie retourne true.
-                                                        // Le paramètre true dans MettrAJourStrategies signifie que l'on va simuler le placement d'une pièce dans la case Grille[ligne, col] considérée
-            }
-            //  Console.ReadLine();
-            if (trace)
-                Console.WriteLine("fin fction alignementPieces, alignementPiece ={0}", alignementPieces);
-            return alignementPieces;
-        }
+        // fonctions relatives à l'intelligence artificielle 
 
         static void ChoisirPieceIA()
         {
@@ -703,11 +683,11 @@ namespace quarto_mjma
 
             
             string[] piecesPossiblesIA = new string[16]; // création d'un tableau qui recensera toutes les pièces que l'IA peut jouer sans risquer de faire gagner l'adversaire. Elle choisira alors aléatoirement entre ces pièces
-
-            for (k = 0; k < TabPieces.GetLength(1); k++) // choix d'une pièce parmi les pièces dispos
+                                                           // taille maximale du tableau = nombre de pièces siot 16
+            for (k = 0; k < TabPieces.GetLength(1); k++) // parcourt du tableau recnesant les pièces 
             {
                 choixPiece = TabPieces[0, k];
-                if (TabPieces[1, k] == "0")// si pièce non utilisée
+                if (TabPieces[1, k] == "0")//choix d'une pièce parmi les pièces disponibles
                 {
                     //  l'IA parcourt tout le tableau pour s'assurer que cette pièce empêche l'humain de gagner.
                     //   Une pièce empêche l'humain de gagner si, pour n'importe quelle case vide de la grille, elle ne génère pas un alignement de 4 pièces avec 1 caractéristique commune
