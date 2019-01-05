@@ -416,33 +416,13 @@ namespace quarto_mjma
                 {
                     if (trace)
                         Console.WriteLine("if !AGagne");
-                    TrouverCaseIA();
+                    ChoisirCaseIA();
                 }
             }
                     UtiliserPiece();
                     MettreAJourStrategies(false, 0);
         }
 
-
-        /// <summary>
-        /// ChoisirCaseIA : L'IA choisit intelligemment la case dans laquelle elle va jouer la pièce donnée. Si 3 pièces alignées, met la pièce donnée dans la case qu'il reste sinon, joue dans les coins
-        static void ChoisirCaseIA()
-        {
-           
-
-                /*if (trace)
-                Console.WriteLine("aléatoire");
-
-                Random R = new Random();
-                // choisit aléatoirement la ligne et la colonne pour placer le pion
-                do
-                {
-                    ligne = R.Next(0, nbreLignes);
-                    col = R.Next(0, nbreLignes);
-                } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
-
-                Grille[ligne, col] = ChoixPiece;*/
-        }
 
         /// <summary>
         /// GagnerIA () : l'IA cherche si elle peut directement gagner avec la pièce qu'elle a. S'il l y a déjà 3 pièces d' "alignées", elle regarde si sa pièce est compatible
@@ -713,8 +693,8 @@ namespace quarto_mjma
 
 
         /// <summary>
-        /// TrouverCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles tout en s'assurant de ne pas permettre à l'humaind e gagner au prochain tour
-        static void TrouverCaseIA()
+        /// ChoisirCaseIA: Si elle ne peut pas directement gagner, l'IA cherche à poser sa pièce dans les cases disponibles tout en s'assurant de ne pas permettre à l'humaind e gagner au prochain tour
+        static void ChoisirCaseIA()
         {
             bool alignement3pieces = false; //booléen déterminant si  la simulation de placement de la pièce (donnée par l'humain) génère un alignement de 3 pièces avc une cractéristique commune (true) ou non. 
             if (trace)
