@@ -504,7 +504,7 @@ namespace quarto_mjma
         /// </summary>
         /// <param name="i"></param> 
         /// <returns></returns>
-        static bool TrouverCaseIALigne(int i) // int i donne le numéro de ligne, dans la grille, sur laquelle sont déjà alignées 3 pièces avec 1 caractéristique commune
+        static bool TrouverCaseIALigne(int i) //  int k indique sur laquelle des 4 colonnes de la grille les 3pièces alignées se trouvent
         {
             bool caseJouable = false;
             int j = 0;
@@ -526,9 +526,9 @@ namespace quarto_mjma
         /// </summary>
         /// <param name="j"></param>
         /// <returns></returns>
-        static bool TrouverCaseIACol(int j)
+        static bool TrouverCaseIACol(int j) // int j indique sur laquelle des 4 colonnes de la grille les 3pièces alignées se trouvent
         {
-            bool caseVide = false;
+            bool caseJouable = false;
             int i = 0;
             while (i < nbreLignes && AvoirCaseRemplie(i, j))
             {
@@ -536,10 +536,10 @@ namespace quarto_mjma
             }
             if (i < nbreLignes)
             {
-                caseVide = true;
+                caseJouable = true;
             }
             ligne = i;
-            return caseVide;
+            return caseJouable;
         }
 
         /// <summary>
@@ -548,7 +548,7 @@ namespace quarto_mjma
         /// </summary>
         /// <param name="k"></param>
         /// <returns></returns>
-        static bool TrouverCaseIAdiago(int k) //l'indice k indique sur quelle diagonale les 3pièces alignées se trouvent
+        static bool TrouverCaseIAdiago(int k) // int k indique sur laquelle des 2 diagonales de la grille les 3pièces alignées se trouvent
         {
             bool caseJouable = false;
             int i = 0;
