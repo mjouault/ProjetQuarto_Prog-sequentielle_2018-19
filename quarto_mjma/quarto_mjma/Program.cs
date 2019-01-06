@@ -801,9 +801,9 @@ namespace quarto_mjma
             int i = 0; int j = 0; int m = 0;
             string[,] dessin;
 
-            while (i < 4)
+            while (i < 4) //i= nombre de lignes
             {
-                while (j < 4 && m < 16)
+                while (j < 4 && m < 16)//j= nbre de colonnes
                 {
                    // if (TabPieces[1, m] == "0")
                     //{
@@ -811,19 +811,26 @@ namespace quarto_mjma
                         dessin = TrouverDessin(TabPieces[0, m]);
                         //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
-                        for (int k = 0; k < 8; k++)
+                        for (int k = 0; k < 8; k++)//+une case à chaque fois
                         {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                          //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
 
                             Console.SetCursorPosition(75 + largeurCase * j, 5 + 7 * i + k);
-                            if (k < 6)
+
+                        if (k < 6)
+                        {
+                            if (TabPieces[1, m] == "0")
                                 Console.WriteLine(dessin[k, 0]);
-                            if (k == 7)
+                        }
+                       
+                        if (k == 7)
                             {
+                            if (TabPieces[1, m] == "0")
+                            { 
                                 Console.ResetColor();
                                 //Console.WriteLine("m={0}, Tab[0,m]={1}", m, TabPieces[0, m]);
                                 //  Console.WriteLine();
-                                Console.WriteLine(TabPieces[0, m]);
+                                Console.WriteLine("{0}", TabPieces[0, m]);}
                                 //  Console.WriteLine();
 
                                 m++;
