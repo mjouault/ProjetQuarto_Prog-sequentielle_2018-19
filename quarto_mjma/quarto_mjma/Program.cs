@@ -195,9 +195,7 @@ namespace quarto_mjma
             //choix pièce par le joueur
             Console.SetCursorPosition(0, longueurCase * nbreLignes+7);
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
-                "- 0000 correspond à ronde, petite, creuse, rouge\n" +
-                "- 1111 correspond à carrée, grande, pleine, bleue \n" +
-                "vous pouvez mixer plusieurs caractères évidemment.");
+                "(Indiquez le nom de la pièce)");
 
             do
             {
@@ -267,10 +265,7 @@ namespace quarto_mjma
 
             JouerPiece(ChoixPiece);
             Console.SetCursorPosition(0, longueurCase * nbreLignes + 7);
-            Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
-                "- 0000 correspond à petite, creuse, carrée, clair\n" +
-                "- 1111 correspond à grande, pleine, ronde, foncee \n" +
-                "Les caractères peuvent être mélangés entre eux", ChoixPiece);
+            Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous", ChoixPiece);
             // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
 
             bool caseRemplie = false;
@@ -607,6 +602,13 @@ namespace quarto_mjma
             {
                 continuer = false;
             }
+            if (continuer)
+            {
+                for (int n=0; n<nbPiecesTotales;n++)
+                {
+                    TabPieces[1, n] = "0";
+                }
+            }
             return continuer;
         }
 
@@ -815,7 +817,7 @@ namespace quarto_mjma
                         {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                          //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
 
-                            Console.SetCursorPosition(75 + largeurCase * j, 5 + 7 * i + k);
+                            Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k);
 
                         if (k < 6)
                         {
