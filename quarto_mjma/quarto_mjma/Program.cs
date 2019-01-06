@@ -182,7 +182,7 @@ namespace quarto_mjma
         {
             bool pieceUtilisee = false;
             //choix pièce par le joueur
-            Console.SetCursorPosition(0, longueurCase * nbreLignes);
+            Console.SetCursorPosition(0, longueurCase * nbreLignes+7);
             Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
                 "- 0000 correspond à ronde, petite, creuse, rouge\n" +
                 "- 1111 correspond à carrée, grande, pleine, bleue \n" +
@@ -798,22 +798,22 @@ namespace quarto_mjma
                         dessin = TrouverDessin(TabPieces[0, m]);
                     //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
-                    for (int k = 0; k < 7; k++)
+                    for (int k = 0; k < 8; k++)
                     {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                      //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
 
-                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 7 * i + k );
+                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 7 * i + k);
                         if (k < 6)
                             Console.WriteLine(dessin[k, 0]);
                         if (k == 7)
                         {
                             Console.ResetColor();
+                           // Console.WriteLine("m={0}, Tab[0,m]={1}", m, TabPieces[0, m]);
                             Console.WriteLine(TabPieces[0, m]);
-                          //  Console.WriteLine();
-                          
+                            //  Console.WriteLine();
+                            m++;
                         }
                     }
-                    m++;
                     j++;
                     if (j==4 || j==8 || j==12)
                     {
