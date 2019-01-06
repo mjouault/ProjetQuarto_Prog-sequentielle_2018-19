@@ -31,7 +31,7 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
-            Console.SetWindowSize(50, 40);
+            Console.SetWindowSize(150, 40);
             AfficherEnTete();
             AfficherRegles();
             do
@@ -255,7 +255,7 @@ namespace quarto_mjma
             while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée
 
             JouerPiece(ChoixPiece);
-            Console.SetCursorPosition(0, (longueurCase +2) * nbreLignes);
+            Console.SetCursorPosition(0, longueurCase * nbreLignes + 7);
             Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
                 "- 0000 correspond à petite, creuse, carrée, clair\n" +
                 "- 1111 correspond à grande, pleine, ronde, foncee \n" +
@@ -787,33 +787,44 @@ namespace quarto_mjma
 
         static void AfficherPiecesRestantes()
         {
-            int i = 0; int j = 0;
+            int i = 0; int j = 0; int m = 0;
             string[,] dessin;
 
-            for (i = 0; i < 8; i++)
+            while (i < 4)
             {
-                for (j = 0; j < 2; j++)
+                while ( j < 4 && m<16)
                 {
-                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessin(TabPieces[0, j]);
+                     // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
+                        dessin = TrouverDessin(TabPieces[0, m]);
                     //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
                     for (int k = 0; k < 7; k++)
                     {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                      //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
 
-                        Console.SetCursorPosition(75 + 12 * j, 5 + 7 * i + k);
+                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 7 * i + k );
                         if (k < 6)
                             Console.WriteLine(dessin[k, 0]);
                         if (k == 7)
+                        {
                             Console.ResetColor();
-                        Console.WriteLine(TabPieces[0, j]);
+                            Console.WriteLine(TabPieces[0, m]);
+                          //  Console.WriteLine();
+                          
+                        }
                     }
-                   
+                    m++;
+                    j++;
+                    if (j==4 || j==8 || j==12)
+                    {
+                        i++;
+                        j = 0;
+                    }
                 }
 
 
             }
+            Console.ResetColor();
         }
         static string [,] TrouverDessin(string piece) // Trouver le dessin qui correspond à la pièce voulue
         {
