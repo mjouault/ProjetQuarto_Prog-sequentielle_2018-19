@@ -30,6 +30,7 @@ namespace quarto_mjma
         static bool modeIntell = false; // true : mode intelligent activé / false : mode noviced de l'ordinateur
 
         static int largeurCase = 15;
+        static int longueurCase = 7;
         static string blanc = "           ";
         static string[,] pieceVide =
            {
@@ -202,6 +203,34 @@ namespace quarto_mjma
             Console.WriteLine("Pièces restantes:");
 
         }
+        static void AfficherPiece()
+        {
+            string[,] dessin;
+
+            int i = 0;
+            int j = 0;
+
+            for (i = 0; i < nbreLignes; i++)
+            {
+                for (j = 0; j < nbreLignes; j++)
+                {
+                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
+                    dessin = TrouverDessin(Grille[i, j]);
+                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
+
+                    for (int k = 0; k < longueurCase - 1; k++)
+                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
+                        //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
+                        Console.SetCursorPosition(7 + largeurCase * j, 5 + longueurCase * i + k);
+                        Console.WriteLine(dessin[k, 0]);
+                    }
+                    Console.ResetColor();
+                }
+
+
+            }
+        }
+
 
         static void AfficherPiecesRestantes()
         {
@@ -487,6 +516,7 @@ namespace quarto_mjma
                 Console.Clear();
                 AfficherTitre();
                 AfficherGrille();
+                AfficherPiece();
                 AfficherPiecesRestantes();
                 joueurCourantHumain = !joueurCourantHumain; // le joueur courant n'est devient l'autre joueur
             }
@@ -573,10 +603,7 @@ namespace quarto_mjma
             bool pieceUtilisee = false;
 
             //choix pièce par le joueur
-            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
-                "- 0000 correspond à petite, creuse, carrée, clair\n" +
-                "- 1111 correspond à grande, pleine, ronde, foncee \n" +
-                "vous pouvez mixer plusieurs caractères évidemment.");
+            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n");
             do
             {
                 choixPiece = Console.ReadLine(); //on récupère la pièce que le joueur choisi pour l'ordi
