@@ -102,13 +102,13 @@ namespace quarto_mjma
                 Console.WriteLine("            REGLES DU JEU");
                 Console.WriteLine("==============================================\n");
 
-                Console.Write("\nBUT DU JEU : Créer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun(fig. 2).\nCet alignement peut-être horizontal, vertical ou diagonal." +
-                    " \nDÉROULEMENT D’UNE PARTIE : Le premier joueur est tiré au sort.\nIl choisit une des 16 pièces et la donne à son adversaire." +
+                Console.Write("\nBUT DU JEU : \nCréer sur le plateau un alignement de 4 pièces ayant au moins un caractère commun. Cet alignement peut-être horizontal, vertical ou diagonal." +
+                    " \n\nDÉROULEMENT D’UNE PARTIE : \nLe premier joueur est tiré au sort.\nIl choisit une des 16 pièces et la donne à son adversaire." +
                     "\nCelui - ci doit la placer sur une des cases du plateau et choisir ensuite une des 15 pièces restantes pour la donner à son adversaire." +
                     "\nA son tour, celui-ci la place sur une case libre et ainsi de suite…." +
-                    "\n\nGAIN DE LA PARTIE : La partie est gagnée par le premier joueur qui annonce “QUARTO !”" +
+                    "\n\nGAIN DE LA PARTIE : \nLa partie est gagnée par le premier joueur qui annonce “QUARTO !”" +
                     "\nUn joueur fait “QUARTO !” et gagne la partie lorsque, en plaçant la pièce donnée, il aligne 4 pièces ayant au moins un caractère en commun." +
-                    "\nPlusieurs caractères peuvent se cumuler.\n\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
+                    "\nPlusieurs caractères peuvent se cumuler.\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
                     "\nIl y a égalité: toutes les pièces ont été posées sans vainqueur.");
             }
 
@@ -124,7 +124,7 @@ namespace quarto_mjma
         static void ChoisirMode()
         {
             int choix;
-            Console.WriteLine("Tu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant\n[2]: Ordinateur intelligent");
+            Console.WriteLine("\n\n\nTu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant\n[2]: Ordinateur intelligent");
             choix = int.Parse(Console.ReadLine());
             while (choix != 1 && choix != 2) // message d'erreur s'il ne répond pas par "1" ou "2"
             {
@@ -314,7 +314,7 @@ namespace quarto_mjma
 
                 if (caseRemplie)
                 {
-                    Console.WriteLine("\nErreur : case déjà remplie, veuillez en choisir une autre :"); //message d'erreur si case déjà remplie
+                    Console.WriteLine("\nErreur, case déjà remplie, veuillez en choisir une autre :"); //message d'erreur si case déjà remplie
                 }
              
 
@@ -345,7 +345,7 @@ namespace quarto_mjma
                 {
                     Console.Beep(500, 300);
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("Erreur : une pièce doit avoir 4 caractères. Veuillez entrer un nom de pièce valide :"); 
+                    Console.WriteLine("Erreur, une pièce doit avoir 4 caractères. Veuillez entrer un nom de pièce valide :"); 
                     Console.ResetColor();
                 }
                 else // si la pièce est correcte
@@ -356,7 +356,7 @@ namespace quarto_mjma
                     {
                         Console.Beep(500, 300);
                         Console.ForegroundColor = ConsoleColor.DarkRed;
-                        Console.WriteLine("Erreur : Pièce déjà utilisée, veuillez en choisir une autre :");
+                        Console.WriteLine("Erreur, Pièce déjà utilisée, veuillez en choisir une autre :");
                         Console.ResetColor();
                     }
                 }
@@ -381,8 +381,6 @@ namespace quarto_mjma
                 GagnerIA(); // l'IA vérifie si elle peut gagner en plaçant la pièce donnée
                 if (!AGagne) // si elle ne peut pas
                 {
-                    if (trace)
-                        Console.WriteLine("if !AGagne");
                     ChoisirCaseIA(); // elle cherche une case telle que le placement de la pièce dans cette case ne permet pas à l'humain de gagner ensuite
                 }
             }
@@ -1087,7 +1085,7 @@ namespace quarto_mjma
             string reponse = Console.ReadLine(); //le joueur choisit s'il veut refaire une partie
             while (reponse != "r" && reponse != "a")
             {
-                Console.WriteLine("Erreur : saisissez [r] ou [a] on a dit !"); //Message d'erreur, demande à l'humain de saisir à nouveau tant qu'il ne saisit pas [r] ou [a]
+                Console.WriteLine("Erreur, saisissez [r] ou [a] on a dit !"); //Message d'erreur, demande à l'humain de saisir à nouveau tant qu'il ne saisit pas [r] ou [a]
                 reponse = Console.ReadLine();
             }
             if (reponse == "r")
@@ -1096,10 +1094,12 @@ namespace quarto_mjma
                 return false;
         }
 
+        // fonction que l'on voulait utiliser mais nous n'avons pas trouvé comment arrêter à tout moment sans demander à l'utilisateur s'il veut quitter la partie.
+
         /// <summary>
         /// ArreterPartie : à tout moment, le joueur peut décider d'arrêter la partie
         /// </summary>
-        static bool ArreterPartie()
+       /* static bool ArreterPartie()
         {
             bool arret = false;
             Console.WriteLine("Voulez-vous arrêter la partie ? (o/n)");
@@ -1114,7 +1114,7 @@ namespace quarto_mjma
                 Console.WriteLine("On s'arrête ...");
             }
             return arret;
-        }
+        }*/
 
     }
 }
