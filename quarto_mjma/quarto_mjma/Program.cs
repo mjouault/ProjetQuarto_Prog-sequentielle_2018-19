@@ -221,7 +221,7 @@ namespace quarto_mjma
                     for (int k = 0; k < longueurCase - 1; k++)
                     {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                         //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
-                        Console.SetCursorPosition(7 + largeurCase * j, 5 + longueurCase * i + k);
+                        Console.SetCursorPosition(9 + largeurCase * j, 5 + longueurCase * i + k);
                         Console.WriteLine(dessin[k, 0]);
                     }
                     Console.ResetColor();
