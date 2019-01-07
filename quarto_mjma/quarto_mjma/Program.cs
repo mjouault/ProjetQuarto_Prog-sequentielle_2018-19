@@ -124,7 +124,7 @@ namespace quarto_mjma
         static void ChoisirMode()
         {
             int choix;
-            Console.WriteLine("\n\n\nTu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant\n[2]: Ordinateur intelligent");
+            Console.WriteLine("\n\n\nTu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant (jeu aléatoire)\n[2]: Ordinateur intelligent");
             choix = int.Parse(Console.ReadLine());
             while (choix != 1 && choix != 2) // message d'erreur s'il ne répond pas par "1" ou "2"
             {
