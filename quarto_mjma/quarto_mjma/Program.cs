@@ -536,10 +536,8 @@ namespace quarto_mjma
 
             UtiliserPiece(); // l'indice de présence de la pièce choisie passe de 0 à 1
 
-            Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous\n" +
-                "- 0000 correspond à petite, creuse, carrée, clair\n" +
-                "- 1111 correspond à grande, pleine, ronde, foncee \n" +
-                "Les caractères peuvent être mélangés entre eux", choixPiece);
+            Console.SetCursorPosition(0, longueurCase * nbreLignes + 7);
+            Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous", choixPiece);
             // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
 
 
@@ -592,7 +590,9 @@ namespace quarto_mjma
             bool pieceUtilisee = false;
 
             //choix pièce par le joueur
-            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n");
+            Console.SetCursorPosition(0, longueurCase * nbreLignes + 7);
+            Console.WriteLine("Que choisissez-vous comme pièce pour l'ordinateur?\n" +
+                "(Indiquez le nom de la pièce)");
             do
             {
                 choixPiece = Console.ReadLine(); //on récupère la pièce que le joueur choisi pour l'ordi
