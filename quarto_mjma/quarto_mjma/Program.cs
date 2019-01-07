@@ -273,17 +273,6 @@ namespace quarto_mjma
                             m++;
                         }
                     }
-                    /*  }
-                      else if T
-                     {
-                          for (int k = 0; k < 6; k++)
-                          {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
-                           //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
-
-                              Console.SetCursorPosition(75 + largeurCase * j, 5 + 7 * i + k);
-                              if (k < 6)
-                                  Console.WriteLine( pieceVide[0,k]);
-                          }*/
                     j++;
                     if (j == 4 || j == 8 || j == 12)
                     {
