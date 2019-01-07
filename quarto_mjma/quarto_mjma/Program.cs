@@ -29,11 +29,24 @@ namespace quarto_mjma
         static bool grilleRemplie = false;
         static bool modeIntell = false; // true : mode intelligent activé / false : mode noviced de l'ordinateur
 
+        static int largeurCase = 15;
+        static string blanc = "           ";
+        static string[,] pieceVide =
+           {
+            { blanc},
+            { blanc},
+            { blanc},
+            { blanc},
+            { blanc},
+            { blanc}
+          };
+
+
         // Main
         static void Main(string[] args)
         {
             bool rejoue = false;
-            Console.SetWindowSize(100, 40);
+            Console.SetWindowSize(150, 40);
 
             AfficherEnTete();
             AfficherRegles();
@@ -70,11 +83,12 @@ namespace quarto_mjma
         /// <summary>
         /// AfficherTitre : affichage du titre durant toute la partie de jeu
         /// </summary>
-        private static void AfficherTitre()
+         static void AfficherTitre()
         {
-            Console.WriteLine("==============================================");
-            Console.WriteLine("                  QUARTO");
-            Console.WriteLine("==============================================\n");
+            Console.WriteLine("                  ==============================================");
+            Console.WriteLine("                                      QUARTO");
+            Console.WriteLine("                  ==============================================\n");
+
         }
 
         /// <summary>
@@ -124,7 +138,7 @@ namespace quarto_mjma
         static void ChoisirMode()
         {
             int choix;
-            Console.WriteLine("\n\n\nTu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant (jeu aléatoire)\n[2]: Ordinateur intelligent");
+            Console.WriteLine("\nTu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant (jeu aléatoire)\n[2]: Ordinateur intelligent");
             choix = int.Parse(Console.ReadLine());
             while (choix != 1 && choix != 2) // message d'erreur s'il ne répond pas par "1" ou "2"
             {
@@ -170,21 +184,250 @@ namespace quarto_mjma
             for (int i = 0; i < nbreLignes; i++) //indice ligne
             {
 
-                Console.WriteLine("      +------+------+------+------+");
-                Console.WriteLine("      |      |      |      |      |");
-                Console.Write("{0}   ", i);
-                Console.Write("  |");
-
-                for (int j = 0; j < nbreLignes; j++) // i = indice colonne
-                {
-                    Console.Write(" " + Grille[i, j] + " |");
-                }
-                Console.Write("\n");// sauter une ligne pour mettre la barre entre chaque case
-                Console.WriteLine("      |      |      |      |      |");
+                Console.WriteLine("      +---------------+---------------+---------------+---------------+");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+              Console.WriteLine(i+"     |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
+                Console.WriteLine("      |               |               |               |               |");
             }
 
-            Console.WriteLine("      +------+------+------+------+");
-            Console.WriteLine("         0      1      2      3");
+            Console.WriteLine("      +---------------+---------------+---------------+---------------+");
+            Console.WriteLine("              0              1              2                3         ");
+
+
+
+            Console.SetCursorPosition(75, 4);
+            Console.WriteLine("Pièces restantes:");
+
+        }
+
+        static void AfficherPiecesRestantes()
+        {
+            int i = 0; int j = 0; int m = 0;
+            string[,] dessin;
+
+            while (i < 4) //i= nombre de lignes
+            {
+                while (j < 4 && m < 16)//j= nbre de colonnes
+                {
+                    // if (TabPieces[1, m] == "0")
+                    //{
+                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
+                    dessin = TrouverDessin(TabPieces[0, m]);
+                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
+
+                    for (int k = 0; k < 8; k++)//+une case à chaque fois
+                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
+                     //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
+
+                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k);
+
+                        if (k < 6)
+                        {
+                            if (TabPieces[1, m] == "0")
+                                Console.WriteLine(dessin[k, 0]);
+                        }
+
+                        if (k == 7)
+                        {
+                            if (TabPieces[1, m] == "0")
+                            {
+                                Console.ResetColor();
+                                //Console.WriteLine("m={0}, Tab[0,m]={1}", m, TabPieces[0, m]);
+                                //  Console.WriteLine();
+                                Console.WriteLine("{0}", TabPieces[0, m]);
+                            }
+                            //  Console.WriteLine();
+
+                            m++;
+                        }
+                    }
+                    /*  }
+                      else if T
+                     {
+                          for (int k = 0; k < 6; k++)
+                          {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
+                           //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
+
+                              Console.SetCursorPosition(75 + largeurCase * j, 5 + 7 * i + k);
+                              if (k < 6)
+                                  Console.WriteLine( pieceVide[0,k]);
+                          }*/
+                    j++;
+                    if (j == 4 || j == 8 || j == 12)
+                    {
+                        i++;
+                        j = 0;
+                    }
+                }
+            }
+            Console.ResetColor();
+        }
+
+        static string[,] TrouverDessin(string piece) // Trouver le dessin qui correspond à la pièce voulue
+        {
+
+            string largeurGrandCarre = "*         *";
+            string largeurGrandCarrePlein = "***********";
+            //int hauteurGrandCarre = 6;
+            string largeurPetitCarre = "  *     *  ";
+            string largeurPetitCarrePlein = "  *******  ";
+            // int hauteurPetitCarre = 4;
+
+
+            string[,] pieceCarreePetite =
+           {
+        { blanc},
+        { largeurPetitCarrePlein },
+        { largeurPetitCarre },
+        { largeurPetitCarre },
+        { largeurPetitCarrePlein },
+         { blanc},
+        };
+
+            string[,] pieceCarrePetitePleine =
+           {
+        { blanc},
+        { largeurPetitCarrePlein},
+        { largeurPetitCarrePlein},
+        { largeurPetitCarrePlein},
+        { largeurPetitCarrePlein},
+        { blanc},
+        };
+
+            string[,] pieceCarreeGrande =
+           {
+        { largeurGrandCarrePlein },
+        { largeurGrandCarre },
+        { largeurGrandCarre },
+        { largeurGrandCarre },
+        { largeurGrandCarre },
+        { largeurGrandCarrePlein },
+        };
+
+            string[,] pieceCarreeGrandePleine =
+            {
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        { largeurGrandCarrePlein },
+        };
+
+            string[,] pieceRondePetite =
+            {
+        { blanc},
+        {"    * *    "},
+        {"  *     *  "},
+        {"  *     *  "},
+        {"    * *    "},
+        { blanc}
+         };
+
+
+            string[,] pieceRondePetitePleine =
+         {
+         { blanc},
+         {"    ***    "},
+         {"  *******  "},
+         {"  *******  "},
+         {"    ***    "},
+          { blanc}
+        };
+
+            string[,] pieceRondeGrande =
+            {
+           { "    * *    "},
+           { " *       * "},
+           { "*         *"},
+           { "*         *"},
+           { " *       * "},
+           { "    * *    "}
+        };
+
+            string[,] pieceRondeGrandePleine =
+            {
+           {"   ****   "},
+           {" ********* "},
+           {"***********"},
+           {"***********"},
+           {" ********* "},
+           {"   ****    "}
+        };
+
+
+
+            string[,] dessin = new string[6, 1];
+
+            // 0000 = ronde, petite creuse, rouge
+            if (piece[0] == ' ')
+            {
+                dessin = pieceVide;
+            }
+            else
+            {
+                //identifie d'abord la couleur
+                if (piece[3] == '0')
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                }
+
+                //identifie la forme
+                if (piece[0] == '0') // pièce ronde
+                {
+                    //identifie la grandeur
+                    if (piece[1] == '0') //petite
+                    {
+                        dessin = pieceRondePetite;
+
+                        //identifie le caractère creux/plein
+                        if (piece[2] == '1')
+                        {
+                            dessin = pieceRondePetitePleine;
+                        }
+                    }
+                    else //grande
+                    {
+                        dessin = pieceRondeGrande;
+
+                        if (piece[2] == '1')
+                        {
+                            dessin = pieceRondeGrandePleine;
+                        }
+                    }
+                }
+                else if (piece[0] == '1') // piece carrée
+                {
+                    if (piece[1] == '0') //petite
+                    {
+                        dessin = pieceCarreePetite;
+
+                        if (piece[2] == '1')
+                        {
+                            dessin = pieceCarrePetitePleine;
+                        }
+
+                    }
+                    else //grande
+                    {
+                        dessin = pieceCarreeGrande;
+
+                        if (piece[2] == '1')
+                        {
+                            dessin = pieceCarreeGrandePleine;
+                        }
+                    }
+                }
+            }
+            // Console.ResetColor();
+            return dessin;
         }
 
         /// <summary>
@@ -210,18 +453,13 @@ namespace quarto_mjma
         static void Jouer()
         {
             bool joueurCourantHumain = choisir1erJoueur(); // appel de la fonction booléenne choisir1erJoueur pour déterminer l'ordre d'alternance
+            Console.Clear();
             AfficherTitre();
             AfficherGrille();
+            AfficherPiecesRestantes();
 
             while (!AGagne && !grilleRemplie)
             {
-                //Console.Clear();
-                // AfficherTitre();
-                // AfficherGrille();
-
-                if (trace)
-                    Console.WriteLine("la partie commence");
-
                 if (joueurCourantHumain)  // joueur être humain commence
                 {
                     JouerHumain();
@@ -246,8 +484,10 @@ namespace quarto_mjma
                         Console.WriteLine("Match nul");
                 }
 
+                Console.Clear();
                 AfficherTitre();
                 AfficherGrille();
+                AfficherPiecesRestantes();
                 joueurCourantHumain = !joueurCourantHumain; // le joueur courant n'est devient l'autre joueur
             }
         }
