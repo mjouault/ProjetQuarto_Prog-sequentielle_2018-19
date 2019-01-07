@@ -29,7 +29,7 @@ namespace quarto_mjma
         static bool grilleRemplie = false;
         static bool modeIntell = false; // true : mode intelligent activé / false : mode noviced de l'ordinateur
 
-        static int largeurCase = 15;
+        static int largeurCase = 16;
         static int longueurCase = 7;
         static string blanc = "           ";
         static string[,] pieceVide =
