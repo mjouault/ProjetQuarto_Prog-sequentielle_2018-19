@@ -4,31 +4,15 @@ namespace quarto_mjma
 {
     class Program
     {
-        // Variables globales
-        static int nbPiecesTotales = 16;
-        // tableau des pièces avec deuxième ligne servant à indiquer ou non la présence de la pièce sur la grille de jeu
-        static string[,] TabPieces;
-        static string[,] Grille;    // Grille de jeu
-        static string caseVide = "    ";
+        // --------Variables globales------
 
-        static int ligne; static int col; //lignes et colonnes que le joueur/l'ordi a choisi
-        static string choixPiece; // variable globale désignant une pièce choisie pour être jouée par l'un des joueurs
+         // variables relatives aux caractéristiques du jeu
+        static int nbPiecesTotales = 16;
         static int nbreLignes = 4; // constante donnant le nombre de lignes et de colonnes puisque le plateau est carré
         static int nbreCaractéristiques = 4; // constante donnant le nombre de caractéristiques des pièces
 
-        static int[,] tabLignes0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque ligne 
-        static int[,] tabLignes1 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque ligne 
-        static int[,] tabCol0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque colonne
-        static int[,] tabCol1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque colonne
-        static int[,] tabDiago0 = new int[4, 4];   //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque diagonale
-        static int[,] tabDiago1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque diagonale
 
-
-        static bool trace = false;  //  true si l'on veut afficher des messages pour débugueur notre code, false sinon
-        static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
-        static bool grilleRemplie = false;
-        static bool modeIntell = false; // true : mode intelligent activé / false : mode noviced de l'ordinateur
-
+        //variables relatives à l'affichage
         static int largeurCase = 16;
         static int longueurCase = 7;
         static string blanc = "           ";
@@ -42,8 +26,33 @@ namespace quarto_mjma
             { blanc}
           };
 
+        // varibales mises à jour durant le jeu 
+        static string[,] TabPieces; //tableau recensant le nom ds pièces (ligne 0) et leur indice de présence (0 : absent) dans la grille de jeu (ligne1)
+        static string[,] Grille;    // Grille de jeu
+        static string caseVide = "    ";
+        static int ligne; static int col; //lignes et colonnes que le joueur/l'ordi choisit pour placer la pièce donnée
+        static string choixPiece; // désigne une pièce choisie pour être jouée par l'un des joueurs
 
-        // Main
+
+
+        // tableux de sommes pour que l'IA mène sa stratégie
+        static int[,] tabLignes0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque ligne 
+        static int[,] tabLignes1 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque ligne 
+        static int[,] tabCol0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque colonne
+        static int[,] tabCol1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque colonne
+        static int[,] tabDiago0 = new int[4, 4];   //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque diagonale
+        static int[,] tabDiago1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque diagonale
+
+
+        //booléen utiles
+        static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
+        static bool grilleRemplie = false;
+        static bool modeIntell = false; // true : mode intelligent activé / false : mode noviced de l'ordinateur
+
+       
+
+
+        //----------------------------------- Main----------------------------------------------
         static void Main(string[] args)
         {
             bool rejoue = false;
@@ -63,7 +72,7 @@ namespace quarto_mjma
             } while (RejouerPartie());
         }
 
-        //Affichage introduction du jeu
+        //-----------------------------Fonctions de démarrage du jeu-----------------------------
 
         /// <summary>
         /// AfficherEnTete : Affiche l'en-tête
@@ -126,11 +135,8 @@ namespace quarto_mjma
                     "\nPlusieurs caractères peuvent se cumuler.\nDe plus, il n’est pas obligé d’avoir lui même déposé les trois autres pièces." +
                     "\nIl y a égalité: toutes les pièces ont été posées sans vainqueur.");
             }
-
-            //Console.WriteLine("Que la partie commence et que le meilleur gagne !");
         }
 
-        //Sous-programmes
 
             /// <summary>
             /// ChoisirMode : l'humain choisit le niveau de l'ordinateur : débutant (en tapant 1) ou intelligent (en tapant 2)
@@ -176,6 +182,26 @@ namespace quarto_mjma
                                           "0", "0", "0", "0", "0", "0", "0", "0" } };
         }
 
+
+        /// <summary>
+        /// choisir1erJoueur : désigne aléatoirement qui du joueur ou de l'ordi commence à jouer (si 1 est tiré, l'humain commance, si le 0 est tiré, l'est l'ordi).
+        /// </summary>
+        /// <returns></returns>
+        static bool choisir1erJoueur()
+        {
+            bool estHumain = false;
+
+            Random R = new Random();
+            int choix1er = R.Next(0, 2); ;
+
+            if (choix1er == 1)
+                estHumain = true;
+
+            return estHumain;
+        }
+
+
+        //---------------------------Fonctions d'affichage du jeu----------------------------
 
         /// <summary>
         /// AfficherGrille : affiche la grille avec le dessin des pièces à chaque tour de jeu 
@@ -231,7 +257,9 @@ namespace quarto_mjma
             }
         }
 
-
+        /// <summary>
+        /// AfficherPiecesRestantes : Affiche les pièces disponibles, réactualisées à chaque tour
+        /// </summary>
         static void AfficherPiecesRestantes()
         {
             int i = 0; int j = 0; int m = 0;
@@ -448,23 +476,9 @@ namespace quarto_mjma
             return dessin;
         }
 
-        /// <summary>
-        /// choisir1erJoueur : désigne aléatoirement qui du joueur ou de l'ordi commence à jouer (si 1 est tiré, l'humain commance, si le 0 est tiré, l'est l'ordi).
-        /// </summary>
-        /// <returns></returns>
-        static bool choisir1erJoueur()
-        {
-            bool estHumain = false;
 
-            Random R = new Random();
-            int choix1er = R.Next(0, 2);;
-           
-            if (choix1er == 1) 
-                estHumain = true;
-
-            return estHumain;
-        }
-
+        //----------Fonctions permettant de jouer------------
+       
         /// <summary>
         /// Jouer() : Fait en sorte que le joueur et l'ordinateur jouent chacun leur tour
         /// </summary>
@@ -643,9 +657,12 @@ namespace quarto_mjma
                     MettreAJourStrategies(false, 0); // mise à jour des tableaux de sommes correspondant
         }
 
-        // sous- fonctions relatives à l'intelligence artificielle 
 
-        // sous-fonctions de choix intelligent de la  pièce 
+        // --------------------sous- fonctions relatives à l'intelligence artificielle------------------------------ 
+
+
+        // 1) sous-fonctions de choix intelligent de la  pièce 
+
         static void ChoisirPieceIA()
         {
             bool empecheVictoireHumain = false; // true : l'IA a trouvé une pièce qui empêche l'humain de gagner, false sinon
@@ -727,22 +744,15 @@ namespace quarto_mjma
 
                     if (piecesPossiblesIA[k] != null)
                     {
-                        if (trace)
-                            Console.WriteLine("entre ds le if piecepossible non null, piece ={0}", choixPiece);
                         //  l'IA parcourt tout le tableau pour voir si, parmi les pièces qui empêchent l'humain de gagner, certaines peuvent lui permettre de gagner. 
                         // Une pièce qui permettrait à l'IA de gagner serait une pièce qui, placée dans l'une des cases, générerait un alignement de 3 pièces
                         while (ligne < nbreLignes && !alignement3Pieces)
                         {
                             while (col < nbreLignes && !alignement3Pieces)
                             {
-                                if (trace)
-                                    Console.WriteLine("entre ds le 2eme while piecepossible non null, ");
-
                                 if (Grille[ligne, col] == caseVide)
                                 {
                                     alignement3Pieces = MettreAJourStrategies(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
-                                    if (trace)
-                                        Console.WriteLine("alignement3pieces={0}, ligne={1}, col={2}", alignement3Pieces, ligne, col);
                                     if (alignement3Pieces) // L'IA a trouvé une pièce qui générait un alignement de 3 pièces si elle était placée dans une case
                                     {
                                         potentielleVictoireIA = true; // cette pièce empêche donc l'humain de gagner avec cette pièce si on la lui donne
@@ -785,8 +795,6 @@ namespace quarto_mjma
 
                     do
                     {
-                        if (trace)
-                            Console.WriteLine("tableau de pièces gagnantes nul, choix aléatoire");
                         randomPiece = R.Next(0, piecesPossiblesIA.Length);
 
                     }
@@ -798,7 +806,7 @@ namespace quarto_mjma
             }
         }
 
-        // sous-fonctions de choix intelligent de la case
+        // 2) sous-fonctions de choix intelligent de la case
 
         /// <summary>
         /// GagnerIA () : l'IA cherche si elle peut directement gagner avec la pièce qu'elle a : S'il l y a déjà 3 pièces d' "alignées", elle regarde si sa pièce est compatible et si elle peut la placer dans la case restante
@@ -889,7 +897,7 @@ namespace quarto_mjma
                         }
                     }
 
-                    if (k != tabDiago0.GetLength(0) && TrouverCaseIAdiago(k)) //l'indice k permet d'identifier dans laquelle des 2 diagonales se trouve l'alignement de 3 pièces identiques
+                    if (k != tabDiago0.GetLength(0) && TrouverCaseIADiago(k)) //l'indice k permet d'identifier dans laquelle des 2 diagonales se trouve l'alignement de 3 pièces identiques
                     {
                         Grille[ligne, col] = choixPiece;
                         AGagne = true;
@@ -952,7 +960,7 @@ namespace quarto_mjma
         /// </summary>
         /// <param name="k"></param>
         /// <returns></returns>
-        static bool TrouverCaseIAdiago(int k) // int k indique sur laquelle des 2 diagonales de la grille les 3pièces alignées se trouvent
+        static bool TrouverCaseIADiago(int k) // int k indique sur laquelle des 2 diagonales de la grille les 3pièces alignées se trouvent
         {
             bool caseJouable = false;
             int i = 0;
@@ -987,7 +995,6 @@ namespace quarto_mjma
 
             return caseJouable;
         }
-
 
 
         /// <summary>
@@ -1060,6 +1067,7 @@ namespace quarto_mjma
         }
 
     
+        //----------------------------------Fonctions d'actualisation et de vérification -------------------------
         /// <summary>
         /// UtiliserPiece : Fonction permettant de ne jouer qu'une seule fois chaque pièce
         /// </summary>
@@ -1190,6 +1198,7 @@ namespace quarto_mjma
         }
 
 
+        //-------------------------------------------Fonctions relatives à la fin du jeu -------------------------------------------------
         /// <summary>
         /// Gagner () : Fonction donnant toutes les combinaisons gagnantes et terminant la partie
         /// </summary>
