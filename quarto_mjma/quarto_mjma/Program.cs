@@ -229,88 +229,6 @@ namespace quarto_mjma
             Console.WriteLine("Pièces restantes:");
 
         }
-        static void AfficherPiece()
-        {
-            string[,] dessin;
-
-            int i = 0;
-            int j = 0;
-
-            for (i = 0; i < nbreLignes; i++)
-            {
-                for (j = 0; j < nbreLignes; j++)
-                {
-                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessin(Grille[i, j]);
-                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
-
-                    for (int k = 0; k < longueurCase - 1; k++)
-                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
-                        //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
-                        Console.SetCursorPosition(9 + largeurCase * j, 5 + longueurCase * i + k);
-                        Console.WriteLine(dessin[k, 0]);
-                    }
-                    Console.ResetColor();
-                }
-
-
-            }
-        }
-
-        /// <summary>
-        /// AfficherPiecesRestantes : Affiche les pièces disponibles, réactualisées à chaque tour
-        /// </summary>
-        static void AfficherPiecesRestantes()
-        {
-            int i = 0; int j = 0; int m = 0;
-            string[,] dessin;
-
-            while (i < 4) //i= nombre de lignes
-            {
-                while (j < 4 && m < 16)//j= nbre de colonnes
-                {
-                    // if (TabPieces[1, m] == "0")
-                    //{
-                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessin(TabPieces[0, m]);
-                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
-
-                    for (int k = 0; k < 8; k++)//+une case à chaque fois
-                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
-                     //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
-
-                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k);
-
-                        if (k < 6)
-                        {
-                            if (TabPieces[1, m] == "0")
-                                Console.WriteLine(dessin[k, 0]);
-                        }
-
-                        if (k == 7)
-                        {
-                            if (TabPieces[1, m] == "0")
-                            {
-                                Console.ResetColor();
-                                //Console.WriteLine("m={0}, Tab[0,m]={1}", m, TabPieces[0, m]);
-                                //  Console.WriteLine();
-                                Console.WriteLine("{0}", TabPieces[0, m]);
-                            }
-                            //  Console.WriteLine();
-
-                            m++;
-                        }
-                    }
-                    j++;
-                    if (j == 4 || j == 8 || j == 12)
-                    {
-                        i++;
-                        j = 0;
-                    }
-                }
-            }
-            Console.ResetColor();
-        }
 
         /// <summary>
         /// TrouverDessin : permet d'associer au nom de pièce textuel, le visuel correspondant
@@ -481,6 +399,90 @@ namespace quarto_mjma
             return dessin;
         }
 
+        static void AfficherPiece()
+        {
+            string[,] dessin;
+
+            int i = 0;
+            int j = 0;
+
+            for (i = 0; i < nbreLignes; i++)
+            {
+                for (j = 0; j < nbreLignes; j++)
+                {
+                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
+                    dessin = TrouverDessin(Grille[i, j]);
+                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
+
+                    for (int k = 0; k < longueurCase - 1; k++)
+                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
+                        //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
+                        Console.SetCursorPosition(9 + largeurCase * j, 5 + longueurCase * i + k);
+                        Console.WriteLine(dessin[k, 0]);
+                    }
+                    Console.ResetColor();
+                }
+
+
+            }
+        }
+
+        /// <summary>
+        /// AfficherPiecesRestantes : Affiche les pièces disponibles, réactualisées à chaque tour
+        /// </summary>
+        static void AfficherPiecesRestantes()
+        {
+            int i = 0; int j = 0; int m = 0;
+            string[,] dessin;
+
+            while (i < 4) //i= nombre de lignes
+            {
+                while (j < 4 && m < 16)//j= nbre de colonnes
+                {
+                    // if (TabPieces[1, m] == "0")
+                    //{
+                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
+                    dessin = TrouverDessin(TabPieces[0, m]);
+                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
+
+                    for (int k = 0; k < 8; k++)//+une case à chaque fois
+                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
+                     //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
+
+                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k);
+
+                        if (k < 6)
+                        {
+                            if (TabPieces[1, m] == "0")
+                                Console.WriteLine(dessin[k, 0]);
+                        }
+
+                        if (k == 7)
+                        {
+                            if (TabPieces[1, m] == "0")
+                            {
+                                Console.ResetColor();
+                                //Console.WriteLine("m={0}, Tab[0,m]={1}", m, TabPieces[0, m]);
+                                //  Console.WriteLine();
+                                Console.WriteLine("{0}", TabPieces[0, m]);
+                            }
+                            //  Console.WriteLine();
+
+                            m++;
+                        }
+                    }
+                    j++;
+                    if (j == 4 || j == 8 || j == 12)
+                    {
+                        i++;
+                        j = 0;
+                    }
+                }
+            }
+            Console.ResetColor();
+        }
+
+       
 
         //----------Fonctions permettant de jouer------------
        
@@ -528,6 +530,54 @@ namespace quarto_mjma
                 AfficherPiecesRestantes();
                 joueurCourantHumain = !joueurCourantHumain; // le joueur courant n'est devient l'autre joueur
             }
+        }
+
+        /// <summary>
+        /// UtiliserPiece : Fonction permettant de ne jouer qu'une seule fois chaque pièce
+        /// </summary>
+        /// <param name="choixPiece"></param>
+        static void UtiliserPiece()
+        {
+            int i = 0;
+
+            // Recherche de l'indice de colonne de la pièce "choixPiece" dans le tableau recensant les pièces
+            while (i < nbPiecesTotales && choixPiece != TabPieces[0, i])
+            {
+                i++;
+            }
+
+            // une fois cet indice trouvé, l'indice de présence de la pièce passe à 1
+            TabPieces[1, i] = "1";
+        }
+
+        /// <summary>
+        /// verifierSiPieceUtilisee : True si la pièce n'a pas été joué, False sinon
+        /// </summary>
+        /// <returns></returns>
+        static bool VerifierSiPieceUtilisee() //vérifier si la pièce a été utilisée (true) ou non (false)
+        {
+            bool pieceUtilisee = false;
+            int i = 0;  // Compteur
+
+            // Vérification
+
+            while (choixPiece != TabPieces[0, i] && i < nbPiecesTotales)
+                i++;
+            if (TabPieces[1, i] == "1")
+                pieceUtilisee = true;
+
+            return pieceUtilisee;
+        }
+
+        /// <summary>
+        /// AvoirCaseRemplie : Permet de savoir si le joueur ou l'ordinateur peut jouer dans la case ou si elle est déjà remplie
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        static bool AvoirCaseRemplie(int i, int j)
+        {
+            return Grille[i, j] != caseVide; // retourne true si la case considérée n'est pas vide, false sinon
         }
 
         /// <summary>
@@ -665,9 +715,90 @@ namespace quarto_mjma
 
         // --------------------sous- fonctions relatives à l'intelligence artificielle------------------------------ 
 
+        /// <summary>
+        /// MettreAJourStrategies : l'IA calcule après chaque placement de pièce le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
+        /// </summary>
+        /// <returns></returns>
+        static bool MettreAJourStrategies(bool simul, int nbPiecesAlignees)  /* La fonction MettreAJourStrategies est appelée :
+                                                                                - A chaque fin de tour pour que l'IA recalcule ses stratégies
+                                                                               -  Dans TrouverCase afin de s'assurer qu'après simulation du placement de la pièce (d'où vient notre bool simul),
+                                                                                il n'y aurait pas 3 pièces alignées afin de ne pas permettre au joueur de gagner au tour suivant.
+                                                                               - Dans TrouverPiece afin de s'assurer qu'après simulation du placement de la pièce dans la grille,(d'où vient nbPiecesAlignees) 
+                                                                                l'humain ne pourrait pas former un alignement de 4caractéristiques avec cette pièce*/
 
-        // 1) sous-fonctions de choix intelligent de la  pièce 
+        {
+            bool alignementPieces = false;
 
+
+            for (int n = 0; n < nbreCaractéristiques; n++) //parcours chaque caractéristique
+            {
+                if (choixPiece[n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne/colonne/diagonale considérée
+                {
+                    if (simul) // On simule le placement d'une pièce dans la grille sans que les tableaux de sommes soient mis à jour
+                    {
+
+                        if (tabLignes0[ligne, n] == nbPiecesAlignees || tabCol0[col, n] == nbPiecesAlignees) // cherche un certain nombre de pièces alignées (2 ou 3) dans les tableaux de sommes des lignes et des colonnes concernant les caractéristiques codée par "0"
+                        {
+                            alignementPieces = true;
+                        }
+                        else if (ligne == col && tabDiago0[0, n] == nbPiecesAlignees) // idem pour le tableau de sommes de la diagonale de la gauche vers la droite, du haut vers le bas (il s'agit de la première ligne du tableau tabDiago0 d'où  tabDiago[0,n])
+                        {
+                            alignementPieces = true;
+                        }
+                        else if (ligne == ((nbreLignes - 1) - col) && tabDiago0[1, n] == nbPiecesAlignees || col == ((nbreLignes - 1) - ligne) && tabDiago0[1, n] == nbPiecesAlignees) // idem pour le tableau de sommes de la diagonale de la droite vers la gauche, du haut vers le bas (il s'agit de la première ligne du tableau tabDiago0 d'où  tabDiago[1,n])
+                        {
+                            alignementPieces = true;
+                        }
+                    }
+                    else // Une pièce vient d'être placée dans la grille de jeu, les tableaux de sommes sont actualisés (incrémentation des tableaux concernés selon les caractéristiques de la pièce)
+                    {
+                        tabLignes0[ligne, n]++;
+                        tabCol0[col, n]++;
+
+                        if (ligne == col)
+                            tabDiago0[0, n]++;
+
+                        else if (ligne == ((nbreLignes - 1) - col) || col == (nbreLignes - 1) - ligne)
+                            tabDiago0[1, n]++;
+                    }
+                }
+                else //compteur du nombre de 1 de la n ième caractéristique sur la ligne, colonne, diagonale considérée. Mêmes manipulations mais dans les tableaux de sommes des caractéristiques codée par "1"
+                {
+                    if (simul)
+                    {
+                        if (tabLignes1[ligne, n] == nbPiecesAlignees || tabCol1[col, n] == nbPiecesAlignees) // cherche un certain nombre de pièces alignées (2 ou 3) dans les tableaux de sommes des lignes et des colonnes concernant les caractéristiques codée par "1"
+                        {
+                            alignementPieces = true;
+                        }
+                        else if (ligne == col && tabDiago1[0, n] == nbPiecesAlignees) // idem pour le tableau de sommes de la diagonale de la gauche vers la droite, du haut vers le bas (il s'agit de la première ligne du tableau tabDiago0 d'où  tabDiago1[0,n])
+                        {
+
+                            alignementPieces = true;
+                        }
+                        else if (ligne == ((nbreLignes - 1) - col) && tabDiago1[1, n] == nbPiecesAlignees || col == ((nbreLignes - 1) - ligne) && tabDiago1[1, n] == nbPiecesAlignees) // idem pour le tableau de sommes de la diagonale de la droite vers la gauche, du haut vers le bas (il s'agit de la première ligne du tableau tabDiago0 d'où tabDiago1[1,n])
+                        {
+                            alignementPieces = true;
+                        }
+                    }
+                    else
+                    {
+                        tabLignes1[ligne, n]++;
+                        tabCol1[col, n]++;
+
+                        if (ligne == col)
+                            tabDiago1[0, n]++;
+
+                        if (ligne == ((nbreLignes - 1) - col) || col == ((nbreLignes - 1) - ligne))
+                            tabDiago1[1, n]++;
+                    }
+                }
+            }
+            return alignementPieces;
+        }
+
+        /// <summary>
+        /// ChoisirPieceIA : l'IA choisit intelligemment la pièce qu'elle donnera à l'humain
+        /// </summary>
         static void ChoisirPieceIA()
         {
             bool empecheVictoireHumain = false; // true : l'IA a trouvé une pièce qui empêche l'humain de gagner, false sinon
@@ -731,87 +862,94 @@ namespace quarto_mjma
 
             else  // si le tableau recensant les pièces que l'IA peut jouer n'est pas nul
             {
-                // l'IA va maintenant regarder si elle ne peut pas trouver une pièce qui empêche l'humain de gagner mais qui peuvent en plus permettre à l'IA de gagner au prochain tour.
-                // Elle procède de la même façon que précédemment mais cette fois, en cherchant une pièce dont la simulation de placement générerait un alignement de 3 pièces (ainsi, si l'humain place la pièce au bon endroit et ensuite, lui donne une pièce adéquate, il pourra faire un quarto)
-
-
-                bool alignement3Pieces = false; //true : La simulation de placement de la pièce considérée dans une case de la grille génère un alignement de 3 pièces (avec une caractéristique commune), false sinon
-                bool potentielleVictoireIA = false; // true : l'IA a trouvé une pièce telle que, si elle la donne, elle peut potentiellement gagner lorsque viendra son tour, false sinon
-
-                string[] piecesGagnantesIA = new string[piecesPossiblesIA.Length]; // tableau recensant toutes les pièces disponibles qui peuvent permettre à l'IA de gagner au prochain tour. 
-                                                                                   // sa taille maximale est égale à la taille du tableau des pièces qui empêchent l'humain de gagner
-
-                for (k = 0; k < piecesPossiblesIA.Length; k++) // choix d'une pièce parmi les pièces dispos
-                {
-                    choixPiece = piecesPossiblesIA[k];
-                    ligne = 0; col = 0;
-                    alignement3Pieces = false;
-
-                    if (piecesPossiblesIA[k] != null)
-                    {
-                        //  l'IA parcourt tout le tableau pour voir si, parmi les pièces qui empêchent l'humain de gagner, certaines peuvent lui permettre de gagner. 
-                        // Une pièce qui permettrait à l'IA de gagner serait une pièce qui, placée dans l'une des cases, générerait un alignement de 3 pièces
-                        while (ligne < nbreLignes && !alignement3Pieces)
-                        {
-                            while (col < nbreLignes && !alignement3Pieces)
-                            {
-                                if (Grille[ligne, col] == caseVide)
-                                {
-                                    alignement3Pieces = MettreAJourStrategies(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
-                                    if (alignement3Pieces) // L'IA a trouvé une pièce qui générait un alignement de 3 pièces si elle était placée dans une case
-                                    {
-                                        potentielleVictoireIA = true; // cette pièce empêche donc l'humain de gagner avec cette pièce si on la lui donne
-                                        piecesGagnantesIA[k] = choixPiece; // remplissage du tableau recensant toutes les pièces que peut jouer l'IA sans faire gagner l'adversaire
-                                    }
-                                }
-
-                                col++;
-                            }
-                            if (col == nbreLignes) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case générant un alignement de 3 pièces avec 1 caractéristique commune
-                            {
-                                col = 0; // Et remet l'indice des colonnes à 0 pour toutes les parcourir de nouveau lorsqu'elle changera de ligne
-                            }
-                            if (ligne < nbreLignes)
-                                ligne++;
-                        }
-                    }
-                }
-
-                if (potentielleVictoireIA) // l'IA a trouvé au moins une pièce potentiellement gagnante pour elle, le tableau piecesGagnantesIA n'est donc pas nul
-                {
-                    // l'IA choisit au hasard une pièce dans le tableau piecesGagnantesIA (pour ne pas être prévisible)
-                    int randomPiecesGagnantes;
-                    Random R2 = new Random();
-                    do
-                    {
-                        randomPiecesGagnantes = R2.Next(0, piecesGagnantesIA.Length); // choix aléatoire d'un indice (entre 0 et 15) de colonne du tableau piecesGagnantes
-
-                    }
-                    while (piecesGagnantesIA[randomPiecesGagnantes] == null); // il se peut que des valeurs du tableau soient nulles (puisqu'il comporte 16 cases)
-
-                    choixPiece = piecesPossiblesIA[randomPiecesGagnantes]; 
-
-                }
-                else // si le tableau recensant les pièces gagnantes pr l'IA est nul
-                {
-                    // L'IA choit au hasard la pièce qu'elle va donner à l'adversaire entre les pièces qui empêchent l'adversaire de gagner (afin que son choix ne soit pas prévisible)
-                    int randomPiece;
-                    Random R = new Random();
-
-                    do
-                    {
-                        randomPiece = R.Next(0, piecesPossiblesIA.Length);
-
-                    }
-                    while (piecesPossiblesIA[randomPiece] == null);
-
-                    choixPiece = piecesPossiblesIA[randomPiece];
-                }
+                
+             ChoisirPieceGagnante(piecesPossiblesIA);  // Elle procède de la même façon que précédemment mais cette fois, en cherchant une pièce dont la simulation de placement générerait un alignement de 3 pièces (ainsi, si l'humain place la pièce au bon endroit et ensuite, lui donne une pièce adéquate, il pourra faire un quarto)
 
             }
         }
 
-        // 2) sous-fonctions de choix intelligent de la case
+        /// <summary>
+        /// ChoisirPieceGagnanteIA : l'IA cherche une pièce qui empêche l'humain de gagner et qui peut permettre à l'IA de gagner au prochain tour
+        /// </summary>
+        /// <param name="piecesPossiblesIA"></param>
+        static void ChoisirPieceGagnante(string[] piecesPossiblesIA)
+        {
+            int k = 0;
+            bool alignement3Pieces = false; //true : La simulation de placement de la pièce considérée dans une case de la grille génère un alignement de 3 pièces (avec une caractéristique commune), false sinon
+            bool potentielleVictoireIA = false; // true : l'IA a trouvé une pièce telle que, si elle la donne, elle peut potentiellement gagner lorsque viendra son tour, false sinon
+
+            string[] piecesGagnantesIA = new string[piecesPossiblesIA.Length]; // tableau recensant toutes les pièces disponibles qui peuvent permettre à l'IA de gagner au prochain tour. 
+                                                                               // sa taille maximale est égale à la taille du tableau des pièces qui empêchent l'humain de gagner
+
+            for (k = 0; k < piecesPossiblesIA.Length; k++) // choix d'une pièce parmi les pièces dispos
+            {
+                choixPiece = piecesPossiblesIA[k];
+                ligne = 0; col = 0;
+                alignement3Pieces = false;
+
+                if (piecesPossiblesIA[k] != null)
+                {
+                    //  l'IA parcourt tout le tableau pour voir si, parmi les pièces qui empêchent l'humain de gagner, certaines peuvent lui permettre de gagner. 
+                    // Une pièce qui permettrait à l'IA de gagner serait une pièce qui, placée dans l'une des cases, générerait un alignement de 3 pièces
+                    while (ligne < nbreLignes && !alignement3Pieces)
+                    {
+                        while (col < nbreLignes && !alignement3Pieces)
+                        {
+                            if (Grille[ligne, col] == caseVide)
+                            {
+                                alignement3Pieces = MettreAJourStrategies(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
+                                if (alignement3Pieces) // L'IA a trouvé une pièce qui générait un alignement de 3 pièces si elle était placée dans une case
+                                {
+                                    potentielleVictoireIA = true; // cette pièce empêche donc l'humain de gagner avec cette pièce si on la lui donne
+                                    piecesGagnantesIA[k] = choixPiece; // remplissage du tableau recensant toutes les pièces que peut jouer l'IA sans faire gagner l'adversaire
+                                }
+                            }
+
+                            col++;
+                        }
+                        if (col == nbreLignes) // l'IA a parcouru toutes les colonnes de la ligne i considérée sans trouver de case générant un alignement de 3 pièces avec 1 caractéristique commune
+                        {
+                            col = 0; // Et remet l'indice des colonnes à 0 pour toutes les parcourir de nouveau lorsqu'elle changera de ligne
+                        }
+                        if (ligne < nbreLignes)
+                            ligne++;
+                    }
+                }
+            }
+
+            if (potentielleVictoireIA) // l'IA a trouvé au moins une pièce potentiellement gagnante pour elle, le tableau piecesGagnantesIA n'est donc pas nul
+            {
+                // l'IA choisit au hasard une pièce dans le tableau piecesGagnantesIA (pour ne pas être prévisible)
+                int randomPiecesGagnantes;
+                Random R2 = new Random();
+                do
+                {
+                    randomPiecesGagnantes = R2.Next(0, piecesGagnantesIA.Length); // choix aléatoire d'un indice (entre 0 et 15) de colonne du tableau piecesGagnantes
+
+                }
+                while (piecesGagnantesIA[randomPiecesGagnantes] == null); // il se peut que des valeurs du tableau soient nulles (puisqu'il comporte 16 cases)
+
+                choixPiece = piecesPossiblesIA[randomPiecesGagnantes];
+
+            }
+            else // si le tableau recensant les pièces gagnantes pr l'IA est nul
+            {
+                // L'IA choit au hasard la pièce qu'elle va donner à l'adversaire entre les pièces qui empêchent l'adversaire de gagner (afin que son choix ne soit pas prévisible)
+                int randomPiece;
+                Random R = new Random();
+
+                do
+                {
+                    randomPiece = R.Next(0, piecesPossiblesIA.Length);
+
+                }
+                while (piecesPossiblesIA[randomPiece] == null);
+
+                choixPiece = piecesPossiblesIA[randomPiece];
+            }
+        }
+
+        //  sous-fonctions de choix intelligent de la case
 
         /// <summary>
         /// GagnerIA () : l'IA cherche si elle peut directement gagner avec la pièce qu'elle a : S'il l y a déjà 3 pièces d' "alignées", elle regarde si sa pièce est compatible et si elle peut la placer dans la case restante
@@ -1070,140 +1208,10 @@ namespace quarto_mjma
                 Grille[ligne, col] = choixPiece;
             }
         }
-
-    
-        //----------------------------------Fonctions d'actualisation et de vérification -------------------------
-        /// <summary>
-        /// UtiliserPiece : Fonction permettant de ne jouer qu'une seule fois chaque pièce
-        /// </summary>
-        /// <param name="choixPiece"></param>
-        static void UtiliserPiece()
-        {
-            int i = 0;
-
-            // Recherche de l'indice de colonne de la pièce "choixPiece" dans le tableau recensant les pièces
-            while (i < nbPiecesTotales && choixPiece != TabPieces[0, i])
-            {
-                i++;
-            }
-
-            // une fois cet indice trouvé, l'indice de présence de la pièce passe à 1
-            TabPieces[1, i] = "1";
-        }
-
-        /// <summary>
-        /// verifierSiPieceUtilisee : True si la pièce n'a pas été joué, False sinon
-        /// </summary>
-        /// <returns></returns>
-        static bool VerifierSiPieceUtilisee() //vérifier si la pièce a été utilisée (true) ou non (false)
-        {
-            bool pieceUtilisee = false;
-            int i = 0;  // Compteur
-
-            // Vérification
-
-            while (choixPiece != TabPieces[0, i] && i < nbPiecesTotales)
-                i++;
-            if (TabPieces[1, i] == "1")
-                pieceUtilisee = true;
-
-            return pieceUtilisee;
-        }
-
-        /// <summary>
-        /// AvoirCaseRemplie : Permet de savoir si le joueur ou l'ordinateur peut jouer dans la case ou si elle est déjà remplie
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="j"></param>
-        /// <returns></returns>
-        static bool AvoirCaseRemplie(int i, int j)
-        {
-            return Grille[i, j] != caseVide; // retourne true si la case considérée n'est pas vide, false sinon
-        }
-
-        /// <summary>
-        /// MettreAJourStrategies : l'IA calcule après chaque placement de pièce le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
-        /// </summary>
-        /// <returns></returns>
-        static bool MettreAJourStrategies(bool simul, int nbPiecesAlignees)  /* La fonction MettreAJourStrategies est appelée dans TrouverCase afin de s'assurer
-                                                                                qu'après simulation du placement de la pièce (d'où vient notre bool simul),
-                                                                                il n'y aurait pas 3 pièces alignées afin de ne pas permettre au joueur de gagner au tour suivant.
-                                                                                
-                                                                                Elle est également appelée dans TrouverPiece afin de s'assurer qu'après simulation du placement de la pièce dans la grille,(d'où vient nbPiecesAlignees) 
-                                                                                l'humain ne pourrait pas former un alignement de 4caractéristiques avec cette pièce*/
-                                                                               
-        {
-            bool alignementPieces = false;
-
-       
-            for (int n = 0; n < nbreCaractéristiques; n++) //parcours chaque caractéristique
-            {
-                if (choixPiece[n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne/colonne/diagonale considérée
-                {
-                    if (simul) // On simule le placement d'une pièce dans la grille sans que les tableaux de sommes soient mis à jour
-                    {
-          
-                        if (tabLignes0[ligne, n] == nbPiecesAlignees || tabCol0[col, n] == nbPiecesAlignees) // cherche un certain nombre de pièces alignées (2 ou 3) dans les tableaux de sommes des lignes et des colonnes concernant les caractéristiques codée par "0"
-                        {
-                            alignementPieces = true;
-                        }
-                       else if (ligne == col && tabDiago0 [0,n] == nbPiecesAlignees) // idem pour le tableau de sommes de la diagonale de la gauche vers la droite, du haut vers le bas (il s'agit de la première ligne du tableau tabDiago0 d'où  tabDiago[0,n])
-                        {
-                            alignementPieces = true;
-                        }
-                       else if (ligne == ((nbreLignes-1) -col) && tabDiago0[1, n] == nbPiecesAlignees || col == ((nbreLignes - 1) - ligne) && tabDiago0[1, n] == nbPiecesAlignees) // idem pour le tableau de sommes de la diagonale de la droite vers la gauche, du haut vers le bas (il s'agit de la première ligne du tableau tabDiago0 d'où  tabDiago[1,n])
-                        {
-                            alignementPieces = true;
-                        }
-                    }
-                    else // Une pièce vient d'être placée dans la grille de jeu, les tableaux de sommes sont actualisés (incrémentation des tableaux concernés selon les caractéristiques de la pièce)
-                    {
-                        tabLignes0[ligne, n] ++;
-                        tabCol0[col, n] ++;
-
-                        if (ligne == col)
-                            tabDiago0[0, n]++;
-
-                        else if (ligne == ((nbreLignes - 1) - col) || col == (nbreLignes - 1) - ligne)
-                            tabDiago0[1, n]++;
-                    }
-                }
-                else //compteur du nombre de 1 de la n ième caractéristique sur la ligne, colonne, diagonale considérée. Mêmes manipulations mais dans les tableaux de sommes des caractéristiques codée par "1"
-                {
-                    if (simul)
-                    {
-                        if (tabLignes1[ligne, n] == nbPiecesAlignees || tabCol1[col, n] == nbPiecesAlignees) // cherche un certain nombre de pièces alignées (2 ou 3) dans les tableaux de sommes des lignes et des colonnes concernant les caractéristiques codée par "1"
-                        {
-                            alignementPieces = true;
-                        }
-                        else if (ligne == col && tabDiago1[0, n] == nbPiecesAlignees) // idem pour le tableau de sommes de la diagonale de la gauche vers la droite, du haut vers le bas (il s'agit de la première ligne du tableau tabDiago0 d'où  tabDiago1[0,n])
-                        {
-
-                            alignementPieces = true;
-                        }
-                        else if (ligne == ((nbreLignes - 1) - col) && tabDiago1[1, n] == nbPiecesAlignees || col == ((nbreLignes - 1) - ligne) && tabDiago1[1, n] == nbPiecesAlignees) // idem pour le tableau de sommes de la diagonale de la droite vers la gauche, du haut vers le bas (il s'agit de la première ligne du tableau tabDiago0 d'où tabDiago1[1,n])
-                        {
-                            alignementPieces = true;
-                        }
-                    }
-                    else
-                    {
-                        tabLignes1[ligne, n] ++; 
-                        tabCol1[col, n] ++;
-
-                        if (ligne == col)
-                            tabDiago1[0, n]++;
-
-                        if (ligne == ((nbreLignes - 1) - col) || col == ((nbreLignes - 1) - ligne))
-                            tabDiago1[1, n]++;
-                    }
-                }
-            }
-            return alignementPieces;
-        }
-
+      
 
         //-------------------------------------------Fonctions relatives à la fin du jeu -------------------------------------------------
+
         /// <summary>
         /// Gagner () : Fonction donnant toutes les combinaisons gagnantes et terminant la partie
         /// </summary>
