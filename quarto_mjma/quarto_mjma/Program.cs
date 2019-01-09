@@ -312,6 +312,11 @@ namespace quarto_mjma
             Console.ResetColor();
         }
 
+        /// <summary>
+        /// TrouverDessin : permet d'associer au nom de pièce textuel, le visuel correspondant
+        /// </summary>
+        /// <param name="piece"></param>
+        /// <returns></returns>
         static string[,] TrouverDessin(string piece) // Trouver le dessin qui correspond à la pièce voulue
         {
 
