@@ -55,7 +55,7 @@ namespace quarto_mjma
         //----------------------------------- Main----------------------------------------------
         static void Main(string[] args)
         {
-            bool rejoue = false;
+            // a quoi sert ce bool? bool rejoue = false;
             Console.SetWindowSize(150, 40);
 
             AfficherEnTete();
