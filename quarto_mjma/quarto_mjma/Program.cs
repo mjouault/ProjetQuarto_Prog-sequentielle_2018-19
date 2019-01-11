@@ -25,6 +25,7 @@ namespace quarto_mjma
             { blanc},
             { blanc}
           };
+        static string[,] dessinPiece; // visuel correspondant à une pièce : c'est un tableau de 6 lignes de 11 caractères chacune
 
         // varibales mises à jour durant le jeu 
         static string[,] TabPieces; //tableau recensant le nom ds pièces (ligne 0) et leur indice de présence (0 : absent) dans la grille de jeu (ligne1)
@@ -60,14 +61,16 @@ namespace quarto_mjma
 
             AfficherEnTete();
             AfficherRegles();
-            ChoisirMode();
+           
             do
             {
                Grille = new string[nbreLignes, nbreLignes];
-                
+
+                AGagne = false;
                 InitialiserGrille();
                 InitialiserPieces();
-                AGagne = false;
+              //  InitialiserTableauxSommes();
+                ChoisirMode();
                 Jouer();
             } while (RejouerPartie());
         }
@@ -182,6 +185,15 @@ namespace quarto_mjma
                                           "0", "0", "0", "0", "0", "0", "0", "0" } };
         }
 
+       /* static void InitialiserTableauxSommes()
+        {
+            Array.Clear(tabLignes0, 0, tabLignes0.Length);
+            Array.Clear(tabLignes1, 0, tabLignes1.Length);
+            Array.Clear(tabCol0, 0, tabCol0.Length);
+            Array.Clear(tabCol1, 0, tabCol1.Length);
+            Array.Clear(tabDiago0, 0, tabDiago0.Length);
+            Array.Clear(tabDiago1, 0, tabDiago1.Length);
+        }*/
 
         /// <summary>
         /// choisir1erJoueur : désigne aléatoirement qui du joueur ou de l'ordi commence à jouer (si 1 est tiré, l'humain commance, si le 0 est tiré, l'est l'ordi).
@@ -235,7 +247,7 @@ namespace quarto_mjma
         /// </summary>
         /// <param name="piece"></param>
         /// <returns></returns>
-        static string[,] TrouverDessin(string piece) // Trouver le dessin qui correspond à la pièce voulue
+        static string[,] TrouverDessinPiece(string piece) // Trouver le dessin qui correspond à la pièce voulue
         {
 
             string largeurGrandCarre = "*         *";
@@ -395,13 +407,12 @@ namespace quarto_mjma
                     }
                 }
             }
-            // Console.ResetColor();
             return dessin;
         }
 
         static void AfficherPiece()
         {
-            string[,] dessin;
+           // string[,] dessinPiece;
 
             int i = 0;
             int j = 0;
@@ -410,15 +421,13 @@ namespace quarto_mjma
             {
                 for (j = 0; j < nbreLignes; j++)
                 {
-                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessin(Grille[i, j]);
-                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
+                    dessinPiece = TrouverDessinPiece(Grille[i, j]);
 
-                    for (int k = 0; k < longueurCase - 1; k++)
+                    for (int k = 0; k < longueurCase - 1; k++) // k = indice de lignes du dessin
                     {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                         //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
                         Console.SetCursorPosition(9 + largeurCase * j, 5 + longueurCase * i + k);
-                        Console.WriteLine(dessin[k, 0]);
+                        Console.WriteLine(dessinPiece[k, 0]);
                     }
                     Console.ResetColor();
                 }
@@ -433,17 +442,14 @@ namespace quarto_mjma
         static void AfficherPiecesRestantes()
         {
             int i = 0; int j = 0; int m = 0;
-            string[,] dessin;
+          //  string[,] dessinPiece;
 
             while (i < 4) //i= nombre de lignes
             {
                 while (j < 4 && m < 16)//j= nbre de colonnes
                 {
-                    // if (TabPieces[1, m] == "0")
-                    //{
-                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessin(TabPieces[0, m]);
-                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
+                   
+                    dessinPiece = TrouverDessinPiece(TabPieces[0, m]);
 
                     for (int k = 0; k < 8; k++)//+une case à chaque fois
                     {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
@@ -454,7 +460,7 @@ namespace quarto_mjma
                         if (k < 6)
                         {
                             if (TabPieces[1, m] == "0")
-                                Console.WriteLine(dessin[k, 0]);
+                                Console.WriteLine(dessinPiece[k, 0]);
                         }
 
                         if (k == 7)
@@ -606,8 +612,16 @@ namespace quarto_mjma
             UtiliserPiece(); // l'indice de présence de la pièce choisie passe de 0 à 1
 
             Console.SetCursorPosition(0, longueurCase * nbreLignes + 7);
-            Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous", choixPiece);
-            // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
+            Console.WriteLine("L'ordinateur a choisi cette pièce pour vous : ");
+            dessinPiece = TrouverDessinPiece(choixPiece);
+            for (int k=0; k< 6; k++)
+            {
+                Console.SetCursorPosition(45, longueurCase * nbreLignes +7+k);
+               Console.WriteLine (dessinPiece [k, 0]);
+
+            }
+            Console.ResetColor();
+         
 
 
             //choix de la case par le joueur
@@ -617,7 +631,7 @@ namespace quarto_mjma
             {
                 do // l'humain saisit de nouveau une ligne tant que la ligne n'est pas comprise entre 0 et 3
                 {
-                    Console.WriteLine("\nChoisir une ligne (entre 0 et 3) ");
+                    Console.WriteLine("Choisir une ligne (entre 0 et 3) ");
                     ligne = int.Parse(Console.ReadLine());
                     if (ligne < 0 || ligne > 3)
                     {
@@ -628,7 +642,7 @@ namespace quarto_mjma
 
                 do //de^même pour la saisie de la colonne
                 {
-                    Console.WriteLine("\nChoisir une colonne (entre 0 et 3)");
+                    Console.WriteLine("Choisir une colonne (entre 0 et 3)");
                     col = int.Parse(Console.ReadLine());
                     if (col < 0 || col > 3)
                     {
@@ -982,6 +996,8 @@ namespace quarto_mjma
                 {
                     Grille[i, col] = choixPiece; // actualisation de la grille
                     AGagne = true;
+                    if (trace)
+                        Console.WriteLine("agagne ds ligne IA");
                 }
                 else
                 {
@@ -1013,6 +1029,8 @@ namespace quarto_mjma
                 {
                     Grille[ligne, j] = choixPiece;
                     AGagne = true;
+                    if (trace)
+                        Console.WriteLine("agagne ds col IA");
                 }
                 else
                 {
@@ -1044,6 +1062,8 @@ namespace quarto_mjma
                     {
                         Grille[ligne, col] = choixPiece;
                         AGagne = true;
+                        if (trace)
+                            Console.WriteLine("agagne ds ligne IA");
                     }
                     else
                     {
@@ -1235,11 +1255,6 @@ namespace quarto_mjma
                     if (j == nbreLignes) // Toute une ligne a été parcourue sans sortie de la boucle donc, une ligne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                     {
                         AGagne = true; // le dernier joueur ayant placé la pièce a donc gagné
-                        if (trace)
-                        {
-                            Console.WriteLine("gagneLigne");
-                            Console.ReadLine();
-                        }
                     }
                 }
             }
@@ -1259,11 +1274,6 @@ namespace quarto_mjma
                         if (i == nbreLignes) // une colonne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                         {
                             AGagne = true;
-                            if (trace)
-                            {
-                                Console.WriteLine("gagneCol");
-                                Console.ReadLine();
-                            }
                         }
                     }
                 }
@@ -1283,11 +1293,6 @@ namespace quarto_mjma
                     if (i == nbreLignes)
                     {
                         AGagne = true; // la diagonale en question a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
-                        if (trace)
-                        {
-                            Console.WriteLine("gagneDiago1");
-                            Console.ReadLine();
-                        }
                     }
                 }
             }
@@ -1308,11 +1313,6 @@ namespace quarto_mjma
                     if (i == nbreLignes)
                     {
                         AGagne = true; // la diagonale en question a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
-                        if (trace)
-                        {
-                            Console.WriteLine("gagneDiago2");
-                            Console.ReadLine();
-                        }
                     }
                 }
             }
