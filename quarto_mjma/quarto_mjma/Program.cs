@@ -718,6 +718,10 @@ namespace quarto_mjma
             else // en mode intelligent
             {
                 GagnerIA(); // l'IA vérifie si elle peut gagner en plaçant la pièce donnée
+                if (trace)
+                {
+                    Console.WriteLine("gagnerIA ={0}", AGagne);
+                }
                 if (!AGagne) // si elle ne peut pas
                 {
                     ChoisirCaseIA(); // elle cherche une case telle que le placement de la pièce dans cette case ne permet pas à l'humain de gagner ensuite
