@@ -45,6 +45,7 @@ namespace quarto_mjma
 
 
         //booléen utiles
+        static bool trace = true;
         static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
         static bool grilleRemplie = false;
         static bool modeIntell = false; // true : mode intelligent activé / false : mode noviced de l'ordinateur
@@ -55,7 +56,6 @@ namespace quarto_mjma
         //----------------------------------- Main----------------------------------------------
         static void Main(string[] args)
         {
-            // a quoi sert ce bool? bool rejoue = false;
             Console.SetWindowSize(150, 40);
 
             AfficherEnTete();
@@ -86,7 +86,7 @@ namespace quarto_mjma
 
             Console.Write("C'est donc toi le nouveau joueur qui souhaite affronter la machine toute puissante au QUARTO !\nQuel est ton petit nom ? ");
             pseudo = Console.ReadLine();
-            Console.WriteLine("Sympa comme blaze!\nAvant de commencer {0}, veux-tu que je te rappelle les règles du jeu? [o]/[n]", pseudo);
+            Console.WriteLine("Sympa comme pseudo!\nAvant de commencer {0}, veux-tu que je te rappelle les règles du jeu? [o]/[n]", pseudo);
 
         }
 
@@ -120,7 +120,7 @@ namespace quarto_mjma
                 }
             } while (afficherRegles != "o" && afficherRegles != "n");
 
-            if (afficherRegles == "o") // s'il répond oi, affichage des règles
+            if (afficherRegles == "o") // s'il répond oui, affichage des règles
             {
                 Console.WriteLine("\nSage décision, un petit rappel ne fait jamais de mal !\n==============================================");
                 Console.WriteLine("            REGLES DU JEU");
@@ -145,7 +145,7 @@ namespace quarto_mjma
         static void ChoisirMode()
         {
             int choix;
-            Console.WriteLine("\nTu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant (jeu aléatoire)\n[2]: Ordinateur intelligent");
+            Console.WriteLine("\n\nTu peux maintenant choisir le niveau de l'ordinateur!\n[1]: Ordinateur débutant (jeu aléatoire)\n[2]: Ordinateur intelligent");
             choix = int.Parse(Console.ReadLine());
             while (choix != 1 && choix != 2) // message d'erreur s'il ne répond pas par "1" ou "2"
             {
@@ -1235,6 +1235,11 @@ namespace quarto_mjma
                     if (j == nbreLignes) // Toute une ligne a été parcourue sans sortie de la boucle donc, une ligne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                     {
                         AGagne = true; // le dernier joueur ayant placé la pièce a donc gagné
+                        if (trace)
+                        {
+                            Console.WriteLine("gagneLigne");
+                            Console.ReadLine();
+                        }
                     }
                 }
             }
@@ -1253,7 +1258,12 @@ namespace quarto_mjma
                         }
                         if (i == nbreLignes) // une colonne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                         {
-                            AGagne = true; 
+                            AGagne = true;
+                            if (trace)
+                            {
+                                Console.WriteLine("gagneCol");
+                                Console.ReadLine();
+                            }
                         }
                     }
                 }
@@ -1273,6 +1283,11 @@ namespace quarto_mjma
                     if (i == nbreLignes)
                     {
                         AGagne = true; // la diagonale en question a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
+                        if (trace)
+                        {
+                            Console.WriteLine("gagneDiago1");
+                            Console.ReadLine();
+                        }
                     }
                 }
             }
@@ -1293,6 +1308,11 @@ namespace quarto_mjma
                     if (i == nbreLignes)
                     {
                         AGagne = true; // la diagonale en question a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
+                        if (trace)
+                        {
+                            Console.WriteLine("gagneDiago2");
+                            Console.ReadLine();
+                        }
                     }
                 }
             }
@@ -1359,7 +1379,7 @@ namespace quarto_mjma
         /// <returns></returns>
          static bool RejouerPartie()
         {
-            Console.WriteLine("Tapez [r] pour rejouer ou [a] pour arrêter");
+            Console.WriteLine("\n\n\nTapez [r] pour rejouer ou [a] pour arrêter");
             string reponse = Console.ReadLine(); //le joueur choisit s'il veut refaire une partie
             while (reponse != "r" && reponse != "a")
             {
