@@ -379,6 +379,10 @@ namespace quarto_mjma
             else // en mode intelligent
             {
                 GagnerIA(); // l'IA vérifie si elle peut gagner en plaçant la pièce donnée
+              //  if (trace)
+              //  {
+                    Console.WriteLine("GagnerIA ={0}", AGagne);
+               // }
                 if (!AGagne) // si elle ne peut pas
                 {
                     ChoisirCaseIA(); // elle cherche une case telle que le placement de la pièce dans cette case ne permet pas à l'humain de gagner ensuite
@@ -554,19 +558,24 @@ namespace quarto_mjma
 
             while (n < nbreCaractéristiques && !AGagne)
             {
+                Console.WriteLine("entre ds while nbcarac ligne, n={0}, choixpiece={1}", n, choixPiece);
+               
                 int i = 0;
                 if (choixPiece[n] == '0') // cherche dans les tableaux de sommes relatives aux lignes de jeu s'il y a déjà 3 pièces alignées ayant la caractéristique 0 en n ième position
                 {
-
+                    Console.WriteLine("entre ds if carar = 0 ligne, n={0}, choixpiece={1}", n, choixPiece);
                     while (i < tabLignes0.GetLength(0) && tabLignes0[i, n] != 3) // continue à chercher tant qu'elle n'a pas parcouru tous les tableaux et qu'elle ne trouve pas un "3" dans ces tableaux 
                     {
+                        Console.WriteLine("entre ds while nb ligne0, n={0}, choixpiece={1}, i={2}", n, choixPiece, i);
                         i++;
                     }
                 }
                 else // cherche dans le plateau de jeu s'il y a déjà 3 pièces alignées ayant la caractéristique 1 en n ième position (procède de même)
                 {
+                    Console.WriteLine("entre ds if carar = 1 ligne , n={0}, choixpiece={1}", n, choixPiece);
                     while (i < tabLignes1.GetLength(0) && tabLignes1[i, n] != 3)
                     {
+                        Console.WriteLine("entre ds while nb ligne1, n={0}, choixpiece={1}, i={2}", n, choixPiece, i);
                         i++;
                     }
                 }
@@ -575,10 +584,12 @@ namespace quarto_mjma
                 {
                     Grille[i, col] = choixPiece; // actualisation de la grille
                     AGagne = true;
+                    Console.WriteLine("agagne ligne={0}, n= {1}", AGagne, n);
                 }
                 else
                 {
                     n++;
+                    Console.WriteLine("agagne ligne={0}, n= {1}", AGagne, n);
                 }
             }
 
@@ -586,11 +597,13 @@ namespace quarto_mjma
             n = 0; // l'IA parcourt de nouveau les 4 caractéristiques de la pièce
             while (n < nbreCaractéristiques && !AGagne)
             {
+                Console.WriteLine("entre ds while nbcarac col, n={0}, choixpiece={1}", n, choixPiece);
                 int j = 0;
                 if (choixPiece[n] == '0')
                 {
                     while (j < tabCol0.GetLength(0) && tabCol0[j, n] != 3)
                     {
+                        Console.WriteLine("entre ds if carar = 0 col, n={0}, choixpiece={1}", n, choixPiece);
                         j++;
                     }
                 }
