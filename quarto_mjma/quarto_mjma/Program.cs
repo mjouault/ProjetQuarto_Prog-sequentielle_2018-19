@@ -231,11 +231,11 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// TrouverDessin : permet d'associer au nom de pièce textuel, le visuel correspondant
+        /// TrouverDessinPiece : permet d'associer au nom de pièce textuel, le visuel correspondant
         /// </summary>
         /// <param name="piece"></param>
         /// <returns></returns>
-        static string[,] TrouverDessin(string piece) // Trouver le dessin qui correspond à la pièce voulue
+        static string[,] TrouverDessinPiece(string piece) // Trouver le dessin qui correspond à la pièce voulue
         {
 
             string largeurGrandCarre = "*         *";
@@ -329,12 +329,12 @@ namespace quarto_mjma
 
 
 
-            string[,] dessin = new string[6, 1];
+            string[,] dessinPiece = new string[6, 1];
 
             // 0000 = ronde, petite creuse, rouge
             if (piece[0] == ' ')
             {
-                dessin = pieceVide;
+                dessinPiece = pieceVide;
             }
             else
             {
@@ -354,21 +354,21 @@ namespace quarto_mjma
                     //identifie la grandeur
                     if (piece[1] == '0') //petite
                     {
-                        dessin = pieceRondePetite;
+                        dessinPiece = pieceRondePetite;
 
                         //identifie le caractère creux/plein
                         if (piece[2] == '1')
                         {
-                            dessin = pieceRondePetitePleine;
+                            dessinPiece = pieceRondePetitePleine;
                         }
                     }
                     else //grande
                     {
-                        dessin = pieceRondeGrande;
+                        dessinPiece = pieceRondeGrande;
 
                         if (piece[2] == '1')
                         {
-                            dessin = pieceRondeGrandePleine;
+                            dessinPiece = pieceRondeGrandePleine;
                         }
                     }
                 }
@@ -376,27 +376,27 @@ namespace quarto_mjma
                 {
                     if (piece[1] == '0') //petite
                     {
-                        dessin = pieceCarreePetite;
+                        dessinPiece = pieceCarreePetite;
 
                         if (piece[2] == '1')
                         {
-                            dessin = pieceCarrePetitePleine;
+                            dessinPiece = pieceCarrePetitePleine;
                         }
 
                     }
                     else //grande
                     {
-                        dessin = pieceCarreeGrande;
+                        dessinPiece = pieceCarreeGrande;
 
                         if (piece[2] == '1')
                         {
-                            dessin = pieceCarreeGrandePleine;
+                            dessinPiece = pieceCarreeGrandePleine;
                         }
                     }
                 }
             }
             // Console.ResetColor();
-            return dessin;
+            return dessinPiece;
         }
 
         static void AfficherPiece()
@@ -411,7 +411,7 @@ namespace quarto_mjma
                 for (j = 0; j < nbreLignes; j++)
                 {
                     // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessin(Grille[i, j]);
+                    dessin = TrouverDessinPiece(Grille[i, j]);
                     //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
                     for (int k = 0; k < longueurCase - 1; k++)
@@ -442,7 +442,7 @@ namespace quarto_mjma
                     // if (TabPieces[1, m] == "0")
                     //{
                     // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessin(TabPieces[0, m]);
+                    dessin = TrouverDessinPiece(TabPieces[0, m]);
                     //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
                     for (int k = 0; k < 8; k++)//+une case à chaque fois
