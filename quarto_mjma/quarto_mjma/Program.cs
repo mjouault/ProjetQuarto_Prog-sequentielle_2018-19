@@ -69,7 +69,7 @@ namespace quarto_mjma
                 AGagne = false;
                 InitialiserGrille();
                 InitialiserPieces();
-              //  InitialiserTableauxSommes();
+               InitialiserTableauxSommes();
                 ChoisirMode();
                 Jouer();
             } while (RejouerPartie());
@@ -185,7 +185,7 @@ namespace quarto_mjma
                                           "0", "0", "0", "0", "0", "0", "0", "0" } };
         }
 
-       /* static void InitialiserTableauxSommes()
+        static void InitialiserTableauxSommes()
         {
             Array.Clear(tabLignes0, 0, tabLignes0.Length);
             Array.Clear(tabLignes1, 0, tabLignes1.Length);
@@ -193,7 +193,7 @@ namespace quarto_mjma
             Array.Clear(tabCol1, 0, tabCol1.Length);
             Array.Clear(tabDiago0, 0, tabDiago0.Length);
             Array.Clear(tabDiago1, 0, tabDiago1.Length);
-        }*/
+        }
 
         /// <summary>
         /// choisir1erJoueur : désigne aléatoirement qui du joueur ou de l'ordi commence à jouer (si 1 est tiré, l'humain commance, si le 0 est tiré, l'est l'ordi).
