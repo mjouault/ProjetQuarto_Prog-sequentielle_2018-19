@@ -32,7 +32,7 @@ namespace quarto_mjma
         // Main
         static void Main(string[] args)
         {
-            bool rejoue = false;
+           // bool rejoue = false;
             Console.SetWindowSize(100, 40);
 
             AfficherEnTete();
@@ -584,12 +584,12 @@ namespace quarto_mjma
                 {
                     Grille[i, col] = choixPiece; // actualisation de la grille
                     AGagne = true;
-                    Console.WriteLine("agagne ligne={0}, n= {1}", AGagne, n);
+                    Console.WriteLine(" if agagne ligne={0}, n= {1}", AGagne, n);
                 }
                 else
                 {
                     n++;
-                    Console.WriteLine("agagne ligne={0}, n= {1}", AGagne, n);
+                    Console.WriteLine("else agagne ligne={0}, n= {1}", AGagne, n);
                 }
             }
 
@@ -601,16 +601,19 @@ namespace quarto_mjma
                 int j = 0;
                 if (choixPiece[n] == '0')
                 {
+                    Console.WriteLine("entre ds if carar = 0 col, n={0}, choixpiece={1}", n, choixPiece);
                     while (j < tabCol0.GetLength(0) && tabCol0[j, n] != 3)
                     {
-                        Console.WriteLine("entre ds if carar = 0 col, n={0}, choixpiece={1}", n, choixPiece);
+                        Console.WriteLine("entre ds while nb col0, n={0}, choixpiece={1}, j={2}", n, choixPiece, j);
                         j++;
                     }
                 }
                 else
                 {
+                    Console.WriteLine("entre ds if carar = 1 col , n={0}, choixpiece={1}", n, choixPiece);
                     while (j < tabCol1.GetLength(0) && tabCol1[j, n] != 3)
                     {
+                        Console.WriteLine("entre ds while nb col1, n={0}, choixpiece={1}, j={2}", n, choixPiece, j);
                         j++;
                     }
                 }
@@ -618,12 +621,15 @@ namespace quarto_mjma
                 if (j != tabCol0.GetLength(0) && TrouverCaseIACol(j))
                 {
                     Grille[ligne, j] = choixPiece;
+                    Console.WriteLine("if agagne col={0}, n= {1}, choixpiece={2}", AGagne, n, choixPiece);
                     AGagne = true;
                 }
                 else
                 {
+                    Console.WriteLine(" else agagne col={0}, n= {1}, choixpiece={2}", AGagne, n, choixPiece);
                     n++;
                 }
+            }
 
                 // si elle n'a toujours pas gagné, cherche de la même manière dans le plateau de jeu s'il y a déjà 3 pièces alignées surl'une des 2 diagonales pour 1 caractéristique
                 n = 0;
@@ -656,7 +662,6 @@ namespace quarto_mjma
                         n++;
                     }
                 }
-            }
         }
 
         /// <summary>
