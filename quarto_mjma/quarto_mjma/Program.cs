@@ -25,6 +25,7 @@ namespace quarto_mjma
             { blanc},
             { blanc}
           };
+        static string[,] dessinPiece = new string [6,1]; //visuel d'une pièce : tableau de 6 lignes composées chacune de 11 caractères
 
         // varibales mises à jour durant le jeu 
         static string[,] TabPieces; //tableau recensant le nom ds pièces (ligne 0) et leur indice de présence (0 : absent) dans la grille de jeu (ligne1)
@@ -341,9 +342,6 @@ namespace quarto_mjma
         };
 
 
-
-            string[,] dessinPiece = new string[6, 1];
-
             // 0000 = ronde, petite creuse, rouge
             if (piece[0] == ' ')
             {
@@ -414,8 +412,6 @@ namespace quarto_mjma
 
         static void AfficherPiece()
         {
-            string[,] dessin;
-
             int i = 0;
             int j = 0;
 
@@ -424,14 +420,14 @@ namespace quarto_mjma
                 for (j = 0; j < nbreLignes; j++)
                 {
                     // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessinPiece(Grille[i, j]);
+                    dessinPiece = TrouverDessinPiece(Grille[i, j]);
                     //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
                     for (int k = 0; k < longueurCase - 1; k++)
                     {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                         //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
                         Console.SetCursorPosition(9 + largeurCase * j, 5 + longueurCase * i + k);
-                        Console.WriteLine(dessin[k, 0]);
+                        Console.WriteLine(dessinPiece[k, 0]);
                     }
                     Console.ResetColor();
                 }
@@ -446,7 +442,6 @@ namespace quarto_mjma
         static void AfficherPiecesRestantes()
         {
             int i = 0; int j = 0; int m = 0;
-            string[,] dessin;
 
             while (i < 4) //i= nombre de lignes
             {
@@ -455,7 +450,7 @@ namespace quarto_mjma
                     // if (TabPieces[1, m] == "0")
                     //{
                     // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
-                    dessin = TrouverDessinPiece(TabPieces[0, m]);
+                    dessinPiece = TrouverDessinPiece(TabPieces[0, m]);
                     //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
                     for (int k = 0; k < 8; k++)//+une case à chaque fois
@@ -467,7 +462,7 @@ namespace quarto_mjma
                         if (k < 6)
                         {
                             if (TabPieces[1, m] == "0")
-                                Console.WriteLine(dessin[k, 0]);
+                                Console.WriteLine(dessinPiece[k, 0]);
                         }
 
                         if (k == 7)
@@ -619,8 +614,15 @@ namespace quarto_mjma
             UtiliserPiece(); // l'indice de présence de la pièce choisie passe de 0 à 1
 
             Console.SetCursorPosition(0, longueurCase * nbreLignes + 7);
-            Console.WriteLine("L'ordinateur a choisi la pièce {0} pour vous", choixPiece);
-            // améliorer notre présentation des pièces  Console.WriteLine("le 1er caractère correspond à [1]= ronde [0]=carrée, 2ème caractère [1]=creuse [0]=vide");
+            Console.WriteLine("L'ordinateur a choisi cette pièce pour vous : ");
+            dessinPiece = TrouverDessinPiece(choixPiece);
+            for (int k = 0; k < 6; k++)
+            {
+                Console.SetCursorPosition(45, longueurCase * nbreLignes + 8 + k);
+                Console.WriteLine(dessinPiece[k, 0]);
+
+            }
+            Console.ResetColor();
 
 
             //choix de la case par le joueur
