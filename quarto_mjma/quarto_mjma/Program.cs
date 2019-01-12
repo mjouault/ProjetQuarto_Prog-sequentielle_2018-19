@@ -1018,6 +1018,7 @@ namespace quarto_mjma
                 {
                     n++;
                 }
+            }
 
                 // si elle n'a toujours pas gagné, cherche de la même manière dans le plateau de jeu s'il y a déjà 3 pièces alignées surl'une des 2 diagonales pour 1 caractéristique
                 n = 0;
@@ -1050,7 +1051,6 @@ namespace quarto_mjma
                         n++;
                     }
                 }
-            }
         }
 
         /// <summary>
