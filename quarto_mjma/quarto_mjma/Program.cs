@@ -44,6 +44,7 @@ namespace quarto_mjma
                 
                 InitialiserGrille();
                 InitialiserPieces();
+                InitialiserTableauxSommes();
                 AGagne = false;
                 Jouer();
             } while (RejouerPartie());
@@ -976,20 +977,39 @@ namespace quarto_mjma
         /// <returns></returns>
         static void Gagner()
         {
-            int i; //indice lignes
-            int j; //indice colonnes
+            int i=0; //indice lignes
+            int j=0; //indice colonnes
             int n; //indice des 4 caractéristiques de la pièce
 
-            //verification si quarto sur chaque ligne 
+        /*   // vérif lignes
+            while (i<tabLignes0.GetLength(0)&& tabLignes0[i, j] != 4)
+            {
+                  while (j<tabLignes0.GetLength(1) && tabLignes0[i,j]!=4)
+                {
+                    j++;
+                }
+
+                if(j== tabLignes0.GetLength(1))
+                {
+                    j = 0;
+                    i ++;
+                }
+            }
+            if (i==tabLignes0.GetLength(0))
+            {
+                AGagne = true;
+            }*/
+
+           //verification si quarto sur chaque ligne 
             for (i = 0; i < nbreLignes; i++) //indice ligne
             {
                 for (n = 0; n < nbreLignes; n++) //test pour chaque carcatéristique(x4)
                 {
-                    j = 0;
-                    while (j < nbreLignes && AvoirCaseRemplie (i, 0) && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ à chacune des autres cases remplies de la ligne considérée
-                    {
-                        j++;
-                    }
+                   j = 0;
+                   while (j < nbreLignes && AvoirCaseRemplie (i, 0) && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ à chacune des autres cases remplies de la ligne considérée
+                   {
+                       j++;
+                   }
                     if (j == nbreLignes) // Toute une ligne a été parcourue sans sortie de la boucle donc, une ligne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                     {
                         AGagne = true; // le dernier joueur ayant placé la pièce a donc gagné
