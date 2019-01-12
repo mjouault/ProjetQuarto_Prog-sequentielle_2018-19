@@ -161,6 +161,15 @@ namespace quarto_mjma
                                           "0", "0", "0", "0", "0", "0", "0", "0" } };
         }
 
+        static void InitialiserTableauxSommes()
+        {
+            Array.Clear(tabLignes0, 0, tabLignes0.Length);
+            Array.Clear(tabLignes1, 0, tabLignes1.Length);
+            Array.Clear(tabCol0, 0, tabCol0.Length);
+            Array.Clear(tabCol1, 0, tabCol1.Length);
+            Array.Clear(tabDiago0, 0, tabDiago0.Length);
+            Array.Clear(tabDiago1, 0, tabDiago1.Length);
+        }
 
         /// <summary>
         /// AfficherGrille : affiche la grille avec le dessin des pièces à chaque tour de jeu 
@@ -323,6 +332,14 @@ namespace quarto_mjma
 
             Grille[ligne, col] = choixPiece; // la grille est actualisée
             MettreAJourStrategies(false, 0); // Les tableaux concernés par l'ajout de cette pièce dans la grille sont aussi actualisés
+
+            for (int i = 0; i < tabLignes0.GetLength(0); i++)
+            {
+                for (int j = 0; j < tabLignes0.GetLength(1); j++)
+                {
+                    Console.Write("\ntabLignes0 [{0}, {1}] = {2}", i, j, tabLignes0[i, j]);
+                }
+            }
         }
 
         /// <summary>
@@ -948,9 +965,10 @@ namespace quarto_mjma
                     }
                 }
             }
+
             return alignementPieces;
         }
-
+        
 
         /// <summary>
         /// Gagner () : Fonction donnant toutes les combinaisons gagnantes et terminant la partie
