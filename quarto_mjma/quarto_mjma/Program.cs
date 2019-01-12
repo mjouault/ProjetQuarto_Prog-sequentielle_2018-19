@@ -412,8 +412,6 @@ namespace quarto_mjma
 
         static void AfficherPiece()
         {
-           // string[,] dessinPiece;
-
             int i = 0;
             int j = 0;
 
@@ -442,7 +440,6 @@ namespace quarto_mjma
         static void AfficherPiecesRestantes()
         {
             int i = 0; int j = 0; int m = 0;
-          //  string[,] dessinPiece;
 
             while (i < 4) //i= nombre de lignes
             {
