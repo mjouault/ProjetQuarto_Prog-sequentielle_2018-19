@@ -183,6 +183,9 @@ namespace quarto_mjma
                                           "0", "0", "0", "0", "0", "0", "0", "0" } };
         }
 
+        /// <summary>
+        /// InitialiserStrategiesIA : réinitialise les tableaux de sommes dont l'IA se sert pour jouer intelligemment
+        /// </summary>
         static void InitialiserStrategiesIA()
         {
             Array.Clear(tabLignes0, 0, tabLignes0.Length);
