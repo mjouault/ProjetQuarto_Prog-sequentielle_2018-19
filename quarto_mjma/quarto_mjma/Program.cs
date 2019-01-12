@@ -67,6 +67,7 @@ namespace quarto_mjma
                 
                 InitialiserGrille();
                 InitialiserPieces();
+                InitialiserStrategiesIA();
                 AGagne = false;
                 Jouer();
             } while (RejouerPartie());
@@ -180,6 +181,16 @@ namespace quarto_mjma
                                           "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" },
                                         { "0", "0", "0", "0", "0", "0", "0", "0",                             // la 2eme ligne recense l'indice de présence de chaque pièce dans la grille (1= présence, 0 sinon)
                                           "0", "0", "0", "0", "0", "0", "0", "0" } };
+        }
+
+        static void InitialiserStrategiesIA()
+        {
+            Array.Clear(tabLignes0, 0, tabLignes0.Length);
+            Array.Clear(tabLignes1, 0, tabLignes1.Length);
+            Array.Clear(tabCol0, 0, tabCol0.Length);
+            Array.Clear(tabCol1, 0, tabCol1.Length);
+            Array.Clear(tabDiago0, 0, tabDiago0.Length);
+            Array.Clear(tabDiago1, 0, tabDiago1.Length);
         }
 
 
