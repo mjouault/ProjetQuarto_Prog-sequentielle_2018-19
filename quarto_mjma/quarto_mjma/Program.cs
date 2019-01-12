@@ -44,8 +44,7 @@ namespace quarto_mjma
         static int[,] tabDiago1 = new int[4, 4];  //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque diagonale
 
 
-        //booléen utiles
-        static bool trace = true;
+        //booléen utilisés durant tout le jeu
         static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
         static bool grilleRemplie = false;
         static bool modeIntell = false; // true : mode intelligent activé / false : mode noviced de l'ordinateur
@@ -1249,11 +1248,6 @@ namespace quarto_mjma
                     if (j == nbreLignes) // Toute une ligne a été parcourue sans sortie de la boucle donc, une ligne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                     {
                         AGagne = true; // le dernier joueur ayant placé la pièce a donc gagné
-                        if (trace)
-                        {
-                            Console.WriteLine("gagneLigne");
-                            Console.ReadLine();
-                        }
                     }
                 }
             }
@@ -1273,11 +1267,6 @@ namespace quarto_mjma
                         if (i == nbreLignes) // une colonne de 4 pièces avec au moins 1 caractéristique commune a été complétée
                         {
                             AGagne = true;
-                            if (trace)
-                            {
-                                Console.WriteLine("gagneCol");
-                                Console.ReadLine();
-                            }
                         }
                     }
                 }
@@ -1297,11 +1286,6 @@ namespace quarto_mjma
                     if (i == nbreLignes)
                     {
                         AGagne = true; // la diagonale en question a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
-                        if (trace)
-                        {
-                            Console.WriteLine("gagneDiago1");
-                            Console.ReadLine();
-                        }
                     }
                 }
             }
@@ -1322,11 +1306,6 @@ namespace quarto_mjma
                     if (i == nbreLignes)
                     {
                         AGagne = true; // la diagonale en question a été complétée avec 4 pièces ayant au moins 1 caractéristique commune 
-                        if (trace)
-                        {
-                            Console.WriteLine("gagneDiago2");
-                            Console.ReadLine();
-                        }
                     }
                 }
             }
