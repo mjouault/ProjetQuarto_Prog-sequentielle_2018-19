@@ -618,7 +618,7 @@ namespace quarto_mjma
             dessinPiece = TrouverDessinPiece(choixPiece);
             for (int k = 0; k < 6; k++)
             {
-                Console.SetCursorPosition(45, longueurCase * nbreLignes + 8 + k);
+                Console.SetCursorPosition(47, longueurCase * nbreLignes + 7 + k);
                 Console.WriteLine(dessinPiece[k, 0]);
 
             }
@@ -632,7 +632,7 @@ namespace quarto_mjma
             {
                 do // l'humain saisit de nouveau une ligne tant que la ligne n'est pas comprise entre 0 et 3
                 {
-                    Console.WriteLine("\nChoisir une ligne (entre 0 et 3) ");
+                    Console.WriteLine("Choisir une ligne (entre 0 et 3) ");
                     ligne = int.Parse(Console.ReadLine());
                     if (ligne < 0 || ligne > 3)
                     {
@@ -1374,7 +1374,7 @@ namespace quarto_mjma
         /// <returns></returns>
          static bool RejouerPartie()
         {
-            Console.WriteLine("\n\n\nTapez [r] pour rejouer ou [a] pour arrêter");
+            Console.WriteLine("\nTapez [r] pour rejouer ou [a] pour arrêter");
             string reponse = Console.ReadLine(); //le joueur choisit s'il veut refaire une partie
             while (reponse != "r" && reponse != "a")
             {
