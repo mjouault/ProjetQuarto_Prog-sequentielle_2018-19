@@ -142,7 +142,6 @@ namespace quarto_mjma
             /// <summary>
             /// ChoisirMode : l'humain choisit le niveau de l'ordinateur : débutant (en tapant 1) ou intelligent (en tapant 2)
             /// </summary>
-            /// <returns></returns>
         static void ChoisirMode()
         {
             int choix;
@@ -197,22 +196,6 @@ namespace quarto_mjma
         }
 
 
-        /// <summary>
-        /// choisir1erJoueur : désigne aléatoirement qui du joueur ou de l'ordi commence à jouer (si 1 est tiré, l'humain commance, si le 0 est tiré, l'est l'ordi).
-        /// </summary>
-        /// <returns></returns>
-        static bool choisir1erJoueur()
-        {
-            bool estHumain = false;
-
-            Random R = new Random();
-            int choix1er = R.Next(0, 2); ;
-
-            if (choix1er == 1)
-                estHumain = true;
-
-            return estHumain;
-        }
 
 
         //---------------------------Fonctions d'affichage du jeu----------------------------
@@ -252,14 +235,13 @@ namespace quarto_mjma
         static string[,] TrouverDessinPiece(string piece) // Trouver le dessin qui correspond à la pièce voulue
         {
 
+            
             string largeurGrandCarre = "*         *";
             string largeurGrandCarrePlein = "***********";
-            //int hauteurGrandCarre = 6;
             string largeurPetitCarre = "  *     *  ";
             string largeurPetitCarrePlein = "  *******  ";
-            // int hauteurPetitCarre = 4;
 
-
+            // visuels possibles des pièces
             string[,] pieceCarreePetite =
            {
         { blanc},
@@ -410,7 +392,7 @@ namespace quarto_mjma
             return dessinPiece;
         }
 
-        static void AfficherPiece()
+        static void AfficherPiecesGrille()
         {
             int i = 0;
             int j = 0;
@@ -490,10 +472,28 @@ namespace quarto_mjma
             Console.ResetColor();
         }
 
-       
+
 
         //----------Fonctions permettant de jouer------------
-       
+
+        /// <summary>
+        /// choisir1erJoueur : désigne aléatoirement qui du joueur ou de l'ordi commence à jouer (si 1 est tiré, l'humain commance, si le 0 est tiré, l'est l'ordi).
+        /// </summary>
+        /// <returns></returns>
+        static bool choisir1erJoueur()
+        {
+            bool estHumain = false;
+
+            Random R = new Random();
+            int choix1er = R.Next(0, 2); ;
+
+            if (choix1er == 1)
+                estHumain = true;
+
+            return estHumain;
+        }
+
+
         /// <summary>
         /// Jouer() : Fait en sorte que le joueur et l'ordinateur jouent chacun leur tour
         /// </summary>
@@ -534,14 +534,14 @@ namespace quarto_mjma
                 Console.Clear();
                 AfficherTitre();
                 AfficherGrille();
-                AfficherPiece();
+                AfficherPiecesGrille();
                 AfficherPiecesRestantes();
                 joueurCourantHumain = !joueurCourantHumain; // le joueur courant n'est devient l'autre joueur
             }
         }
 
         /// <summary>
-        /// UtiliserPiece : Fonction permettant de ne jouer qu'une seule fois chaque pièce
+        /// UtiliserPiece :  permett de ne jouer qu'une seule fois chaque pièce
         /// </summary>
         /// <param name="choixPiece"></param>
         static void UtiliserPiece()
