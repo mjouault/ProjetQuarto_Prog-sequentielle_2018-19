@@ -58,7 +58,7 @@ namespace quarto_mjma
         {
             Console.SetWindowSize(150, 40);
 
-            AfficherEnTete();
+            AfficherPageAccueil();
             AfficherRegles();
             ChoisirMode();
             do
@@ -76,9 +76,9 @@ namespace quarto_mjma
         //-----------------------------Fonctions de démarrage du jeu-----------------------------
 
         /// <summary>
-        /// AfficherEnTete : Affiche l'en-tête
+        /// AfficherPageAccueil : Affiche l'en-tête
         /// </summary>
-        static void AfficherEnTete()
+        static void AfficherPageAccueil()
         {
             string pseudo;
 
@@ -1386,28 +1386,6 @@ namespace quarto_mjma
             else
                 return false;
         }
-
-        // fonction que l'on voulait utiliser mais nous n'avons pas trouvé comment arrêter à tout moment sans demander à l'utilisateur s'il veut quitter la partie.
-
-        /// <summary>
-        /// ArreterPartie : à tout moment, le joueur peut décider d'arrêter la partie
-        /// </summary>
-       /* static bool ArreterPartie()
-        {
-            bool arret = false;
-            Console.WriteLine("Voulez-vous arrêter la partie ? (o/n)");
-            string stop = Console.ReadLine();
-            if (stop == "n")
-            {
-                Console.WriteLine("On continue ...");
-            }
-            else
-            {
-                arret = true;
-                Console.WriteLine("On s'arrête ...");
-            }
-            return arret;
-        }*/
 
     }
 }
