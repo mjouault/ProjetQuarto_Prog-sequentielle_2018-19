@@ -13,8 +13,8 @@ namespace quarto_mjma
 
 
         //variables relatives à l'affichage
-        static int largeurCase = 16;
-        static int longueurCase = 7;
+        static int largeurCase = 16; // Une case fait 16 caractères de largeur
+        static int longueurCase = 7; // Une case fait 6 lignesd de longueur
         static string blanc = "           ";
         static string[,] pieceVide =
            {
