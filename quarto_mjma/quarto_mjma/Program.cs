@@ -1043,14 +1043,14 @@ namespace quarto_mjma
                     if (choixPiece[n] == '0') 
                     {
 
-                        while (k < tabDiago0.GetLength(0) && tabDiago0[0, n] != 3 && tabDiago0[1,n]!=3)
+                        while (k < tabDiago0.GetLength(0) && tabDiago0[k, n] != 3)
                         {
                             k++;
                         }
                     }
                     else
                     {
-                        while (k < tabDiago1.GetLength(0) && tabDiago1[0, n] != 3 && tabDiago1[1, n] != 3)
+                        while (k < tabDiago1.GetLength(0) && tabDiago1[k, n] != 3)
                         {
                             k++;
                         }
