@@ -1035,7 +1035,7 @@ namespace quarto_mjma
                 }
             }
 
-                // si elle n'a toujours pas gagné, cherche de la même manière dans le plateau de jeu s'il y a déjà 3 pièces alignées surl'une des 2 diagonales pour 1 caractéristique
+                // si elle n'a toujours pas gagné, cherche de la même manière dans le plateau de jeu s'il y a déjà 3 pièces alignées sur l'une des 2 diagonales pour 1 caractéristique
                 n = 0;
                 while (n < nbreCaractéristiques && !AGagne)
                 {
@@ -1043,14 +1043,14 @@ namespace quarto_mjma
                     if (choixPiece[n] == '0') 
                     {
 
-                        while (k < tabDiago0.GetLength(0) && tabDiago0[0, n] != 3)
+                        while (k < tabDiago0.GetLength(0) && tabDiago0[0, n] != 3 && tabDiago0[1,n]!=3)
                         {
                             k++;
                         }
                     }
                     else
                     {
-                        while (k < tabDiago1.GetLength(0) && tabDiago1[0, n] != 3)
+                        while (k < tabDiago1.GetLength(0) && tabDiago1[0, n] != 3 && tabDiago1[1, n] != 3)
                         {
                             k++;
                         }
