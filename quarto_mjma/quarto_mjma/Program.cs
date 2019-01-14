@@ -426,7 +426,7 @@ namespace quarto_mjma
             {
                 while (j < 4 && m < 16)// affichage de 4 pièces par ligne, m = nombre total de pièces dans le jeu
                 {
-                    if ( !AvoirPieceUtilisee(1, m))
+                    if ( !AvoirPieceUtilisee(1, m)) // l'on ne veut que les pièces encore disponible (donc indice de présence sur la ligne 1 de TabPieces == "0")
                     {
                         dessinPiece = TrouverDessinPiece(TabPieces[0, m]);
 
