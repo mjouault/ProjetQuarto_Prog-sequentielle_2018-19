@@ -872,7 +872,7 @@ namespace quarto_mjma
         /// ChoisirPieceGagnanteIA : l'IA cherche une pièce qui empêche l'humain de gagner et qui peut permettre à l'IA de gagner au prochain tour
         /// </summary>
         /// <param name="piecesPossiblesIA"></param>
-        static void ChoisirPieceGagnante(string[] piecesPossiblesIA)
+        static void ChoisirPieceGagnante(string[] piecesPossiblesIA) // l'IA fait un nouveau tri parmi les pièces qu'elle peut déjà jouer (sans risque de faire gagner l'humain)
         {
             int k = 0;
             bool alignement3Pieces = false; //true : La simulation de placement de la pièce considérée dans une case de la grille génère un alignement de 3 pièces (avec une caractéristique commune), false sinon
@@ -897,7 +897,7 @@ namespace quarto_mjma
                         {
                             if (Grille[ligne, col] == caseVide)
                             {
-                                alignement3Pieces = MettreAJourStrategies(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 4 pièces
+                                alignement3Pieces = MettreAJourStrategies(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 3 pièces
                                 if (alignement3Pieces) // L'IA a trouvé une pièce qui générait un alignement de 3 pièces si elle était placée dans une case
                                 {
                                     potentielleVictoireIA = true; // cette pièce empêche donc l'humain de gagner avec cette pièce si on la lui donne
@@ -1060,7 +1060,7 @@ namespace quarto_mjma
         /// <returns></returns>
         static bool TrouverCaseIALigne(int i) //  int k indique sur laquelle des 4 colonnes de la grille les 3pièces alignées se trouvent
         {
-            bool caseJouable = false;
+            bool caseJouable = false; // true : la case restante sur la ligne est vide donc jouable, false sinon
             int j = 0;
             while (j < nbreLignes && AvoirCaseRemplie(i, j)) // tant que la case est remplie, l'IA continue de chercher sur la ligne en question
             {
@@ -1152,7 +1152,7 @@ namespace quarto_mjma
             int indice = 0; // indice permettant de remplir le tableau ci-dessus
             
             ligne = 0; col = 0;
-            bool trouveCasePossible = false;
+            bool trouveCasePossible = false; // true : trouve une case telle que le placement de la pièce dans cette case ne permet pas à l'humain de gagner au prochain tour , false sinon
 
             while (ligne < nbreLignes) // parcourt de la grille de jeu
             {
