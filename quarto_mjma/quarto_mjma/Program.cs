@@ -559,10 +559,10 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// verifierSiPieceUtilisee : True si la pièce n'a pas été joué, False sinon
+        /// verifierSiPiecHumaineUtilisee : True si la pièce que l'humain souhaite donnée a déjà été utilisée, False sinon
         /// </summary>
         /// <returns></returns>
-        static bool VerifierSiPieceUtilisee() //vérifier si la pièce a été utilisée (true) ou non (false)
+        static bool VerifierSiPieceHumainUtilisee() //vérifier si la pièce a été utilisée (true) ou non (false)
         {
             bool pieceUtilisee = false;
             int i = 0;  // Compteur
@@ -690,7 +690,7 @@ namespace quarto_mjma
                 }
                 else // si la pièce est correcte
                 {
-                    pieceUtilisee = VerifierSiPieceUtilisee(); 
+                    pieceUtilisee = VerifierSiPieceHumainUtilisee(); 
 
                     if (pieceUtilisee) // message d'erreur si pièce utilisée
                     {
