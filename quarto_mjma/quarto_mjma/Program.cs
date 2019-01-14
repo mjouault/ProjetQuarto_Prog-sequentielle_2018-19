@@ -408,7 +408,8 @@ namespace quarto_mjma
                     for (int k = 0; k < longueurCase - 1; k++)
                     {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
                         //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
-                        Console.SetCursorPosition(9 + largeurCase * j, 5 + longueurCase * i + k);
+                        Console.SetCursorPosition(9 + largeurCase * j, 5 + longueurCase * i + k); // i et j permettent de retrouver la case de la grille "virtuelle" dans laquelle se trouve la pièce (encore sous forme de chaîne de 4 caractères)
+                                                                                                   // largeurCase et longueurCase permettent correspondent à la prise en compte des dimensions du dessin de la pièce
                         Console.WriteLine(dessinPiece[k, 0]);
                     }
                     Console.ResetColor();
@@ -427,36 +428,28 @@ namespace quarto_mjma
 
             while (i < 4) //i= nombre de lignes
             {
-                while (j < 4 && m < 16)//j= nbre de colonnes
+                while (j < 4 && m < 16)//j= nbre de colonnes du tableau de pièces
                 {
-                    // if (TabPieces[1, m] == "0")
-                    //{
-                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
                     dessinPiece = TrouverDessinPiece(TabPieces[0, m]);
-                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
-                    for (int k = 0; k < 8; k++)//+une case à chaque fois
-                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
-                     //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
+                    for (int k = 0; k < 8; k++)// k = indice de lignes du dessin de la pièce
+                    {
 
-                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k);
+                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k); 
 
                         if (k < 6)
                         {
-                            if (TabPieces[1, m] == "0")
+                            if (! AvoirPieceUtilisee (1, m))
                                 Console.WriteLine(dessinPiece[k, 0]);
                         }
 
                         if (k == 7)
                         {
-                            if (TabPieces[1, m] == "0")
+                            if ( ! AvoirPieceUtilisee (1, m))
                             {
                                 Console.ResetColor();
-                                //Console.WriteLine("m={0}, Tab[0,m]={1}", m, TabPieces[0, m]);
-                                //  Console.WriteLine();
                                 Console.WriteLine("{0}", TabPieces[0, m]);
                             }
-                            //  Console.WriteLine();
 
                             m++;
                         }
@@ -559,22 +552,13 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// verifierSiPiecHumaineUtilisee : True si la pièce que l'humain souhaite donnée a déjà été utilisée, False sinon
+        ///AvoirPieceUtilisee: vérification  si la pièce a été utilisée (true) ou non (false)
         /// </summary>
         /// <returns></returns>
-        static bool VerifierSiPieceHumainUtilisee() //vérifier si la pièce a été utilisée (true) ou non (false)
+        static bool AvoirPieceUtilisee(int i, int j) 
         {
-            bool pieceUtilisee = false;
-            int i = 0;  // Compteur
+            return TabPieces [i, j] == "1"; //True si la pièce a déjà été utilisée, False sinon
 
-            // Vérification
-
-            while (choixPiece != TabPieces[0, i] && i < nbPiecesTotales)
-                i++;
-            if (TabPieces[1, i] == "1")
-                pieceUtilisee = true;
-
-            return pieceUtilisee;
         }
 
         /// <summary>
@@ -604,7 +588,7 @@ namespace quarto_mjma
                     randomPiece = R.Next(0, 16);
                     choixPiece = TabPieces[0, randomPiece]; // l'ordi choisit aléatoirement parmi les pièces disponibles
                 }
-                while (TabPieces[1, randomPiece] == "1"); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée*/
+                while (AvoirPieceUtilisee (1, randomPiece)); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée*/
             }
             else // si mode intelligent
             {
@@ -690,7 +674,10 @@ namespace quarto_mjma
                 }
                 else // si la pièce est correcte
                 {
-                    pieceUtilisee = VerifierSiPieceHumainUtilisee(); 
+                    int i = 0;
+                    while (choixPiece != TabPieces[0, i] && i < nbPiecesTotales)
+                        i++;
+                    pieceUtilisee = AvoirPieceUtilisee(1,i); 
 
                     if (pieceUtilisee) // message d'erreur si pièce utilisée
                     {
@@ -827,7 +814,7 @@ namespace quarto_mjma
             for (k = 0; k < TabPieces.GetLength(1); k++) // parcours du tableau recensant les pièces 
             {
                 choixPiece = TabPieces[0, k]; // Permet d'appeler la fonction MettreAJourStrategies qui dépend de choixPiece
-                if (TabPieces[1, k] == "0")//choix d'une pièce parmi les pièces disponibles
+                if (! AvoirPieceUtilisee (1, k)) //choix d'une pièce parmi les pièces disponibles
                 {
                     ligne = 0; col = 0; // remise à 0 des indices lorsque l'on passe à une autre pièce
                     alignement4Pieces = false;
@@ -872,7 +859,7 @@ namespace quarto_mjma
                     randomPiece = R.Next(0, 16);
                     choixPiece = TabPieces[0, randomPiece];
                 }
-                while (TabPieces[1, randomPiece] == "1"); //l'IA choisit de nouveau la pièce s'il en a choisi une déjà jouée
+                while (AvoirPieceUtilisee (1, randomPiece)); //l'IA choisit de nouveau la pièce s'il en a choisi une déjà jouée
             }
 
             else  // si le tableau recensant les pièces que l'IA peut jouer n'est pas nul
