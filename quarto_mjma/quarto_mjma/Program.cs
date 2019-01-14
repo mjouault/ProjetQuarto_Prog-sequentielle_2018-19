@@ -530,9 +530,8 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// UtiliserPiece :  permett de ne jouer qu'une seule fois chaque pièce
+        /// UtiliserPiece :  permet de ne jouer qu'une seule fois chaque pièce
         /// </summary>
-        /// <param name="choixPiece"></param>
         static void UtiliserPiece()
         {
             int i = 0;
