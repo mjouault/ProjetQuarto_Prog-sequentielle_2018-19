@@ -401,13 +401,10 @@ namespace quarto_mjma
             {
                 for (j = 0; j < nbreLignes; j++)
                 {
-                    // Console.WriteLine("début for parcours de la grille avant trouverdessin, i={0}, j={1}", i, j);
                     dessinPiece = TrouverDessinPiece(Grille[i, j]);
-                    //  Console.WriteLine("début for parcours de la grille après trouverdessin, i={0}, j={1}", i, j);
 
                     for (int k = 0; k < longueurCase - 1; k++)
-                    {//là où se trouve le curseur + largeur de la case *(le nombre de colonne+1) (déplace vers la droite)
-                        //ligne=i, 5 (la grille est à 5 du haut de l'écran) + longueur de la case*(nbre ligne+1) + k (?)
+                    {
                         Console.SetCursorPosition(9 + largeurCase * j, 5 + longueurCase * i + k); // i et j permettent de retrouver la case de la grille "virtuelle" dans laquelle se trouve la pièce (encore sous forme de chaîne de 4 caractères)
                                                                                                    // largeurCase et longueurCase permettent correspondent à la prise en compte des dimensions du dessin de la pièce
                         Console.WriteLine(dessinPiece[k, 0]);
@@ -428,14 +425,14 @@ namespace quarto_mjma
 
             while (i < 4) //i= nombre de lignes
             {
-                while (j < 4 && m < 16)//j= nbre de colonnes du tableau de pièces
+                while (j < 4 && m < 16)//j= nbre de colonnes du tableau TabPieces
                 {
                     dessinPiece = TrouverDessinPiece(TabPieces[0, m]);
 
-                    for (int k = 0; k < 8; k++)// k = indice de lignes du dessin de la pièce
+                    for (int k = 0; k < 8; k++)// k = indice de lignes du dessin de la pièce (+1 car écriture ensuite du nom de la pièce)
                     {
 
-                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k); 
+                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k); // 9 = décalage vers le bas permettant d'afficher sous chaque pièce, leur nom
 
                         if (k < 6)
                         {
@@ -448,7 +445,7 @@ namespace quarto_mjma
                             if ( ! AvoirPieceUtilisee (1, m))
                             {
                                 Console.ResetColor();
-                                Console.WriteLine("{0}", TabPieces[0, m]);
+                                Console.WriteLine("   {0}", TabPieces[0, m]);
                             }
 
                             m++;
