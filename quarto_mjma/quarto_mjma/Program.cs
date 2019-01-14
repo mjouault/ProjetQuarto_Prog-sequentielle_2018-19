@@ -437,19 +437,13 @@ namespace quarto_mjma
 
                             if (k < 6)
                             {
-                                // if (!AvoirPieceUtilisee (1, m))
                                 Console.WriteLine(dessinPiece[k, 0]);
                             }
 
                             if (k == 7)
                             {
-                                // if ( ! AvoirPieceUtilisee (1, m))
-                                // {
                                 Console.ResetColor();
                                 Console.WriteLine("   {0}", TabPieces[0, m]);
-                                //  }
-
-                                //  m++;
                             }
                         }
                     }
@@ -495,6 +489,7 @@ namespace quarto_mjma
         {
             bool joueurCourantHumain = choisir1erJoueur(); // appel de la fonction booléenne choisir1erJoueur pour déterminer l'ordre d'alternance
             Console.Clear();
+            // Affiche une première fois la grille vide avec toutes les pièces du jeu disponibles à drote de l'écran
             AfficherTitre();
             AfficherGrille();
             AfficherPiecesRestantes();
@@ -525,12 +520,12 @@ namespace quarto_mjma
                         Console.WriteLine("Match nul");
                 }
 
-                Console.Clear();
+                Console.Clear(); // raffraichissement de l'affichage après chaque tour
                 AfficherTitre();
                 AfficherGrille();
                 AfficherPiecesGrille();
                 AfficherPiecesRestantes();
-                joueurCourantHumain = !joueurCourantHumain; // le joueur courant n'est devient l'autre joueur
+                joueurCourantHumain = !joueurCourantHumain; // l'autre joueur devien le joueur courant
             }
         }
 
@@ -600,7 +595,9 @@ namespace quarto_mjma
 
             Console.SetCursorPosition(0, longueurCase * nbreLignes + 7);
             Console.WriteLine("L'ordinateur a choisi cette pièce pour vous : ");
-            dessinPiece = TrouverDessinPiece(choixPiece);
+
+            // affichage du visuel de la pièce choisie
+            dessinPiece = TrouverDessinPiece(choixPiece); 
             for (int k = 0; k < 6; k++)
             {
                 Console.SetCursorPosition(47, longueurCase * nbreLignes + 7 + k);
@@ -626,7 +623,7 @@ namespace quarto_mjma
 
                 } while (ligne < 0 || ligne > 3); 
 
-                do //de^même pour la saisie de la colonne
+                do //de même pour la saisie de la colonne
                 {
                     Console.WriteLine("\nChoisir une colonne (entre 0 et 3)");
                     col = int.Parse(Console.ReadLine());
@@ -636,7 +633,7 @@ namespace quarto_mjma
                     }
                 } while (col < 0 || col > 3);
 
-                caseRemplie = AvoirCaseRemplie(ligne, col);
+                caseRemplie = AvoirCaseRemplie(ligne, col); // vérification si la case choisie est remplie
 
                 if (caseRemplie)
                 {
@@ -647,7 +644,7 @@ namespace quarto_mjma
             } while (caseRemplie); //tant que la case choisie est remplie, le joueur doit choisir une autre case. 
                                    //Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
-            Grille[ligne, col] = choixPiece; // la grille est actualisée
+            Grille[ligne, col] = choixPiece; // la grille est actualisée,  affectation du nom de la pièce choisie dans la case désirée
             MettreAJourStrategies(false, 0); // Les tableaux concernés par l'ajout de cette pièce dans la grille sont aussi actualisés
         }
 
