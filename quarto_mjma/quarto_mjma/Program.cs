@@ -437,7 +437,7 @@ namespace quarto_mjma
 
                             if (k < 6)
                             {
-                                Console.WriteLine(dessinPiece[k, 0]);
+                                Console.WriteLine(dessinPiece[k, 0]); // affichage de chaque ligne du dessin de la pièce
                             }
 
                             if (k == 7)
