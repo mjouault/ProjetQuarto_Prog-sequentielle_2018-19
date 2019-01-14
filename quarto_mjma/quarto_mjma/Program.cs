@@ -16,7 +16,7 @@ namespace quarto_mjma
         static int largeurCase = 16; // Une case fait 16 caractères de largeur
         static int longueurCase = 7; // Une case fait 6 lignesd de longueur
         static string blanc = "           ";
-        static string[,] pieceVide =
+        static string[,] pieceVide =  // visuel d'une case vide dans l'affichage de la grille
            {
             { blanc},
             { blanc},
@@ -27,7 +27,7 @@ namespace quarto_mjma
           };
         static string[,] dessinPiece = new string [6,1]; //visuel d'une pièce : tableau de 6 lignes composées chacune de 11 caractères
 
-        // varibales mises à jour durant le jeu 
+        // variables mises à jour durant le jeu 
         static string[,] TabPieces; //tableau recensant le nom ds pièces (ligne 0) et leur indice de présence (0 : absent) dans la grille de jeu (ligne1)
         static string[,] Grille;    // Grille de jeu
         static string caseVide = "    ";
@@ -36,7 +36,7 @@ namespace quarto_mjma
 
 
 
-        // tableux de sommes pour que l'IA mène sa stratégie
+        // tableuax de sommes pour que l'IA mène sa stratégie
         static int[,] tabLignes0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque ligne 
         static int[,] tabLignes1 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 1 sur chaque ligne 
         static int[,] tabCol0 = new int[4, 4]; //tableau sommant, pour chaque caractéristique, le nombre de 0 sur chaque colonne
@@ -235,7 +235,7 @@ namespace quarto_mjma
         static string[,] TrouverDessinPiece(string piece) // Trouver le dessin qui correspond à la pièce voulue
         {
 
-            
+            // déclaration de string pour optimiser codage du visuel des pièces
             string largeurGrandCarre = "*         *";
             string largeurGrandCarrePlein = "***********";
             string largeurPetitCarre = "  *     *  ";
@@ -388,7 +388,6 @@ namespace quarto_mjma
                     }
                 }
             }
-            // Console.ResetColor();
             return dessinPiece;
         }
 
@@ -401,7 +400,7 @@ namespace quarto_mjma
             {
                 for (j = 0; j < nbreLignes; j++)
                 {
-                    dessinPiece = TrouverDessinPiece(Grille[i, j]);
+                    dessinPiece = TrouverDessinPiece(Grille[i, j]); // correspondance nom de la pièce/ dessin de la pièce
 
                     for (int k = 0; k < longueurCase - 1; k++)
                     {
@@ -417,42 +416,47 @@ namespace quarto_mjma
         }
 
         /// <summary>
-        /// AfficherPiecesRestantes : Affiche les pièces disponibles, réactualisées à chaque tour
+        /// AfficherPiecesRestantes : Affiche les pièces encore disponibles, affichage réactualisé à chaque tour
         /// </summary>
         static void AfficherPiecesRestantes()
         {
             int i = 0; int j = 0; int m = 0;
 
-            while (i < 4) //i= nombre de lignes
+            while (i < 4) // affichage des pièces restante sur 4 lignes
             {
-                while (j < 4 && m < 16)//j= nbre de colonnes du tableau TabPieces
+                while (j < 4 && m < 16)// affichage de 4 pièces par ligne, m = nombre total de pièces dans le jeu
                 {
-                    dessinPiece = TrouverDessinPiece(TabPieces[0, m]);
-
-                    for (int k = 0; k < 8; k++)// k = indice de lignes du dessin de la pièce (+1 car écriture ensuite du nom de la pièce)
+                    if ( !AvoirPieceUtilisee(1, m))
                     {
+                        dessinPiece = TrouverDessinPiece(TabPieces[0, m]);
 
-                        Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k); // 9 = décalage vers le bas permettant d'afficher sous chaque pièce, leur nom
-
-                        if (k < 6)
+                        for (int k = 0; k < 8; k++)// k = indice de lignes du dessin de la pièce (+1 car écriture ensuite du nom de la pièce)
                         {
-                            if (! AvoirPieceUtilisee (1, m))
-                                Console.WriteLine(dessinPiece[k, 0]);
-                        }
 
-                        if (k == 7)
-                        {
-                            if ( ! AvoirPieceUtilisee (1, m))
+                            Console.SetCursorPosition(75 + largeurCase * j, 5 + 9 * i + k); // 9 = décalage vers le bas permettant d'afficher sous chaque pièce, leur nom
+
+                            if (k < 6)
                             {
-                                Console.ResetColor();
-                                Console.WriteLine("   {0}", TabPieces[0, m]);
+                                // if (!AvoirPieceUtilisee (1, m))
+                                Console.WriteLine(dessinPiece[k, 0]);
                             }
 
-                            m++;
+                            if (k == 7)
+                            {
+                                // if ( ! AvoirPieceUtilisee (1, m))
+                                // {
+                                Console.ResetColor();
+                                Console.WriteLine("   {0}", TabPieces[0, m]);
+                                //  }
+
+                                //  m++;
+                            }
                         }
                     }
+                    m++;
                     j++;
-                    if (j == 4 || j == 8 || j == 12)
+
+                    if (j == 4 || j == 8 || j == 12) // à chaque fois qu'il y a 4 pièces restantes d'alignées sur une ligne, changement de ligne
                     {
                         i++;
                         j = 0;
