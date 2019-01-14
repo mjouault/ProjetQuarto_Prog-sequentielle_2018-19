@@ -727,7 +727,7 @@ namespace quarto_mjma
                                                                                 l'humain ne pourrait pas former un alignement de 4caractéristiques avec cette pièce*/
 
         {
-            bool alignementPieces = false;
+            bool alignementPieces = false; // true= un nombre défini de pièces  (nbPiecesAlignees) ayec au moins une caractéristique commune sont alignées
 
 
             for (int n = 0; n < nbreCaractéristiques; n++) //parcours chaque caractéristique
@@ -755,10 +755,10 @@ namespace quarto_mjma
                         tabLignes0[ligne, n]++;
                         tabCol0[col, n]++;
 
-                        if (ligne == col)
+                        if (ligne == col) // Si diagonale de la gauche vers la droite, du haut vers le bas concernée
                             tabDiago0[0, n]++;
 
-                        else if (ligne == ((nbreLignes - 1) - col) || col == (nbreLignes - 1) - ligne)
+                        else if (ligne == ((nbreLignes - 1) - col) || col == (nbreLignes - 1) - ligne) // Si diagonale de la droite vers la gauche, du haut vers le bas concernée
                             tabDiago0[1, n]++;
                     }
                 }
