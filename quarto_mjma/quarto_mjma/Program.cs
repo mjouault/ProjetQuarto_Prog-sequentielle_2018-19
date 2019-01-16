@@ -523,15 +523,17 @@ namespace quarto_mjma
                     }
                 }
 
-                if (!AGagne) // Cas où la grille est remplie mais personne n'a gagné : c'est un match nul
+                
+
+              joueurCourantHumain = !joueurCourantHumain; // l'autre joueur devien le joueur courant
+            }
+
+            if (!AGagne) // Cas où la grille est remplie mais personne n'a gagné : c'est un match nul
                 {
                     AvoirGrilleRemplie();
                     if (grilleRemplie)
                         Console.WriteLine("Match nul");
                 }
-
-              joueurCourantHumain = !joueurCourantHumain; // l'autre joueur devien le joueur courant
-            }
         }
 
         /// <summary>
