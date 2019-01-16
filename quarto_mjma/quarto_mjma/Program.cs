@@ -651,7 +651,7 @@ namespace quarto_mjma
                                    //Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
             grille[ligne, col] = choixPiece; // la grille est actualisée,  affectation du nom de la pièce choisie dans la case désirée
-            MettreAJourStrategies(false, 0); // Les tableaux concernés par l'ajout de cette pièce dans la grille sont aussi actualisés
+            CalculerStrategiesIA(false, 0); // Les tableaux concernés par l'ajout de cette pièce dans la grille sont aussi actualisés
         }
 
         /// <summary>
@@ -715,22 +715,23 @@ namespace quarto_mjma
                     ChoisirCaseIA(); // elle cherche une case telle que le placement de la pièce dans cette case ne permet pas à l'humain de gagner ensuite
                 }
             }
-                    MettreAJourStrategies(false, 0); // mise à jour des tableaux de sommes correspondant
+                    CalculerStrategiesIA(false, 0); // mise à jour des tableaux de sommes correspondant
         }
 
 
         // --------------------sous- fonctions relatives à l'intelligence artificielle------------------------------ 
 
         /// <summary>
-        /// MettreAJourStrategies : l'IA calcule après chaque placement de pièce le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
+        /// CalculerStrategiesIA : l'IA calcule après chaque placement de pièce le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
         /// </summary>
         /// <returns></returns>
-        static bool MettreAJourStrategies(bool simul, int nbPiecesAlignees)  /* La fonction MettreAJourStrategies est appelée :
+        static bool CalculerStrategiesIA(bool simulation, int nbPiecesAlignees)  /* fonction appelée :
                                                                                 - A chaque fin de tour pour que l'IA recalcule ses stratégies
-                                                                               -  Dans TrouverCase afin de s'assurer qu'après simulation du placement de la pièce (d'où vient notre bool simul),
-                                                                                il n'y aurait pas 3 pièces alignées afin de ne pas permettre au joueur de gagner au tour suivant.
-                                                                               - Dans TrouverPiece afin de s'assurer qu'après simulation du placement de la pièce dans la grille,(d'où vient nbPiecesAlignees) 
-                                                                                l'humain ne pourrait pas former un alignement de 4caractéristiques avec cette pièce*/
+                                                                               -  Dans TrouverCase afin de s'assurer qu'après simulation du placement de la pièce (d'où le paramètre d'entrée bool simulation),
+                                                                                il n'y aurait pas 3 (nbPiecesAlignees =2 avant simulation) pièces alignées afin de ne pas permettre au joueur de gagner au tour suivant.
+                                                                               - Dans TrouverPiece afin de s'assurer qu'après simulation du placement de la pièce dans la grille,
+                                                                                l'humain ne pourra pas former un alignement de 4caractéristiques ((nbPiecesAlignees =3 avant simulation)) avec cette pièce
+                                                                                Le paramètre d'entrée nbPiecesAlignees permet donc de faire la simulation de placement de pièce pour voir si cela  génère ou non un alignement d'un certain nombre de caractéristiques */
 
         {
             bool alignementPieces = false; // true= un nombre défini de pièces  (nbPiecesAlignees) ayec au moins une caractéristique commune sont alignées
@@ -740,7 +741,7 @@ namespace quarto_mjma
             {
                 if (choixPiece[n] == '0') //compteur du nombre de 0 de la n ième caractéristique sur la ligne/colonne/diagonale considérée
                 {
-                    if (simul) // On simule le placement d'une pièce dans la grille sans que les tableaux de sommes soient mis à jour
+                    if (simulation) // On simule le placement d'une pièce dans la grille sans que les tableaux de sommes soient mis à jour
                     {
 
                         if (tabLignes0[ligne, n] == nbPiecesAlignees || tabCol0[col, n] == nbPiecesAlignees) // cherche un certain nombre de pièces alignées (2 ou 3) dans les tableaux de sommes des lignes et des colonnes concernant les caractéristiques codée par "0"
@@ -770,7 +771,7 @@ namespace quarto_mjma
                 }
                 else //compteur du nombre de 1 de la n ième caractéristique sur la ligne, colonne, diagonale considérée. Mêmes manipulations mais dans les tableaux de sommes des caractéristiques codée par "1"
                 {
-                    if (simul)
+                    if (simulation)
                     {
                         if (tabLignes1[ligne, n] == nbPiecesAlignees || tabCol1[col, n] == nbPiecesAlignees) // cherche un certain nombre de pièces alignées (2 ou 3) dans les tableaux de sommes des lignes et des colonnes concernant les caractéristiques codée par "1"
                         {
@@ -832,7 +833,7 @@ namespace quarto_mjma
 
                             if (grille[ligne, col] == caseVide) // si la case considérée est vide
                             {
-                                alignement4Pieces = MettreAJourStrategies(true, 3); // l'IA vérifie si, pour la case considérée, la simulation de placement de la pièce considérée dans chaque case Grille[ligne, col]  génère ou non un alignement de 4 pièces 
+                                alignement4Pieces = CalculerStrategiesIA(true, 3); // l'IA vérifie si, pour la case considérée, la simulation de placement de la pièce considérée dans chaque case Grille[ligne, col]  génère ou non un alignement de 4 pièces 
                             }
 
                             col++;
@@ -903,7 +904,7 @@ namespace quarto_mjma
                         {
                             if (grille[ligne, col] == caseVide)
                             {
-                                alignement3Pieces = MettreAJourStrategies(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 3 pièces
+                                alignement3Pieces = CalculerStrategiesIA(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 3 pièces
                                 if (alignement3Pieces) // L'IA a trouvé une pièce qui générait un alignement de 3 pièces si elle était placée dans une case
                                 {
                                     potentielleVictoireIA = true; // cette pièce empêche donc l'humain de gagner avec cette pièce si on la lui donne
@@ -1166,7 +1167,7 @@ namespace quarto_mjma
                 {
                     if (grille[ligne, col] == caseVide) // si case vide
                     {
-                        alignement3pieces =MettreAJourStrategies(true, 2); //simulation de placement de la pièce dans cette case et on vérifie si elle génère un alignement de 3 pièces identiques (en effet, le prochain joueur est l'humain!)
+                        alignement3pieces =CalculerStrategiesIA(true, 2); //simulation de placement de la pièce dans cette case et on vérifie si elle génère un alignement de 3 pièces identiques (en effet, le prochain joueur est l'humain!)
                         if (!alignement3pieces) /// a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces 
                         {
                             trouveCasePossible = true;
