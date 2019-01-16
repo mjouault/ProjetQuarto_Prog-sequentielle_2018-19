@@ -488,20 +488,28 @@ namespace quarto_mjma
         static void Jouer()
         {
             bool joueurCourantHumain = choisir1erJoueur(); // appel de la fonction booléenne choisir1erJoueur pour déterminer l'ordre d'alternance
-            Console.Clear();
-            // Affiche une première fois la grille vide avec toutes les pièces du jeu disponibles à drote de l'écran
-            AfficherTitre();
-            AfficherGrille();
-            AfficherPiecesRestantes();
 
             while (!AGagne && !grilleRemplie)
             {
+                Console.Clear(); // raffraichissement de l'affichage après chaque tour
+                AfficherTitre();
+                AfficherGrille();
+                AfficherPiecesGrille();
+                AfficherPiecesRestantes();
+
                 if (joueurCourantHumain)  // joueur être humain commence
                 {
                     JouerHumain();
                     Gagner();  //vérification si le joueur a gagné à chaque fin de tour
                     if (AGagne) //cas s'il gagne
+                    {
+                      // Console.Clear(); 
+                      // AfficherTitre();
+                      // AfficherGrille(); //affchage du quarto réalisé
+                      // AfficherPiecesGrille();
+                      // AfficherPiecesRestantes();
                         AfficherVictoireHumain();
+                    }
                 }
 
                 else  //si le joueur n'a pas gagné
@@ -510,7 +518,9 @@ namespace quarto_mjma
                     //même vérification après chaque tour de jeu de l'ordinateur
                     Gagner();
                     if (AGagne) // cas si l'ordi gagne
+                    {
                         AfficherPerteHumain();
+                    }
                 }
 
                 if (!AGagne) // Cas où la grille est remplie mais personne n'a gagné : c'est un match nul
@@ -520,12 +530,7 @@ namespace quarto_mjma
                         Console.WriteLine("Match nul");
                 }
 
-                Console.Clear(); // raffraichissement de l'affichage après chaque tour
-                AfficherTitre();
-                AfficherGrille();
-                AfficherPiecesGrille();
-                AfficherPiecesRestantes();
-                joueurCourantHumain = !joueurCourantHumain; // l'autre joueur devien le joueur courant
+              joueurCourantHumain = !joueurCourantHumain; // l'autre joueur devien le joueur courant
             }
         }
 
@@ -1146,7 +1151,7 @@ namespace quarto_mjma
         {
             bool alignement3pieces = false; //booléen déterminant si  la simulation de placement de la pièce (donnée par l'humain) génère un alignement de 3 pièces avc une cractéristique commune (true) ou non. 
 
-            int[][] casesPossiblesIA = new int[16][]; // tableau recensant toutes les cases dans lesuelles l'IA peut jouer sa pièce sans risque de faire gagner l'humain. Taille maximale du tableau = nombre de pièces soit 16
+            int[][] casesPossiblesIA = new int[16][]; // tableau recensant toutes les cases dans lesquelles l'IA peut jouer sa pièce sans risque de faire gagner l'humain. Taille maximale du tableau = nombre de pièces soit 16
                                                       // le tableau imbriqué comportera 2 éléments : l'indice de ligne et l'indice de colonne
             int indice = 0; // indice permettant de remplir le tableau ci-dessus
             
@@ -1302,8 +1307,14 @@ namespace quarto_mjma
         /// </summary>
         static void AfficherVictoireHumain()
         {
+            Console.Clear(); // raffraichissement de l'affichage après chaque tour
+            AfficherTitre();
+            AfficherGrille();
+            AfficherPiecesGrille();
+            AfficherPiecesRestantes();
+
             Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si le joueur humain gagne
-            Console.WriteLine("QUARTO! \nVous avez gagné, BRAVO !");
+            Console.WriteLine("\nQUARTO! \nVous avez gagné, BRAVO !");
             Console.Beep(400, 100);//musique de victoire
             Console.Beep(550, 100);
             Console.Beep(450, 100);
@@ -1316,8 +1327,14 @@ namespace quarto_mjma
         /// </summary>
         static void AfficherPerteHumain()
         {
+            Console.Clear(); // raffraichissement de l'affichage après chaque tour
+            AfficherTitre();
+            AfficherGrille();
+            AfficherPiecesGrille();
+            AfficherPiecesRestantes();
+
             Console.ForegroundColor = ConsoleColor.DarkRed; //affiche en rouge si le joueur humain perd
-            Console.WriteLine(" QUARTO de l'ordinateur ! \nQuel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
+            Console.WriteLine(" \nQUARTO de l'ordinateur ! \nQuel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
             Console.Beep(500, 100);
             Console.Beep(400, 100);
             Console.Beep(350, 100);
