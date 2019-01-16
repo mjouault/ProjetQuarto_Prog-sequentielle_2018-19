@@ -28,8 +28,8 @@ namespace quarto_mjma
         static string[,] dessinPiece = new string [6,1]; //visuel d'une pièce : tableau de 6 lignes composées chacune de 11 caractères
 
         // variables mises à jour durant le jeu 
-        static string[,] TabPieces; //tableau recensant le nom ds pièces (ligne 0) et leur indice de présence (0 : absent) dans la grille de jeu (ligne1)
-        static string[,] Grille;    // Grille de jeu
+        static string[,] tabPieces; //tableau recensant le nom ds pièces (ligne 0) et leur indice de présence (0 : absent) dans la grille de jeu (ligne1)
+        static string[,] grille;    // Grille de jeu
         static string caseVide = "    ";
         static int ligne; static int col; //lignes et colonnes que le joueur/l'ordi choisit pour placer la pièce donnée
         static string choixPiece; // désigne une pièce choisie pour être jouée par l'un des joueurs
@@ -48,7 +48,7 @@ namespace quarto_mjma
         //booléen utilisés durant tout le jeu
         static bool AGagne = false; //  true si un joueur a gagné, false sinon (lorsqu'elle est appelée dans les fonctions relative à l'IA, elle détermine si l'IA gagne ou non en plaçant ne pièce)
         static bool grilleRemplie = false;
-        static bool modeIntell = false; // true : mode intelligent activé / false : mode noviced de l'ordinateur
+        static bool modeIntelligent = false; // true : mode intelligent activé / false : mode débutant de l'ordinateur (joue en aléatoire)
 
        
 
@@ -63,7 +63,7 @@ namespace quarto_mjma
             ChoisirMode();
             do
             {
-               Grille = new string[nbreLignes, nbreLignes];
+               grille = new string[nbreLignes, nbreLignes];
                 
                 InitialiserGrille();
                 InitialiserPieces();
@@ -153,7 +153,7 @@ namespace quarto_mjma
                 choix = int.Parse(Console.ReadLine());
             }
             if (choix == 2)
-                modeIntell = true;
+                modeIntelligent = true;
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace quarto_mjma
             {
                 for (int j = 0; j < nbreLignes; j++) // i = indice colonne
                 {
-                    Grille[i, j] = caseVide; // met le contenu caseVide ("   ") dans toutes les cases du tableau
+                    grille[i, j] = caseVide; // met le contenu caseVide ("   ") dans toutes les cases du tableau
                 }
             }
         }
@@ -176,7 +176,7 @@ namespace quarto_mjma
         /// </summary>
         static void InitialiserPieces()
         {
-            TabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",     //la 1ere ligne du tableau recense le nom des pièces du jeu
+            tabPieces = new string[,] { { "0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",     //la 1ere ligne du tableau recense le nom des pièces du jeu
                                           "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111" },
                                         { "0", "0", "0", "0", "0", "0", "0", "0",                             // la 2eme ligne recense l'indice de présence de chaque pièce dans la grille (1= présence, 0 sinon)
                                           "0", "0", "0", "0", "0", "0", "0", "0" } };
@@ -400,7 +400,7 @@ namespace quarto_mjma
             {
                 for (j = 0; j < nbreLignes; j++)
                 {
-                    dessinPiece = TrouverDessinPiece(Grille[i, j]); // correspondance nom de la pièce/ dessin de la pièce
+                    dessinPiece = TrouverDessinPiece(grille[i, j]); // correspondance nom de la pièce/ dessin de la pièce
 
                     for (int k = 0; k < longueurCase - 1; k++)
                     {
@@ -428,7 +428,7 @@ namespace quarto_mjma
                 {
                     if ( !AvoirPieceUtilisee(1, m)) // l'on ne veut que les pièces encore disponible (donc indice de présence sur la ligne 1 de TabPieces == "0")
                     {
-                        dessinPiece = TrouverDessinPiece(TabPieces[0, m]);
+                        dessinPiece = TrouverDessinPiece(tabPieces[0, m]);
 
                         for (int k = 0; k < 8; k++)// k = indice de lignes du dessin de la pièce (+1 car écriture ensuite du nom de la pièce)
                         {
@@ -443,7 +443,7 @@ namespace quarto_mjma
                             if (k == 7)
                             {
                                 Console.ResetColor();
-                                Console.WriteLine("   {0}", TabPieces[0, m]);
+                                Console.WriteLine("   {0}", tabPieces[0, m]);
                             }
                         }
                     }
@@ -544,13 +544,13 @@ namespace quarto_mjma
             int i = 0;
 
             // Recherche de l'indice de colonne de la pièce "choixPiece" dans le tableau recensant les pièces
-            while (i < nbPiecesTotales && choixPiece != TabPieces[0, i])
+            while (i < nbPiecesTotales && choixPiece != tabPieces[0, i])
             {
                 i++;
             }
 
             // une fois cet indice trouvé, l'indice de présence de la pièce passe à 1
-            TabPieces[1, i] = "1";
+            tabPieces[1, i] = "1";
         }
 
         /// <summary>
@@ -559,7 +559,7 @@ namespace quarto_mjma
         /// <returns></returns>
         static bool AvoirPieceUtilisee(int i, int j) 
         {
-            return TabPieces [i, j] == "1"; //True si la pièce a déjà été utilisée, False sinon
+            return tabPieces [i, j] == "1"; //True si la pièce a déjà été utilisée, False sinon
 
         }
 
@@ -571,7 +571,7 @@ namespace quarto_mjma
         /// <returns></returns>
         static bool AvoirCaseRemplie(int i, int j)
         {
-            return Grille[i, j] != caseVide; // retourne true si la case considérée n'est pas vide, false sinon
+            return grille[i, j] != caseVide; // retourne true si la case considérée n'est pas vide, false sinon
         }
 
         /// <summary>
@@ -581,14 +581,14 @@ namespace quarto_mjma
         {
             //L'ordinateur choisit d'abord la pièce qu'il va donner à l'humain
 
-            if (!modeIntell) // si mode débutant
+            if (!modeIntelligent) // si mode débutant
             {
                 int randomPiece;
                 Random R = new Random();
                 do
                 {
                     randomPiece = R.Next(0, 16);
-                    choixPiece = TabPieces[0, randomPiece]; // l'ordi choisit aléatoirement parmi les pièces disponibles
+                    choixPiece = tabPieces[0, randomPiece]; // l'ordi choisit aléatoirement parmi les pièces disponibles
                 }
                 while (AvoirPieceUtilisee (1, randomPiece)); //Demander à l'ordi de choisir de nouveau la pièce s'il en a choisi une déjà jouée*/
             }
@@ -650,7 +650,7 @@ namespace quarto_mjma
             } while (caseRemplie); //tant que la case choisie est remplie, le joueur doit choisir une autre case. 
                                    //Préalablement, les conditions sur les lignes et les colonnes ont été vérifées pour ne pas tomber sur une case hors tableau.
 
-            Grille[ligne, col] = choixPiece; // la grille est actualisée,  affectation du nom de la pièce choisie dans la case désirée
+            grille[ligne, col] = choixPiece; // la grille est actualisée,  affectation du nom de la pièce choisie dans la case désirée
             MettreAJourStrategies(false, 0); // Les tableaux concernés par l'ajout de cette pièce dans la grille sont aussi actualisés
         }
 
@@ -679,7 +679,7 @@ namespace quarto_mjma
                 else // si la pièce est correcte
                 {
                     int i = 0;
-                    while (choixPiece != TabPieces[0, i] && i < nbPiecesTotales)
+                    while (choixPiece != tabPieces[0, i] && i < nbPiecesTotales)
                         i++;
                     pieceUtilisee = AvoirPieceUtilisee(1,i); 
 
@@ -695,7 +695,7 @@ namespace quarto_mjma
 
             UtiliserPiece(); // l'indice de présence de la pièce passe à 1
 
-            if (!modeIntell) // en mode débutant
+            if (!modeIntelligent) // en mode débutant
             {
                 Random R = new Random();
                 // choisit aléatoirement la ligne et la colonne pour placer le pion
@@ -705,7 +705,7 @@ namespace quarto_mjma
                     col = R.Next(0, nbreLignes);
                 } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-                Grille[ligne, col] = choixPiece;
+                grille[ligne, col] = choixPiece;
             }
             else // en mode intelligent
             {
@@ -815,9 +815,9 @@ namespace quarto_mjma
 
             string[] piecesPossiblesIA = new string[16]; // création d'un tableau qui recensera toutes les pièces que l'IA peut jouer sans risquer de faire gagner l'adversaire (Elle choisira alors aléatoirement entre ces pièces)
                                                          // taille maximale du tableau = nombre de pièces soit 16
-            for (k = 0; k < TabPieces.GetLength(1); k++) // parcours du tableau recensant les pièces 
+            for (k = 0; k < tabPieces.GetLength(1); k++) // parcours du tableau recensant les pièces 
             {
-                choixPiece = TabPieces[0, k]; // Permet d'appeler la fonction MettreAJourStrategies qui dépend de choixPiece
+                choixPiece = tabPieces[0, k]; // Permet d'appeler la fonction MettreAJourStrategies qui dépend de choixPiece
                 if (! AvoirPieceUtilisee (1, k)) //choix d'une pièce parmi les pièces disponibles
                 {
                     ligne = 0; col = 0; // remise à 0 des indices lorsque l'on passe à une autre pièce
@@ -830,7 +830,7 @@ namespace quarto_mjma
                         while (col < nbreLignes && !alignement4Pieces)
                         {
 
-                            if (Grille[ligne, col] == caseVide) // si la case considérée est vide
+                            if (grille[ligne, col] == caseVide) // si la case considérée est vide
                             {
                                 alignement4Pieces = MettreAJourStrategies(true, 3); // l'IA vérifie si, pour la case considérée, la simulation de placement de la pièce considérée dans chaque case Grille[ligne, col]  génère ou non un alignement de 4 pièces 
                             }
@@ -861,7 +861,7 @@ namespace quarto_mjma
                 do
                 {
                     randomPiece = R.Next(0, 16);
-                    choixPiece = TabPieces[0, randomPiece];
+                    choixPiece = tabPieces[0, randomPiece];
                 }
                 while (AvoirPieceUtilisee (1, randomPiece)); //l'IA choisit de nouveau la pièce s'il en a choisi une déjà jouée
             }
@@ -901,7 +901,7 @@ namespace quarto_mjma
                     {
                         while (col < nbreLignes && !alignement3Pieces)
                         {
-                            if (Grille[ligne, col] == caseVide)
+                            if (grille[ligne, col] == caseVide)
                             {
                                 alignement3Pieces = MettreAJourStrategies(true, 2); // l'IA vérifie pour la case considérée qu'elle ne génère pas un alignement de 3 pièces
                                 if (alignement3Pieces) // L'IA a trouvé une pièce qui générait un alignement de 3 pièces si elle était placée dans une case
@@ -986,7 +986,7 @@ namespace quarto_mjma
 
                 if (i != tabLignes0.GetLength(0) && TrouverCaseIALigne(i)) // l'IA a trouvé un alignement de 3 pièces et une  case vide pour poser la pièce qui lui permettra de faire un quarto
                 {
-                    Grille[i, col] = choixPiece; // actualisation de la grille
+                    grille[i, col] = choixPiece; // actualisation de la grille
                     AGagne = true;
                 }
                 else
@@ -1017,7 +1017,7 @@ namespace quarto_mjma
 
                 if (j != tabCol0.GetLength(0) && TrouverCaseIACol(j))
                 {
-                    Grille[ligne, j] = choixPiece;
+                    grille[ligne, j] = choixPiece;
                     AGagne = true;
                 }
                 else
@@ -1049,7 +1049,7 @@ namespace quarto_mjma
 
                     if (k != tabDiago0.GetLength(0) && TrouverCaseIADiago(k)) //l'indice k permet d'identifier dans laquelle des 2 diagonales se trouve l'alignement de 3 pièces identiques
                     {
-                        Grille[ligne, col] = choixPiece;
+                        grille[ligne, col] = choixPiece;
                         AGagne = true;
                     }
                     else
@@ -1164,7 +1164,7 @@ namespace quarto_mjma
             {
                 while(col < nbreLignes)
                 {
-                    if (Grille[ligne, col] == caseVide) // si case vide
+                    if (grille[ligne, col] == caseVide) // si case vide
                     {
                         alignement3pieces =MettreAJourStrategies(true, 2); //simulation de placement de la pièce dans cette case et on vérifie si elle génère un alignement de 3 pièces identiques (en effet, le prochain joueur est l'humain!)
                         if (!alignement3pieces) /// a trouvé une case telle que si il place sa pièce dedans, elle ne générera pas un alignement de 3 pièces 
@@ -1198,7 +1198,7 @@ namespace quarto_mjma
 
                 ligne = casesPossiblesIA[randomCasePossible] [0]; // le 1er élément du tableau imbriqué donne la ligne de la grille dans laquelle sera jouée la pièce
                 col = casesPossiblesIA[randomCasePossible][1];    // le 2er élément du tableau imbriqué donne la colonne de la grille dans laquelle sera jouée la pièce
-                Grille[ligne, col] = choixPiece;
+                grille[ligne, col] = choixPiece;
             }
             else // toutes les cases disponibles génèrent un alignement de 3 pièces ayant une caractéristique commune
             {
@@ -1211,7 +1211,7 @@ namespace quarto_mjma
                     col = R.Next(0, nbreLignes);
                 } while (AvoirCaseRemplie(ligne, col)); // tant que la case qu'il a choisi est remplie, l'ordi doit replacer sa pièce 
 
-                Grille[ligne, col] = choixPiece;
+                grille[ligne, col] = choixPiece;
             }
         }
       
@@ -1234,7 +1234,7 @@ namespace quarto_mjma
                 for (n = 0; n < nbreLignes; n++) //test pour chaque carcatéristique(x4)
                 {
                     j = 0;
-                    while (j < nbreLignes && AvoirCaseRemplie (i, 0) && Grille[i, 0][n] == Grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ à chacune des autres cases remplies de la ligne considérée
+                    while (j < nbreLignes && AvoirCaseRemplie (i, 0) && grille[i, 0][n] == grille[i, j][n]) //qd caractéristique commune, on compare la valeur de départ à chacune des autres cases remplies de la ligne considérée
                     {
                         j++;
                     }
@@ -1253,7 +1253,7 @@ namespace quarto_mjma
                     for (n = 0; n < nbreLignes; n++)
                     {
                         i = 0;
-                        while (i < nbreLignes && AvoirCaseRemplie (0, j) && Grille[0, j][n] == Grille[i, j][n])
+                        while (i < nbreLignes && AvoirCaseRemplie (0, j) && grille[0, j][n] == grille[i, j][n])
                         {
                             i++;
                         }
@@ -1272,7 +1272,7 @@ namespace quarto_mjma
                 {
                     // Coordonnées (i, i) de la 1ere case que je compare à la 1ere case de la diagonale (soit Grille[0,0])
                     i = 1;
-                    while (i < nbreLignes && AvoirCaseRemplie (0, 0) && Grille[0, 0][n] == Grille[i, i][n])
+                    while (i < nbreLignes && AvoirCaseRemplie (0, 0) && grille[0, 0][n] == grille[i, i][n])
                     {
                         i++;
                     }
@@ -1291,7 +1291,7 @@ namespace quarto_mjma
                     // Coordonnées (i, j) de la 1ere case que je compare à la 1ere case de la diagonale (soit Grille[0,3])
                     i = 1;
                     j = 2;
-                    while (i < nbreLignes && j >= 0 && AvoirCaseRemplie (0, 3) && Grille[0, 3][n] == Grille[i, j][n])
+                    while (i < nbreLignes && j >= 0 && AvoirCaseRemplie (0, 3) && grille[0, 3][n] == grille[i, j][n])
                     {
                         i++;
                         j--;
