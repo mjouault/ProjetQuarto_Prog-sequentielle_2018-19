@@ -219,12 +219,6 @@ namespace quarto_mjma
 
             Console.WriteLine("      +---------------+---------------+---------------+---------------+");
             Console.WriteLine("              0              1              2                3         ");
-
-
-
-            Console.SetCursorPosition(75, 4);
-            Console.WriteLine("Pièces restantes:");
-
         }
 
         /// <summary>
@@ -420,6 +414,9 @@ namespace quarto_mjma
         /// </summary>
         static void AfficherPiecesRestantes()
         {
+            Console.SetCursorPosition(75, 4);
+            Console.WriteLine("Pièces restantes:");
+
             int i = 0; int j = 0; int m = 0;
 
             while (i < 4) // affichage des pièces restante sur 4 lignes
@@ -503,11 +500,6 @@ namespace quarto_mjma
                     Gagner();  //vérification si le joueur a gagné à chaque fin de tour
                     if (AGagne) //cas s'il gagne
                     {
-                      // Console.Clear(); 
-                      // AfficherTitre();
-                      // AfficherGrille(); //affchage du quarto réalisé
-                      // AfficherPiecesGrille();
-                      // AfficherPiecesRestantes();
                         AfficherVictoireHumain();
                     }
                 }
@@ -1314,10 +1306,9 @@ namespace quarto_mjma
             AfficherTitre();
             AfficherGrille();
             AfficherPiecesGrille();
-            AfficherPiecesRestantes();
 
             Console.ForegroundColor = ConsoleColor.Green;//affiche en vert si le joueur humain gagne
-            Console.WriteLine("\nQUARTO! \nVous avez gagné, BRAVO !");
+            Console.WriteLine("\n\nQUARTO! \nVous avez gagné, BRAVO !");
             Console.Beep(400, 100);//musique de victoire
             Console.Beep(550, 100);
             Console.Beep(450, 100);
@@ -1334,10 +1325,9 @@ namespace quarto_mjma
             AfficherTitre();
             AfficherGrille();
             AfficherPiecesGrille();
-            AfficherPiecesRestantes();
 
             Console.ForegroundColor = ConsoleColor.DarkRed; //affiche en rouge si le joueur humain perd
-            Console.WriteLine(" \nQUARTO de l'ordinateur ! \nQuel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
+            Console.WriteLine(" \n\nQUARTO de l'ordinateur ! \nQuel dommage, votre adversaire a gagné... Ce sera pour une prochaine fois!");
             Console.Beep(500, 100);
             Console.Beep(400, 100);
             Console.Beep(350, 100);
