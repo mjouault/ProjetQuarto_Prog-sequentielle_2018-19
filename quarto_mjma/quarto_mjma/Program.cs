@@ -731,7 +731,7 @@ namespace quarto_mjma
                                                                                 il n'y aurait pas 3 (nbPiecesAlignees =2 avant simulation) pièces alignées afin de ne pas permettre au joueur de gagner au tour suivant.
                                                                                - Dans TrouverPiece afin de s'assurer qu'après simulation du placement de la pièce dans la grille,
                                                                                 l'humain ne pourra pas former un alignement de 4caractéristiques ((nbPiecesAlignees =3 avant simulation)) avec cette pièce
-                                                                                Le paramètre d'entrée nbPiecesAlignees permet donc de faire la simulation de placement de pièce pour voir si cela  génère ou non un alignement d'un certain nombre de caractéristiques */
+                                                                                Le paramètre d'entrée nbPiecesAlignees permet donc de faire la simulation de placement de pièce pour voir si cela  génère ou non un alignement d'un certain nombre de caractéristiques mais sans actualiser les tableaux de sommes manipulés */
 
         {
             bool alignementPieces = false; // true= un nombre défini de pièces  (nbPiecesAlignees) ayec au moins une caractéristique commune sont alignées
