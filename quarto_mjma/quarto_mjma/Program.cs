@@ -722,7 +722,7 @@ namespace quarto_mjma
         // --------------------sous- fonctions relatives à l'intelligence artificielle------------------------------ 
 
         /// <summary>
-        /// CalculerStrategiesIA : l'IA calcule après chaque placement de pièce le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
+        /// CalculerStrategiesIA : l'IA calcule après chaque placement (effectif ou simulé) de pièce, le nombre de pièces ayant 1 caractéristique commune sur une même ligne/col/diago
         /// </summary>
         /// <returns></returns>
         static bool CalculerStrategiesIA(bool simulation, int nbPiecesAlignees)  /* fonction appelée :
